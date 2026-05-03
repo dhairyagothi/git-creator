@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Github, Sparkles } from "lucide-react";
+import { GitBranch, Sparkles } from "lucide-react";
 import { UserCounter } from "./UserCounter";
 
 export function Navbar() {
@@ -39,7 +39,7 @@ export function Navbar() {
             className="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 hover:bg-accent/10 transition-colors"
             aria-label="GitHub"
           >
-            <Github className="h-4 w-4" />
+            <GitBranch className="h-4 w-4" />
           </a>
           <Link
             to="/generator"

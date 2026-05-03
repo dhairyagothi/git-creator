@@ -35,7 +35,7 @@ export function UserCounter({ compact = false, big = false }: { compact?: boolea
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
         </span>
-        <motion.span className="font-mono text-foreground">{display}</motion.span>
+        <motion.span className="font-mono text-foreground">{display as unknown as string}</motion.span>
         <span className="text-muted-foreground">developers</span>
       </div>
     );
@@ -55,7 +55,7 @@ export function UserCounter({ compact = false, big = false }: { compact?: boolea
         </div>
         <div>
           <motion.div className="text-2xl font-bold tracking-tight font-display">
-            {display}
+            {display as unknown as string}
             <span className="text-gradient">+</span>
           </motion.div>
           <div className="text-xs text-muted-foreground">developers built their README here</div>
