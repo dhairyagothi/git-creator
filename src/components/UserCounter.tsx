@@ -1,5 +1,5 @@
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Users } from "lucide-react";
 
 const BASE = 12480;
@@ -17,16 +17,32 @@ function getCount() {
   }
 }
 
+function useCountUp(target: number, duration = 1500) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!target) return;
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.floor(eased * target));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration]);
+  return value;
+}
+
 export function UserCounter({ compact = false, big = false }: { compact?: boolean; big?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
-  const mv = useMotionValue(0);
-  const spring = useSpring(mv, { duration: 1500, bounce: 0 });
-  const display = useTransform(spring, (v) => Math.floor(v).toLocaleString());
-
+  const [target, setTarget] = useState(0);
   useEffect(() => {
-    if (inView) mv.set(getCount());
-  }, [inView, mv]);
+    if (inView) setTarget(getCount());
+  }, [inView]);
+  const display = useCountUp(target).toLocaleString();
 
   if (compact) {
     return (
@@ -35,7 +51,7 @@ export function UserCounter({ compact = false, big = false }: { compact?: boolea
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
         </span>
-        <motion.span className="font-mono text-foreground">{display as unknown as string}</motion.span>
+        <span className="font-mono text-foreground">{display}</span>
         <span className="text-muted-foreground">developers</span>
       </div>
     );
@@ -54,10 +70,10 @@ export function UserCounter({ compact = false, big = false }: { compact?: boolea
           <Users className="h-5 w-5 text-background" />
         </div>
         <div>
-          <motion.div className="text-2xl font-bold tracking-tight font-display">
-            {display as unknown as string}
+          <div className="text-2xl font-bold tracking-tight font-display">
+            {display}
             <span className="text-gradient">+</span>
-          </motion.div>
+          </div>
           <div className="text-xs text-muted-foreground">developers built their README here</div>
         </div>
       </div>
