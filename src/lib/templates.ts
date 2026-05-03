@@ -120,9 +120,8 @@ export const TEMPLATES: Template[] = [
     tags: ["popular"],
     accent: "from-blue-400 to-violet-500",
     defaultSections: [
-      "header", "about", "techStack", "projects", "achievements" as SectionId,
-      "githubStats", "socials", "footer",
-    ].filter((s) => s !== "achievements") as SectionId[],
+      "header", "about", "techStack", "projects", "githubStats", "socials", "footer",
+    ],
   },
 ];
 
