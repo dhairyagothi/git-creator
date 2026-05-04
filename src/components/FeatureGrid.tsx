@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { Layers, Eye, GitBranch, Pencil, Download, Save } from "lucide-react";
+import { TEMPLATES } from "@/lib/templates";
 
+const templateCount = TEMPLATES.length;
 const features = [
-  { icon: Layers, title: "8 Premium Templates", desc: "From minimal to animated — pick the one that matches your vibe." },
+  { icon: Layers, title: `${templateCount} Premium Templates`, desc: "From minimal to animated — pick the one that matches your vibe." },
   { icon: Eye, title: "Live Preview", desc: "See your README rendered exactly as it will appear on GitHub." },
   { icon: GitBranch, title: "GitHub Auto-Fill", desc: "Enter your username and we'll pre-fill your name, bio, and avatar." },
   { icon: Pencil, title: "Markdown Editor", desc: "Edit the markdown directly with a clean, syntax-aware editor." },

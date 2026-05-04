@@ -10,9 +10,15 @@ export interface FormState {
   username: string;
   displayName: string;
   tagline: string;
+  role: string;
+  title: string;
+  company: string;
+  focus: string;
   bio: string;
   avatarUrl: string;
   location: string;
+  city: string;
+  country: string;
   currentlyLearning: string;
   currentlyWorkingOn: string;
   techStack: string[];
@@ -22,6 +28,13 @@ export interface FormState {
   funFacts: string[];
   contributionGoals: string;
   email: string;
+  university: string;
+  major: string;
+  academicYear: string;
+  experienceYears: string;
+  resumeUrl: string;
+  scholarId: string;
+  templateFields: Record<string, string>;
   socials: {
     twitter: string;
     linkedin: string;
@@ -44,9 +57,15 @@ export const emptyForm: FormState = {
   username: "",
   displayName: "",
   tagline: "Building things on the internet",
+  role: "",
+  title: "",
+  company: "",
+  focus: "",
   bio: "",
   avatarUrl: "",
   location: "",
+  city: "",
+  country: "",
   currentlyLearning: "",
   currentlyWorkingOn: "",
   techStack: [],
@@ -56,6 +75,13 @@ export const emptyForm: FormState = {
   funFacts: [],
   contributionGoals: "",
   email: "",
+  university: "",
+  major: "",
+  academicYear: "",
+  experienceYears: "",
+  resumeUrl: "",
+  scholarId: "",
+  templateFields: {},
   socials: {
     twitter: "",
     linkedin: "",

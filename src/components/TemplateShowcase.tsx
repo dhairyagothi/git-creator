@@ -4,7 +4,8 @@ import { ArrowRight } from "lucide-react";
 import { TEMPLATES } from "@/lib/templates";
 
 export function TemplateShowcase() {
-  const featured = TEMPLATES.slice(0, 4);
+  const popular = TEMPLATES.filter((t) => t.tags.includes("popular"));
+  const featured = (popular.length ? popular : TEMPLATES).slice(0, 4);
   return (
     <section className="relative py-24" id="templates">
       <div className="mx-auto max-w-7xl px-6">

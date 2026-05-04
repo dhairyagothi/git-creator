@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { buildReadme } from "@/lib/buildReadme";
+import { getTemplate } from "@/lib/templates";
 import { TemplatePicker } from "./TemplatePicker";
 import { SectionToggles } from "./SectionToggles";
 import { ProfileForm } from "./ProfileForm";
@@ -23,6 +24,7 @@ export function GeneratorWorkspace() {
   const store = useAppStore();
   const { template, sections, form, manualMarkdown, setTemplate, setSections, setManualMarkdown, reset, load } = store;
   const [tab, setTab] = useState<"preview" | "edit">("preview");
+  const templateConfig = getTemplate(template);
 
   // Load draft on mount
   useEffect(() => {
@@ -128,7 +130,13 @@ export function GeneratorWorkspace() {
             <div className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
               Sections
             </div>
-            <SectionToggles sections={sections} onChange={setSections} />
+            {templateConfig.kind === "builder" ? (
+              <SectionToggles sections={sections} onChange={setSections} />
+            ) : (
+              <div className="rounded-lg border border-border/60 bg-card/40 px-3 py-2 text-xs text-muted-foreground">
+                Section toggles are available for builder templates only.
+              </div>
+            )}
           </div>
         </aside>
 

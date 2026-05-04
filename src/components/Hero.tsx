@@ -1,12 +1,21 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Wand2 } from "lucide-react";
-import { UserCounter } from "./UserCounter";
+import Aurora from "./Aurora";
+import GradientText from "./GradientText";
 
 export function Hero() {
   return (
-    <section className="relative pt-20 pb-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="relative -mt-16 pt-36 pb-32 isolate">
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <Aurora
+          colorStops={["#7cff67", "#B497CF", "#5227FF"]}
+          blend={0.5}
+          amplitude={1.0}
+          speed={1}
+        />
+      </div>
+      <div className="mx-auto max-w-7xl px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -15,15 +24,24 @@ export function Hero() {
         >
           <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-3 py-1 text-xs text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full bg-gradient-neon" />
-            New: Animated profile templates
+            Generate Animated README.md
           </div>
-          <h1 className="mt-6 text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl font-display">
-            Craft a{" "}
-            <span className="text-gradient">stunning</span>
-            <br />
-            GitHub profile README
+          <h1 className="mt-6 text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl font-display flex flex-col items-center">
+            <span>
+              Craft a <span className="text-gradient">stunning</span>
+            </span>
+            <div className="mt-2 text-center text-[clamp(2rem,6vw,4.5rem)] leading-tight">
+              <GradientText
+                colors={["#5227FF", "#FF9FFC", "#B497CF"]}
+                animationSpeed={8}
+                showBorder={false}
+                className="text-center font-bold tracking-tight"
+              >
+                GitHub profile<br/>README
+              </GradientText>
+            </div>
           </h1>
-          <p className="mt-6 text-lg text-muted-foreground md:text-xl">
+          <p className="mt-6 text-lg text-muted-foreground md:text-lg">
             Pick a template, fill in a few fields, and export a polished{" "}
             <span className="font-mono text-foreground">README.md</span> in under 60 seconds.
           </p>
@@ -45,9 +63,6 @@ export function Hero() {
             </Link>
           </div>
 
-          <div className="mt-12 flex justify-center">
-            <UserCounter />
-          </div>
         </motion.div>
 
         <FloatingPreview />

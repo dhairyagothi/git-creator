@@ -71,12 +71,10 @@
   --neon-magenta: oklch(0.72 0.28 340);
 
   --gradient-primary: linear-gradient(135deg, oklch(0.7 0.24 295), oklch(0.78 0.2 200));
-  --gradient-neon: linear-gradient(
-    135deg,
-    oklch(0.72 0.28 340),
-    oklch(0.7 0.24 295),
-    oklch(0.78 0.2 200)
-  );
+  --gradient-neon: linear-gradient(135deg,
+      oklch(0.72 0.28 340),
+      oklch(0.7 0.24 295),
+      oklch(0.78 0.2 200));
   --shadow-glow: 0 0 40px -10px oklch(0.7 0.24 295 / 0.5);
   --shadow-elegant: 0 20px 50px -20px oklch(0 0 0 / 0.5);
 }
@@ -93,6 +91,7 @@ body {
   * {
     border-color: var(--color-border);
   }
+
   ::selection {
     background: oklch(0.7 0.24 295 / 0.4);
   }
@@ -129,43 +128,69 @@ body {
 }
 
 @keyframes blob-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -40px) scale(1.05); }
-  66% { transform: translate(-20px, 30px) scale(0.95); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -40px) scale(1.05);
+  }
+
+  66% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
 }
+
 .animate-blob {
   animation: blob-float 18s ease-in-out infinite;
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
+
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    oklch(1 0 0 / 0.08),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      oklch(1 0 0 / 0.08),
+      transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 ::-webkit-scrollbar-thumb {
   background: oklch(1 0 0 / 0.08);
   border-radius: 8px;
 }
-::-webkit-scrollbar-thumb:hover { background: oklch(1 0 0 / 0.16); }
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(1 0 0 / 0.16);
+}
 
 /* Markdown preview styling */
 .prose-readme {
   color: var(--foreground);
   line-height: 1.7;
 }
+
 .prose-readme h1,
 .prose-readme h2,
 .prose-readme h3 {
@@ -174,15 +199,30 @@ body {
   margin-bottom: 0.6em;
   letter-spacing: -0.01em;
 }
-.prose-readme h1 { font-size: 1.875rem; }
+
+.prose-readme h1 {
+  font-size: 1.875rem;
+}
+
 .prose-readme h2 {
   font-size: 1.4rem;
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.3em;
 }
-.prose-readme h3 { font-size: 1.15rem; }
-.prose-readme p { margin: 0.6em 0; }
-.prose-readme a { color: var(--neon-cyan); text-decoration: underline; }
+
+.prose-readme h3 {
+  font-size: 1.15rem;
+}
+
+.prose-readme p {
+  margin: 0.6em 0;
+}
+
+.prose-readme a {
+  color: var(--neon-cyan);
+  text-decoration: underline;
+}
+
 .prose-readme code {
   background: oklch(1 0 0 / 0.08);
   padding: 0.15em 0.4em;
@@ -190,6 +230,7 @@ body {
   font-family: var(--font-mono);
   font-size: 0.9em;
 }
+
 .prose-readme pre {
   background: oklch(0 0 0 / 0.4);
   padding: 1em;
@@ -197,12 +238,36 @@ body {
   overflow-x: auto;
   border: 1px solid var(--border);
 }
-.prose-readme pre code { background: transparent; padding: 0; }
-.prose-readme ul, .prose-readme ol { padding-left: 1.4em; margin: 0.6em 0; }
-.prose-readme ul { list-style: disc; }
-.prose-readme ol { list-style: decimal; }
-.prose-readme li { margin: 0.25em 0; }
-.prose-readme img { display: inline-block; margin: 4px 2px; max-width: 100%; }
+
+.prose-readme pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.prose-readme ul,
+.prose-readme ol {
+  padding-left: 1.4em;
+  margin: 0.6em 0;
+}
+
+.prose-readme ul {
+  list-style: disc;
+}
+
+.prose-readme ol {
+  list-style: decimal;
+}
+
+.prose-readme li {
+  margin: 0.25em 0;
+}
+
+.prose-readme img {
+  display: inline-block;
+  margin: 4px 2px;
+  max-width: 100%;
+}
+
 .prose-readme blockquote {
   border-left: 3px solid var(--neon-violet);
   padding-left: 1em;
@@ -210,9 +275,19 @@ body {
   font-style: italic;
   margin: 1em 0;
 }
-.prose-readme hr { border-color: var(--border); margin: 1.5em 0; }
-.prose-readme table { border-collapse: collapse; margin: 1em 0; }
-.prose-readme th, .prose-readme td {
+
+.prose-readme hr {
+  border-color: var(--border);
+  margin: 1.5em 0;
+}
+
+.prose-readme table {
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.prose-readme th,
+.prose-readme td {
   border: 1px solid var(--border);
   padding: 0.5em 0.8em;
 }

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2, Search, Plus, Trash2 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
+import { getTemplate } from "@/lib/templates";
+import { AUTO_PLACEHOLDER_KEYS, getPlaceholderLabel } from "@/lib/templateFields";
 import { Field, Input, Textarea } from "./FormPrimitives";
 import { TagInput } from "./TagInput";
 
@@ -19,8 +21,12 @@ async function fetchGithubUser(username: string) {
 }
 
 export function ProfileForm() {
-  const { form, updateForm, updateSocial } = useAppStore();
+  const { form, template, updateForm, updateSocial, updateTemplateField } = useAppStore();
   const [loading, setLoading] = useState(false);
+  const templateConfig = getTemplate(template);
+  const templatePlaceholders = templateConfig.kind === "markdown" ? templateConfig.placeholders ?? [] : [];
+  const templateFields = templatePlaceholders.filter((key) => !AUTO_PLACEHOLDER_KEYS.has(key));
+  const isLongField = (key: string) => /SUMMARY|DESC|BIO|QUOTE|THREAD|REPORTS|DATA/.test(key);
 
   const onFetch = async () => {
     if (!form.username) {
@@ -77,6 +83,14 @@ export function ProfileForm() {
             <Input value={form.tagline} onChange={(e) => updateForm({ tagline: e.target.value })} placeholder="Building things on the internet" />
           </Field>
         </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Role">
+            <Input value={form.role} onChange={(e) => updateForm({ role: e.target.value })} placeholder="Full stack developer" />
+          </Field>
+          <Field label="Focus">
+            <Input value={form.focus} onChange={(e) => updateForm({ focus: e.target.value })} placeholder="Design systems, DX" />
+          </Field>
+        </div>
         <Field label="Bio / intro">
           <Textarea rows={3} value={form.bio} onChange={(e) => updateForm({ bio: e.target.value })} placeholder="Short intro about yourself..." />
         </Field>
@@ -84,8 +98,54 @@ export function ProfileForm() {
           <Field label="Location">
             <Input value={form.location} onChange={(e) => updateForm({ location: e.target.value })} placeholder="Berlin, Germany" />
           </Field>
+          <Field label="City">
+            <Input value={form.city} onChange={(e) => updateForm({ city: e.target.value })} placeholder="Berlin" />
+          </Field>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Country">
+            <Input value={form.country} onChange={(e) => updateForm({ country: e.target.value })} placeholder="Germany" />
+          </Field>
           <Field label="Contact email">
             <Input type="email" value={form.email} onChange={(e) => updateForm({ email: e.target.value })} placeholder="hi@example.com" />
+          </Field>
+        </div>
+      </Section>
+
+      <Section title="Professional">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Title">
+            <Input value={form.title} onChange={(e) => updateForm({ title: e.target.value })} placeholder="Senior Software Engineer" />
+          </Field>
+          <Field label="Company">
+            <Input value={form.company} onChange={(e) => updateForm({ company: e.target.value })} placeholder="Acme Corp" />
+          </Field>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Experience (years)">
+            <Input value={form.experienceYears} onChange={(e) => updateForm({ experienceYears: e.target.value })} placeholder="5" />
+          </Field>
+          <Field label="Resume URL">
+            <Input value={form.resumeUrl} onChange={(e) => updateForm({ resumeUrl: e.target.value })} placeholder="https://..." />
+          </Field>
+        </div>
+      </Section>
+
+      <Section title="Education">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="University">
+            <Input value={form.university} onChange={(e) => updateForm({ university: e.target.value })} placeholder="Stanford University" />
+          </Field>
+          <Field label="Major">
+            <Input value={form.major} onChange={(e) => updateForm({ major: e.target.value })} placeholder="Computer Science" />
+          </Field>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Academic year">
+            <Input value={form.academicYear} onChange={(e) => updateForm({ academicYear: e.target.value })} placeholder="2026" />
+          </Field>
+          <Field label="Scholar ID">
+            <Input value={form.scholarId} onChange={(e) => updateForm({ scholarId: e.target.value })} placeholder="Google Scholar ID" />
           </Field>
         </div>
       </Section>
@@ -172,6 +232,31 @@ export function ProfileForm() {
           <Field label="Instagram"><Input value={form.socials.instagram} onChange={(e) => updateSocial("instagram", e.target.value)} placeholder="username" /></Field>
         </div>
       </Section>
+
+      {templateFields.length > 0 && (
+        <Section title="Template fields">
+          <div className="grid gap-4 md:grid-cols-2">
+            {templateFields.map((key) => (
+              <Field key={key} label={getPlaceholderLabel(key)}>
+                {isLongField(key) ? (
+                  <Textarea
+                    rows={3}
+                    value={form.templateFields?.[key] ?? ""}
+                    onChange={(e) => updateTemplateField(key, e.target.value)}
+                    placeholder={key.replace(/_/g, " ")}
+                  />
+                ) : (
+                  <Input
+                    value={form.templateFields?.[key] ?? ""}
+                    onChange={(e) => updateTemplateField(key, e.target.value)}
+                    placeholder={key.replace(/_/g, " ")}
+                  />
+                )}
+              </Field>
+            ))}
+          </div>
+        </Section>
+      )}
 
       <Section title="Extras">
         <Field label="Fun facts" hint="Press Enter to add">

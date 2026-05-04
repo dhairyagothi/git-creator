@@ -16,7 +16,18 @@ export const Route = createFileRoute("/templates")({
   component: TemplatesPage,
 });
 
-const tags = ["all", "popular", "minimal", "advanced"];
+const tags = [
+  "all",
+  "popular",
+  "minimal",
+  "animated",
+  "fullstack",
+  "student",
+  "opensource",
+  "data-ai",
+  "web3",
+  "professional",
+];
 
 function TemplatesPage() {
   const [q, setQ] = useState("");
@@ -41,7 +52,7 @@ function TemplatesPage() {
             Pick your <span className="text-gradient">style</span>
           </h1>
           <p className="mt-4 max-w-2xl text-muted-foreground">
-            Eight premium starting points crafted for different developer personas. All fully customizable.
+            {TEMPLATES.length} starting points crafted for different developer personas. All fully customizable.
           </p>
         </motion.div>
 

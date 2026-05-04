@@ -4,11 +4,22 @@ import { BackgroundFX } from "@/components/BackgroundFX";
 
 import appCss from "../styles.css?url";
 
+import FuzzyText from "@/components/FuzzyText";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-gradient">404</h1>
+        <div className="flex justify-center text-7xl font-bold text-gradient">
+          <FuzzyText 
+            baseIntensity={0.2}
+            hoverIntensity={0.5}
+            enableHover
+            color="currentColor"
+          >
+            404
+          </FuzzyText>
+        </div>
         <h2 className="mt-4 text-xl font-semibold">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.

@@ -1,5 +1,7 @@
 import type { FormState } from "./types";
 import type { SectionId, TemplateId } from "./templates";
+import { getTemplate } from "./templates";
+import { replacePlaceholders } from "./templateFields";
 
 const enc = (s: string) => encodeURIComponent(s.trim());
 
@@ -202,6 +204,11 @@ export function buildReadme(
   template: TemplateId,
   sections: SectionId[],
 ): string {
+  const templateConfig = getTemplate(template);
+  if (templateConfig.kind === "markdown" && templateConfig.content) {
+    return replacePlaceholders(templateConfig.content, form);
+  }
+
   const builders: Record<SectionId, () => string> = {
     header: () => header(form, template),
     about: () => about(form),
