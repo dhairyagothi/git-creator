@@ -8,6 +8,7 @@ import type { TemplateId } from "@/lib/templates";
 
 const search = z.object({
   template: z.string().optional(),
+  username: z.string().optional(),
 });
 
 export const Route = createFileRoute("/generator")({
@@ -22,13 +23,14 @@ export const Route = createFileRoute("/generator")({
 });
 
 function Generator() {
-  const { template: searchTemplate } = Route.useSearch();
-  const setTemplate = useAppStore((s) => s.setTemplate);
+  const { template: searchTemplate, username } = Route.useSearch();
+  const { setTemplate, updateForm } = useAppStore();
 
   useEffect(() => {
     if (searchTemplate) setTemplate(searchTemplate as TemplateId);
+    if (username) updateForm({ username });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTemplate]);
+  }, [searchTemplate, username]);
 
   return (
     <main className="min-h-screen">

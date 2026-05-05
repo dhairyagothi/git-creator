@@ -20,7 +20,7 @@ export const developer = {
   passion:     "Building products from 0 → 1",
   location:    "YOUR_LOCATION",
   workingOn:   "YOUR_PROJECT",
-  learning:    ["YOUR_SKILL_1", "YOUR_SKILL_2"],
+  learning:    ["YOUR_TECH_1", "YOUR_TECH_2"],
   dreamStack:  "TypeScript everywhere 🌎",
   coffee:      "Yes, always ☕"
 };

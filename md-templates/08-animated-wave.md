@@ -1,4 +1,8 @@
 <div align="center">
+  <img src="YOUR_GIF_1" width="100%" />
+</div>
+
+<div align="center">
 
 ![Header](https://capsule-render.vercel.app/api?type=waving&color=0:667eea,100:764ba2&height=220&section=header&text=YOUR_NAME&fontSize=55&fontColor=white&animation=fadeIn&fontAlignY=38&desc=YOUR_ROLE+%7C+YOUR_TAGLINE&descAlignY=60&descAlign=50)
 
@@ -16,7 +20,7 @@
 
 🔭 Working on **YOUR_PROJECT**  
 🌱 Learning **YOUR_LEARNING**  
-👯 Looking to collaborate on **YOUR_COLLAB**  
+👯 Looking to collaborate on **YOUR_PROJECT**  
 💬 Ask me about **YOUR_TOPICS**  
 📫 Email: **YOUR_EMAIL**  
 ⚡ Fun fact: **YOUR_FUN_FACT**  

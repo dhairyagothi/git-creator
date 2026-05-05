@@ -24,8 +24,8 @@
 
 | Protocol | Network | Address |
 |----------|---------|---------|
-| YOUR_CONTRACT_1 | Ethereum | `0x...` |
-| YOUR_CONTRACT_2 | Polygon | `0x...` |
+| YOUR_PROJECT_1 | Ethereum | `0x...` |
+| YOUR_PROJECT_2 | Polygon | `0x...` |
 
 ---
 

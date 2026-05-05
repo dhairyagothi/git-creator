@@ -3,7 +3,7 @@ import { Sparkles } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="relative mt-20 border-t border-border/40">
+    <footer className="relative mt-10 border-t border-border/40">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-4">
         <div>
           <Link to="/" className="flex items-center gap-2">
@@ -17,7 +17,7 @@ export function Footer() {
           </p>
         </div>
         <FooterCol title="Product" links={[
-          { to: "/generator", label: "Generator" },
+          { to: "/user-datails", label: "Generator" },
           { to: "/templates", label: "Templates" },
         ]} />
         <FooterCol title="Resources" links={[
@@ -32,7 +32,7 @@ export function Footer() {
       <div className="border-t border-border/40">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 text-xs text-muted-foreground">
           <div>© {new Date().getFullYear()} github-readme.app</div>
-          <div>Made for developers, by developers.</div>
+          <div>Made by Dhairya with ❤️ Made in Bharat </div>
         </div>
       </div>
     </footer>

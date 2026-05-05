@@ -28,7 +28,7 @@
 - 📍 Based in: **YOUR_LOCATION**
 - 🔭 Building: **YOUR_PROJECT**
 - 📚 Learning: **YOUR_LEARNING**
-- 📊 Specialty: **YOUR_SPECIALTY**
+- 📊 Specialty: **YOUR_FOCUS**
 
 </td>
 <td>
@@ -45,8 +45,8 @@
 
 | Notebook | Description | Dataset |
 |----------|-------------|---------|
-| [YOUR_NOTEBOOK_1](https://kaggle.com/YOUR_USERNAME/YOUR_NB_1) | YOUR_DESC_1 | YOUR_DATA_1 |
-| [YOUR_NOTEBOOK_2](https://kaggle.com/YOUR_USERNAME/YOUR_NB_2) | YOUR_DESC_2 | YOUR_DATA_2 |
+| [YOUR_PROJECT_1](https://kaggle.com/YOUR_USERNAME/YOUR_PROJECT_1) | YOUR_PROJECT_1_DESC | YOUR_TECH_1 |
+| [YOUR_PROJECT_2](https://kaggle.com/YOUR_USERNAME/YOUR_PROJECT_2) | YOUR_PROJECT_2_DESC | YOUR_TECH_2 |
 
 ---
 

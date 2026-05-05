@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=9,14,20&height=200&section=header&text=YOUR_NAME&fontSize=50&fontColor=00FF41&animation=twinkling&fontAlignY=38&desc=Security+Researcher+%7C+Bug+Bounty+Hunter&descAlignY=60&descFontColor=00FF41" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Source+Code+Pro&size=18&pause=1000&color=00FF41&center=true&vCenter=true&width=700&lines=%24+nmap+-sV+target.com;%24+sqlmap+-u+%22https%3A%2F%2Ftarget.com%22;Ethical+hacker+%7C+CTF+player+%F0%9F%9A%A9;YOUR_CVE_COUNT%2B+CVEs+disclosed" alt="Security Typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Source+Code+Pro&size=18&pause=1000&color=00FF41&center=true&vCenter=true&width=700&lines=%24+nmap+-sV+target.com;%24+sqlmap+-u+%22https%3A%2F%2Ftarget.com%22;Ethical+hacker+%7C+CTF+player+%F0%9F%9A%A9;YOUR_ACHIEVEMENT_1%2B+CVEs+disclosed" alt="Security Typing"/>
 
 ---
 
@@ -21,18 +21,18 @@
 
 | Platform | Rank | Reports |
 |----------|------|---------|
-| HackerOne | YOUR_RANK | YOUR_REPORTS |
-| Bugcrowd | YOUR_RANK | YOUR_REPORTS |
-| YOUR_PROGRAM | YOUR_RANK | YOUR_REPORTS |
+| HackerOne | YOUR_ACHIEVEMENT_1 | YOUR_ACHIEVEMENT_1 |
+| Bugcrowd | YOUR_ACHIEVEMENT_1 | YOUR_ACHIEVEMENT_1 |
+| YOUR_MAJOR | YOUR_ACHIEVEMENT_1 | YOUR_ACHIEVEMENT_1 |
 
 ---
 
 ### 🚩 CTF Achievements
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CTFtime-Rating YOUR_RATING-red?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/Hack The Box-YOUR_RANK-9FEF00?style=for-the-badge&logo=hackthebox&logoColor=black"/>
-  <img src="https://img.shields.io/badge/TryHackMe-YOUR_RANK-red?style=for-the-badge&logo=tryhackme&logoColor=white"/>
+  <img src="https://img.shields.io/badge/CTFtime-Rating YOUR_ACHIEVEMENT_2-red?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Hack The Box-YOUR_ACHIEVEMENT_1-9FEF00?style=for-the-badge&logo=hackthebox&logoColor=black"/>
+  <img src="https://img.shields.io/badge/TryHackMe-YOUR_ACHIEVEMENT_1-red?style=for-the-badge&logo=tryhackme&logoColor=white"/>
 </p>
 
 ---

@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { TEMPLATES } from "@/lib/templates";
+import { incrementGenerateCount } from "@/lib/metrics";
 
 export const Route = createFileRoute("/templates")({
   head: () => ({
@@ -113,8 +114,9 @@ function TemplatesPage() {
                 ))}
               </div>
               <Link
-                to="/generator"
+                to="/user-datails"
                 search={{ template: t.id }}
+                onClick={() => incrementGenerateCount()}
                 className="mt-5 inline-flex w-full items-center justify-center gap-1 rounded-lg bg-gradient-neon px-3 py-2 text-sm font-medium text-background transition-transform hover:scale-[1.02]"
               >
                 Use template

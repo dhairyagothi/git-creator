@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=5,12,17&height=200&section=header&text=YOUR_NAME&fontSize=50&fontColor=fff&animation=twinkling&fontAlignY=38&desc=Indie+Hacker+%7C+Solo+Builder+%7C+YOUR_MRR+MRR&descAlignY=60" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=5,12,17&height=200&section=header&text=YOUR_NAME&fontSize=50&fontColor=fff&animation=twinkling&fontAlignY=38&desc=Indie+Hacker+%7C+Solo+Builder+%7C+YOUR_ACHIEVEMENT_1+MRR&descAlignY=60" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&pause=1000&color=FBBF24&center=true&vCenter=true&width=700&lines=Building+in+public+%F0%9F%93%A2;YOUR_PRODUCT_COUNT%2B+shipped+products;From+0+to+MRR+%F0%9F%9A%80;YOUR_TAGLINE" alt="Indie Typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&pause=1000&color=FBBF24&center=true&vCenter=true&width=700&lines=Building+in+public+%F0%9F%93%A2;YOUR_ACHIEVEMENT_1%2B+shipped+products;From+0+to+MRR+%F0%9F%9A%80;YOUR_TAGLINE" alt="Indie Typing"/>
 
 <img src="https://user-images.githubusercontent.com/74038190/212257472-08e52665-c503-4bd9-aa20-f5a4dae769b5.gif" width="100"/>
 
@@ -12,9 +12,9 @@
 
 | Product | Description | MRR | Status |
 |---------|-------------|-----|--------|
-| [YOUR_PRODUCT_1](https://YOUR_PRODUCT_1_URL) | YOUR_DESC_1 | $YOUR_MRR_1 | 🟢 Live |
-| [YOUR_PRODUCT_2](https://YOUR_PRODUCT_2_URL) | YOUR_DESC_2 | $YOUR_MRR_2 | 🟡 Beta |
-| [YOUR_PRODUCT_3](https://YOUR_PRODUCT_3_URL) | YOUR_DESC_3 | — | 🔵 Building |
+| [YOUR_PROJECT_1](https://YOUR_PROJECT_1_DEMO) | YOUR_PROJECT_1_DESC | $YOUR_ACHIEVEMENT_1 | 🟢 Live |
+| [YOUR_PROJECT_2](https://YOUR_PROJECT_2_DEMO) | YOUR_PROJECT_2_DESC | $YOUR_ACHIEVEMENT_2 | 🟡 Beta |
+| [YOUR_PROJECT_3](https://YOUR_PROJECT_3_DEMO) | YOUR_PROJECT_3_DESC | — | 🔵 Building |
 
 ---
 
@@ -30,10 +30,10 @@
 
 ```
 Month 1:  $0
-Month 3:  $YOUR_3M_MRR
-Month 6:  $YOUR_6M_MRR
-Month 12: $YOUR_12M_MRR
-Today:    $YOUR_CURRENT_MRR 🎉
+Month 3:  $YOUR_ACHIEVEMENT_2
+Month 6:  $YOUR_ACHIEVEMENT_3
+Month 12: $YOUR_ACHIEVEMENT_1
+Today:    $YOUR_ACHIEVEMENT_1 🎉
 ```
 
 ---

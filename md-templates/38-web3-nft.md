@@ -22,8 +22,8 @@
 
 | Collection | Network | Items |
 |------------|---------|-------|
-| [YOUR_COLLECTION_1](https://opensea.io/collection/YOUR_COLLECTION_1) | Ethereum | 10k |
-| [YOUR_COLLECTION_2](https://opensea.io/collection/YOUR_COLLECTION_2) | Polygon | 1k |
+| [YOUR_PROJECT_1](https://opensea.io/collection/YOUR_PROJECT_1) | Ethereum | 10k |
+| [YOUR_PROJECT_2](https://opensea.io/collection/YOUR_PROJECT_2) | Polygon | 1k |
 
 ---
 

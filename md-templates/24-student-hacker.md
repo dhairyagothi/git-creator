@@ -14,7 +14,7 @@ class Student:
         self.major     = "YOUR_MAJOR"
         self.year      = YOUR_YEAR
         self.skills    = ["Python", "JS", "React", "Git"]
-        self.learning  = ["YOUR_SKILL_1", "YOUR_SKILL_2"]
+        self.learning  = ["YOUR_TECH_1", "YOUR_TECH_2"]
         self.projects  = ["YOUR_PROJECT_1", "YOUR_PROJECT_2"]
         self.fun_fact  = "YOUR_FUN_FACT"
 

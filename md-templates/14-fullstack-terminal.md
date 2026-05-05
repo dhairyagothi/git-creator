@@ -29,10 +29,10 @@
 │  }                                                                   │
 │                                                                      │
 │  $ git log --oneline -5                                              │
-│  a1b2c3d  feat: shipped YOUR_FEATURE                                 │
-│  e4f5g6h  fix: resolved YOUR_FIX                                     │
+│  a1b2c3d  feat: shipped YOUR_PROJECT                                 │
+│  e4f5g6h  fix: resolved YOUR_PROJECT                                     │
 │  i7j8k9l  docs: updated README                                       │
-│  m1n2o3p  refactor: cleaned up YOUR_MODULE                           │
+│  m1n2o3p  refactor: cleaned up YOUR_CURRENTLY_LEARNING                           │
 │  q4r5s6t  chore: bumped dependencies                                 │
 │                                                                      │
 │  $ echo $CONTACT                                                     │

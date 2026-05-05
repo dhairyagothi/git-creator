@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=9,14,20&height=200&section=header&text=YOUR_NAME&fontSize=50&fontColor=fff&animation=twinkling&fontAlignY=38&desc=Powered+by+Contribution+%F0%9F%94%A5&descAlignY=60" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&pause=1000&color=F97316&center=true&vCenter=true&width=600&lines=YOUR_TOTAL_COMMITS%2B+commits+and+counting+%F0%9F%94%A5;YOUR_TOTAL_PRS%2B+pull+requests+merged;Contributing+since+YOUR_YEAR;YOUR_TAGLINE" alt="Stats Typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&pause=1000&color=F97316&center=true&vCenter=true&width=600&lines=YOUR_ACHIEVEMENT_1%2B+commits+and+counting+%F0%9F%94%A5;YOUR_ACHIEVEMENT_2%2B+pull+requests+merged;Contributing+since+YOUR_YEAR;YOUR_TAGLINE" alt="Stats Typing"/>
 
 ---
 

@@ -23,7 +23,7 @@
 
 - 📘 **Data Structures & Algorithms** — LeetCode grind 💪
 - 🌐 **Web Dev** — Building YOUR_PROJECT
-- 🤖 **YOUR_SUBJECT** — Fascinating!
+- 🤖 **YOUR_FOCUS** — Fascinating!
 - 📚 **Reading** — *YOUR_BOOK*
 
 ---

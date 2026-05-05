@@ -22,8 +22,8 @@
 
 | Project | Description | Tech |
 |---------|-------------|------|
-| [YOUR_NLP_PROJECT_1](https://github.com/YOUR_USERNAME/YOUR_PROJECT_1) | YOUR_DESC_1 | YOUR_TECH_1 |
-| [YOUR_NLP_PROJECT_2](https://github.com/YOUR_USERNAME/YOUR_PROJECT_2) | YOUR_DESC_2 | YOUR_TECH_2 |
+| [YOUR_PROJECT_1](https://github.com/YOUR_USERNAME/YOUR_PROJECT_1) | YOUR_PROJECT_1_DESC | YOUR_TECH_1 |
+| [YOUR_PROJECT_2](https://github.com/YOUR_USERNAME/YOUR_PROJECT_2) | YOUR_PROJECT_2_DESC | YOUR_TECH_2 |
 
 ---
 

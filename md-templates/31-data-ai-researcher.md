@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=20,17,14,9&height=220&section=header&text=YOUR_NAME&fontSize=55&fontColor=fff&animation=fadeIn&fontAlignY=38&desc=AI+Researcher+%7C+YOUR_INSTITUTION&descAlignY=60&descSize=20" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=20,17,14,9&height=220&section=header&text=YOUR_NAME&fontSize=55&fontColor=fff&animation=fadeIn&fontAlignY=38&desc=AI+Researcher+%7C+YOUR_UNIVERSITY&descAlignY=60&descSize=20" width="100%"/>
 
 <img src="https://readme-typing-svg.demolab.com?font=Space+Mono&size=18&pause=1000&color=818CF8&center=true&vCenter=true&width=700&lines=Pushing+the+frontiers+of+AI+%F0%9F%A7%A0;Research+%3E+Deploy+%3E+Repeat;YOUR_RESEARCH_AREA+enthusiast;YOUR_TAGLINE" alt="AI Researcher Typing"/>
 
@@ -10,10 +10,10 @@
 
 ### 🧪 Research Interests
 
-- 🤖 **YOUR_INTEREST_1** — YOUR_DESC_1
-- 🧬 **YOUR_INTEREST_2** — YOUR_DESC_2
-- 📊 **YOUR_INTEREST_3** — YOUR_DESC_3
-- 🌐 **YOUR_INTEREST_4** — YOUR_DESC_4
+- 🤖 **YOUR_FUN_FACT_1** — YOUR_PROJECT_1_DESC
+- 🧬 **YOUR_FUN_FACT_2** — YOUR_PROJECT_2_DESC
+- 📊 **YOUR_FUN_FACT_3** — YOUR_PROJECT_3_DESC
+- 🌐 **YOUR_FUN_FACT_4** — YOUR_PROJECT_4_DESC
 
 ---
 
@@ -21,8 +21,8 @@
 
 | Title | Venue | Year |
 |-------|-------|------|
-| [YOUR_PAPER_1](https://YOUR_PAPER_1_URL) | YOUR_VENUE_1 | 202X |
-| [YOUR_PAPER_2](https://YOUR_PAPER_2_URL) | YOUR_VENUE_2 | 202X |
+| [YOUR_PROJECT_1](https://YOUR_PROJECT_1_DEMO) | YOUR_ACHIEVEMENT_1 | 202X |
+| [YOUR_PROJECT_2](https://YOUR_PROJECT_2_DEMO) | YOUR_ACHIEVEMENT_2 | 202X |
 
 ---
 

@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,6,14&height=200&section=header&text=YOUR_NAME&fontSize=50&fontColor=fff&animation=fadeIn&fontAlignY=38&desc=Tech+Consultant+%7C+YOUR_SPECIALTY&descAlignY=60" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,6,14&height=200&section=header&text=YOUR_NAME&fontSize=50&fontColor=fff&animation=fadeIn&fontAlignY=38&desc=Tech+Consultant+%7C+YOUR_FOCUS&descAlignY=60" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Georgia&size=20&pause=2000&color=64748B&center=true&vCenter=true&width=700&lines=Helping+companies+build+better+software;YOUR_YEARS%2B+years+in+tech+consulting;YOUR_CLIENT_COUNT%2B+clients+served;YOUR_TAGLINE" alt="Consultant Typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Georgia&size=20&pause=2000&color=64748B&center=true&vCenter=true&width=700&lines=Helping+companies+build+better+software;YOUR_YEARS%2B+years+in+tech+consulting;YOUR_ACHIEVEMENT_2%2B+clients+served;YOUR_TAGLINE" alt="Consultant Typing"/>
 
 ---
 
@@ -22,7 +22,7 @@
 
 `FinTech` `HealthTech` `E-commerce` `SaaS` `Enterprise`
 
-**Notable work with:** YOUR_CLIENT_1, YOUR_CLIENT_2, YOUR_CLIENT_3
+**Notable work with:** YOUR_PROJECT_1, YOUR_PROJECT_2, YOUR_PROJECT_3
 
 ---
 

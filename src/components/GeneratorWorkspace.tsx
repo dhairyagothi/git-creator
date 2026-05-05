@@ -19,6 +19,7 @@ import { ProfileForm } from "./ProfileForm";
 import { MarkdownPreview } from "./MarkdownPreview";
 
 const DRAFT_KEY = "gra_draft_v1";
+const PREFILL_KEY = "gra_prefill_v1";
 
 export function GeneratorWorkspace() {
   const store = useAppStore();
@@ -34,6 +35,30 @@ export function GeneratorWorkspace() {
         const data = JSON.parse(raw);
         load(data);
         toast.success("Draft restored", { duration: 2000 });
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(PREFILL_KEY);
+      if (raw) {
+        const data = JSON.parse(raw) as { form?: Partial<typeof form> };
+        if (data?.form) {
+          load({
+            form: {
+              ...form,
+              ...data.form,
+              templateFields: {
+                ...form.templateFields,
+                ...data.form.templateFields,
+              },
+            },
+          });
+          setManualMarkdown(null);
+        }
+        localStorage.removeItem(PREFILL_KEY);
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,24 +144,22 @@ export function GeneratorWorkspace() {
     <div className="mx-auto max-w-[1600px] px-4 py-6">
       <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)_minmax(0,1fr)]">
         {/* LEFT */}
-        <aside className="space-y-4">
-          <div className="glass rounded-xl p-4">
+        <aside className="flex flex-col gap-4 lg:sticky lg:top-20 lg:h-[calc(100vh-140px)]">
+          <div className="glass flex min-h-0 flex-1 flex-col rounded-xl p-4">
             <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
               <Sparkles className="h-3.5 w-3.5" /> Templates
             </div>
-            <TemplatePicker value={template} onChange={setTemplate} compact />
+            <div className="min-h-0 flex-1 overflow-auto pr-1">
+              <TemplatePicker value={template} onChange={setTemplate} compact />
+            </div>
           </div>
-          <div className="glass rounded-xl p-4">
+          <div className="glass flex min-h-0 flex-1 flex-col rounded-xl p-4">
             <div className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
               Sections
             </div>
-            {templateConfig.kind === "builder" ? (
+            <div className="min-h-0 flex-1 overflow-auto pr-1">
               <SectionToggles sections={sections} onChange={setSections} />
-            ) : (
-              <div className="rounded-lg border border-border/60 bg-card/40 px-3 py-2 text-xs text-muted-foreground">
-                Section toggles are available for builder templates only.
-              </div>
-            )}
+            </div>
           </div>
         </aside>
 

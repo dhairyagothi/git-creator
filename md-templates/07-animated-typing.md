@@ -1,4 +1,8 @@
 <div align="center">
+  <img src="YOUR_GIF_1" width="100%" />
+</div>
+
+<div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=200&section=header&animation=fadeIn&fontAlignY=38&fontAlign=50" width="100%"/>
 

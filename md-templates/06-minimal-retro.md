@@ -25,9 +25,9 @@
 > TECH_STACK.exe running...
   [████████████████████] 100%
 
-  ✔ LANGUAGES   : YOUR_LANGUAGES
-  ✔ FRAMEWORKS  : YOUR_FRAMEWORKS
-  ✔ DATABASES   : YOUR_DATABASES
+  ✔ LANGUAGES   : YOUR_TOPICS
+  ✔ FRAMEWORKS  : YOUR_TOOLS
+  ✔ DATABASES   : YOUR_TOOLS
   ✔ TOOLS       : YOUR_TOOLS
 
 > GITHUB_STATS.exe running...

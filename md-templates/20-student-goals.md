@@ -13,9 +13,9 @@
 ## 🎯 2025 Goals
 
 - [ ] 🌐 Deploy **3 full-stack** projects
-- [ ] 🧠 Complete **YOUR_COURSE** on Coursera/Udemy
+- [ ] 🧠 Complete **YOUR_CURRENTLY_LEARNING** on Coursera/Udemy
 - [ ] 🤝 Land my **first internship** in tech
-- [ ] 🌱 Learn **YOUR_LANGUAGE**
+- [ ] 🌱 Learn **YOUR_TECH_1**
 - [ ] ⭐ Get **100 GitHub stars** total
 - [ ] 📝 Start a **tech blog**
 

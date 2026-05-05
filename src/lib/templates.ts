@@ -13,6 +13,8 @@ export type SectionId =
   | "socials"
   | "quote"
   | "badges"
+  | "trophies"
+  | "gifs"
   | "footer";
 
 export interface Template {
@@ -39,6 +41,8 @@ export const ALL_SECTIONS: { id: SectionId; label: string }[] = [
   { id: "socials", label: "Social Links" },
   { id: "quote", label: "Quote" },
   { id: "badges", label: "Badges" },
+  { id: "trophies", label: "Trophies" },
+  { id: "gifs", label: "GIFs" },
   { id: "footer", label: "Footer" },
 ];
 
@@ -162,6 +166,7 @@ const builderTemplates: Template[] = [
       "header",
       "about",
       "badges",
+      "trophies",
       "projects",
       "githubStats",
       "streak",

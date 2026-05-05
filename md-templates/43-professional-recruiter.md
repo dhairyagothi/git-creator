@@ -8,7 +8,7 @@
 
 ### 💼 Professional Summary
 
-> YOUR_PROFESSIONAL_SUMMARY — a brief 2-3 sentence overview of your experience, specialties, and what makes you stand out.
+> YOUR_BIO — a brief 2-3 sentence overview of your experience, specialties, and what makes you stand out.
 
 ---
 
@@ -30,9 +30,9 @@
 ### 📈 Impact
 
 - 🚀 Led team of **YOUR_TEAM_SIZE** engineers
-- 💰 Delivered **YOUR_REVENUE** in business value
-- ⚡ Improved performance by **YOUR_PERF_GAIN%**
-- 👥 Mentored **YOUR_MENTEE_COUNT** junior developers
+- 💰 Delivered **YOUR_ACHIEVEMENT_1** in business value
+- ⚡ Improved performance by **YOUR_ACHIEVEMENT_1%**
+- 👥 Mentored **YOUR_ACHIEVEMENT_1** junior developers
 
 ---
 

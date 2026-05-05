@@ -26,6 +26,7 @@ export interface FormState {
   projects: ProjectEntry[];
   achievements: string[];
   funFacts: string[];
+  gifs: string[];
   contributionGoals: string;
   email: string;
   university: string;
@@ -35,6 +36,12 @@ export interface FormState {
   resumeUrl: string;
   scholarId: string;
   templateFields: Record<string, string>;
+  githubStats: {
+    totalStars: number;
+    publicRepos: number;
+    followers: number;
+    topLanguages: string[];
+  };
   socials: {
     twitter: string;
     linkedin: string;
@@ -73,6 +80,7 @@ export const emptyForm: FormState = {
   projects: [],
   achievements: [],
   funFacts: [],
+  gifs: [],
   contributionGoals: "",
   email: "",
   university: "",
@@ -82,6 +90,12 @@ export const emptyForm: FormState = {
   resumeUrl: "",
   scholarId: "",
   templateFields: {},
+  githubStats: {
+    totalStars: 0,
+    publicRepos: 0,
+    followers: 0,
+    topLanguages: [],
+  },
   socials: {
     twitter: "",
     linkedin: "",

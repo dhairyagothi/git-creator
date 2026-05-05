@@ -41,6 +41,20 @@ const AUTO_PLACEHOLDERS: Record<string, (form: FormState) => string> = {
   YOUR_YEARS: (form) => form.experienceYears,
   YOUR_SCHOLAR_ID: (form) => form.scholarId,
   YOUR_RESUME_URL: (form) => form.resumeUrl,
+  YOUR_ACHIEVEMENT_1: (form) => form.achievements[0] ?? "",
+  YOUR_ACHIEVEMENT_2: (form) => form.achievements[1] ?? "",
+  YOUR_ACHIEVEMENT_3: (form) => form.achievements[2] ?? "",
+  YOUR_ACHIEVEMENT_4: (form) => form.achievements[3] ?? "",
+  YOUR_FUN_FACT_1: (form) => form.funFacts[0] ?? "",
+  YOUR_FUN_FACT_2: (form) => form.funFacts[1] ?? "",
+  YOUR_FUN_FACT_3: (form) => form.funFacts[2] ?? "",
+  YOUR_FUN_FACT_4: (form) => form.funFacts[3] ?? "",
+  YOUR_PROJECT_1_DESC: (form) => form.projects[0]?.description ?? "",
+  YOUR_PROJECT_2_DESC: (form) => form.projects[1]?.description ?? "",
+  YOUR_PROJECT_3_DESC: (form) => form.projects[2]?.description ?? "",
+  YOUR_PROJECT_4_DESC: (form) => form.projects[3]?.description ?? "",
+  YOUR_GIF_1: (form) => form.gifs?.[0] ?? "https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif",
+  YOUR_GIF_2: (form) => form.gifs?.[1] ?? "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif",
 };
 
 export const AUTO_PLACEHOLDER_KEYS = new Set(Object.keys(AUTO_PLACEHOLDERS));

@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,9,14,17&height=200&section=header&text=YOUR_NAME&fontSize=50&fontColor=fff&animation=twinkling&fontAlignY=38&desc=Senior+Software+Engineer+%7C+YOUR_COMPANY&descAlignY=60&descSize=18" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Inter&weight=600&size=20&pause=2000&color=6366F1&center=true&vCenter=true&width=700&lines=Building+scalable+systems+%F0%9F%8F%97;YOUR_YEARS%2B+years+shipping+code;YOUR_COMPANY+%7C+YOUR_PREV_COMPANY;YOUR_TAGLINE" alt="Engineer Typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Inter&weight=600&size=20&pause=2000&color=6366F1&center=true&vCenter=true&width=700&lines=Building+scalable+systems+%F0%9F%8F%97;YOUR_YEARS%2B+years+shipping+code;YOUR_COMPANY+%7C+YOUR_COMPANY;YOUR_TAGLINE" alt="Engineer Typing"/>
 
 ---
 
@@ -15,7 +15,7 @@
 - 🏢 **Company:** YOUR_COMPANY
 - 📍 **Location:** YOUR_LOCATION  
 - 💼 **Title:** YOUR_TITLE
-- 🎓 **Education:** YOUR_DEGREE, YOUR_UNIVERSITY
+- 🎓 **Education:** YOUR_MAJOR, YOUR_UNIVERSITY
 - 🌱 **Currently:** YOUR_CURRENT_FOCUS
 - 📫 **Email:** YOUR_EMAIL
 

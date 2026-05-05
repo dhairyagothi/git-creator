@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Wand2 } from "lucide-react";
+import { incrementGenerateCount } from "@/lib/metrics";
 import Aurora from "./Aurora";
 import GradientText from "./GradientText";
 
@@ -48,7 +49,8 @@ export function Hero() {
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
-              to="/generator"
+              to="/user-datails"
+              onClick={() => incrementGenerateCount()}
               className="group inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-neon px-6 font-medium text-background shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
             >
               <Wand2 className="h-4 w-4" />

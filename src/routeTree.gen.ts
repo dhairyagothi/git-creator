@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UserDatailsRouteImport } from './routes/user-datails'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as GeneratorRouteImport } from './routes/generator'
 import { Route as IndexRouteImport } from './routes/index'
 
+const UserDatailsRoute = UserDatailsRouteImport.update({
+  id: '/user-datails',
+  path: '/user-datails',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TemplatesRoute = TemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
   '/templates': typeof TemplatesRoute
+  '/user-datails': typeof UserDatailsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
   '/templates': typeof TemplatesRoute
+  '/user-datails': typeof UserDatailsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
   '/templates': typeof TemplatesRoute
+  '/user-datails': typeof UserDatailsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/generator' | '/templates'
+  fullPaths: '/' | '/generator' | '/templates' | '/user-datails'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/generator' | '/templates'
-  id: '__root__' | '/' | '/generator' | '/templates'
+  to: '/' | '/generator' | '/templates' | '/user-datails'
+  id: '__root__' | '/' | '/generator' | '/templates' | '/user-datails'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GeneratorRoute: typeof GeneratorRoute
   TemplatesRoute: typeof TemplatesRoute
+  UserDatailsRoute: typeof UserDatailsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/user-datails': {
+      id: '/user-datails'
+      path: '/user-datails'
+      fullPath: '/user-datails'
+      preLoaderRoute: typeof UserDatailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/templates': {
       id: '/templates'
       path: '/templates'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GeneratorRoute: GeneratorRoute,
   TemplatesRoute: TemplatesRoute,
+  UserDatailsRoute: UserDatailsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

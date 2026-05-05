@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,6,9&height=220&section=header&text=YOUR_NAME&fontSize=60&fontColor=fff&animation=fadeIn&fontAlignY=38&desc=YOUR_TITLE&descAlignY=60&descSize=24" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Lato&weight=700&size=20&pause=2000&color=0EA5E9&center=true&vCenter=true&width=700&lines=YOUR_TAGLINE_1;YOUR_TAGLINE_2;Available+for+freelance+%7C+full-time" alt="Portfolio Typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Lato&weight=700&size=20&pause=2000&color=0EA5E9&center=true&vCenter=true&width=700&lines=YOUR_TAGLINE;YOUR_FOCUS;Available+for+freelance+%7C+full-time" alt="Portfolio Typing"/>
 
 ---
 

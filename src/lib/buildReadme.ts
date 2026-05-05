@@ -10,6 +10,11 @@ function badge(label: string, color: string, logo?: string) {
   return `![${label}](https://img.shields.io/badge/-${enc(label)}-${color}?style=for-the-badge${l})`;
 }
 
+function metricBadge(label: string, value: string | number, color: string, logo?: string) {
+  const l = logo ? `&logo=${encodeURIComponent(logo)}&logoColor=white` : "";
+  return `![${label}](https://img.shields.io/badge/${enc(label)}-${enc(String(value))}-${color}?style=for-the-badge${l})`;
+}
+
 function techBadge(name: string) {
   // map common names to slugs/colors
   const map: Record<string, [string, string]> = {
@@ -113,34 +118,34 @@ function techStack(form: FormState): string {
 
 function githubStats(form: FormState): string {
   const u = form.username || "octocat";
+  const stats = form.githubStats;
+  const badges = [
+    metricBadge("Followers", stats.followers || 0, "0EA5E9"),
+    metricBadge("Public Repos", stats.publicRepos || 0, "10B981"),
+    metricBadge("Stars", stats.totalStars || 0, "F59E0B"),
+  ].join(" ");
+
   return [
     "## 📊 GitHub Stats",
     "",
-    `<p align="center">`,
-    `  <img src="https://github-readme-stats.vercel.app/api?username=${enc(u)}&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0D1117" alt="GitHub Stats" />`,
-    `</p>`,
-  ].join("\n");
+    `<p align="center">${badges}</p>`,
+    u ? `<p align="center"><a href="https://github.com/${enc(u)}">@${u}</a></p>` : "",
+  ].filter(Boolean).join("\n");
 }
 
 function streak(form: FormState): string {
-  const u = form.username || "octocat";
-  return [
-    "## 🔥 Streak",
-    "",
-    `<p align="center">`,
-    `  <img src="https://streak-stats.demolab.com/?user=${enc(u)}&theme=tokyonight&hide_border=true&background=0D1117" alt="Streak Stats" />`,
-    `</p>`,
-  ].join("\n");
+  return "";
 }
 
 function topLangs(form: FormState): string {
-  const u = form.username || "octocat";
+  const langs = form.githubStats.topLanguages.length
+    ? form.githubStats.topLanguages
+    : form.techStack.slice(0, 6);
+  if (!langs.length) return "";
   return [
     "## 💡 Top Languages",
     "",
-    `<p align="center">`,
-    `  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=${enc(u)}&layout=compact&theme=tokyonight&hide_border=true&bg_color=0D1117" alt="Top Languages" />`,
-    `</p>`,
+    `<p align="center">${langs.map(techBadge).join(" ")}</p>`,
   ].join("\n");
 }
 
@@ -180,13 +185,35 @@ function quote(form: FormState): string {
 }
 
 function badges(form: FormState): string {
-  const u = form.username || "octocat";
+  const stats = form.githubStats;
   return [
     "## 🏅 Badges",
+    "",
+    `<p align="center">${[
+      metricBadge("Followers", stats.followers || 0, "0EA5E9"),
+      metricBadge("Public Repos", stats.publicRepos || 0, "10B981"),
+      metricBadge("Stars", stats.totalStars || 0, "F59E0B"),
+    ].join(" ")}</p>`,
+  ].join("\n");
+}
+
+function trophies(form: FormState): string {
+  const u = form.username || "octocat";
+  return [
+    "## 🏆 Trophies",
     "",
     `<p align="center">`,
     `  <img src="https://github-profile-trophy.vercel.app/?username=${enc(u)}&theme=tokyonight&no-frame=true&column=4" alt="Trophies" />`,
     `</p>`,
+  ].join("\n");
+}
+
+function gifs(form: FormState): string {
+  if (!form.gifs.length) return "";
+  return [
+    "## ✨ GIFs",
+    "",
+    `<p align="center">${form.gifs.map((url) => `<img src="${url}" alt="GIF" />`).join(" ")}</p>`,
   ].join("\n");
 }
 
@@ -206,7 +233,13 @@ export function buildReadme(
 ): string {
   const templateConfig = getTemplate(template);
   if (templateConfig.kind === "markdown" && templateConfig.content) {
-    return replacePlaceholders(templateConfig.content, form);
+    const replaced = replacePlaceholders(templateConfig.content, form);
+    const cleaned = stripExternalStats(replaced);
+    if (cleaned.didReplace) {
+      const statsBlock = [githubStats(form), topLangs(form)].filter(Boolean).join("\n\n");
+      return [cleaned.content.trim(), statsBlock].filter(Boolean).join("\n\n");
+    }
+    return cleaned.content;
   }
 
   const builders: Record<SectionId, () => string> = {
@@ -221,6 +254,8 @@ export function buildReadme(
     socials: () => socials(form),
     quote: () => quote(form),
     badges: () => badges(form),
+    trophies: () => trophies(form),
+    gifs: () => gifs(form),
     footer: () => footer(form),
   };
 
@@ -228,4 +263,26 @@ export function buildReadme(
     .map((id) => builders[id]?.() ?? "")
     .filter(Boolean)
     .join("\n\n");
+}
+
+function stripExternalStats(content: string): { content: string; didReplace: boolean } {
+  let didReplace = false;
+  const patterns = [
+    /!\[[^\]]*\]\([^)]*github-readme-stats[^)]*\)/gi,
+    /<img[^>]*github-readme-stats[^>]*>/gi,
+    /!\[[^\]]*\]\([^)]*github-readme-streak-stats[^)]*\)/gi,
+    /<img[^>]*github-readme-streak-stats[^>]*>/gi,
+    /!\[[^\]]*\]\([^)]*streak-stats[^)]*\)/gi,
+    /<img[^>]*streak-stats[^>]*>/gi,
+  ];
+
+  let next = content;
+  patterns.forEach((pattern) => {
+    if (pattern.test(next)) {
+      didReplace = true;
+      next = next.replace(pattern, "");
+    }
+  });
+
+  return { content: next, didReplace };
 }

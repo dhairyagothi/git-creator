@@ -12,10 +12,10 @@
 
 ```
  ♡ Name     : YOUR_NAME
- ♡ Age      : YOUR_AGE
+ ♡ Age      : YOUR_YEARS
  ♡ School   : YOUR_UNIVERSITY
  ♡ Major    : YOUR_MAJOR
- ♡ Hobbies  : Coding, YOUR_HOBBY_1, YOUR_HOBBY_2
+ ♡ Hobbies  : Coding, YOUR_FUN_FACT_1, YOUR_FUN_FACT_2
  ♡ Love     : Coffee ☕ & Clean Code ✨
  ♡ Currently: Learning YOUR_LEARNING
 ```

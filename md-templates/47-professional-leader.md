@@ -8,9 +8,9 @@
 
 ### 👥 Leadership Philosophy
 
-> *"YOUR_LEADERSHIP_QUOTE"*
+> *"YOUR_QUOTE"*
 
-I believe in **YOUR_LEADERSHIP_PRINCIPLE_1**, **YOUR_LEADERSHIP_PRINCIPLE_2**, and **YOUR_LEADERSHIP_PRINCIPLE_3**.
+I believe in **YOUR_FUN_FACT_1**, **YOUR_FUN_FACT_2**, and **YOUR_FUN_FACT_3**.
 
 ---
 
@@ -20,8 +20,8 @@ I believe in **YOUR_LEADERSHIP_PRINCIPLE_1**, **YOUR_LEADERSHIP_PRINCIPLE_2**, a
 |--------|-------|
 | 👥 Team Size | YOUR_TEAM_SIZE engineers |
 | 🚀 Products Shipped | YOUR_PRODUCTS |
-| 📈 Revenue Impact | YOUR_REVENUE |
-| 🌱 Engineers Grown | YOUR_PROMOTIONS promotions |
+| 📈 Revenue Impact | YOUR_ACHIEVEMENT_1 |
+| 🌱 Engineers Grown | YOUR_ACHIEVEMENT_1 promotions |
 
 ---
 

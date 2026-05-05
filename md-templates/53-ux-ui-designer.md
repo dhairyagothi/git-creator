@@ -24,9 +24,9 @@
 
 | Project | Type | Link |
 |---------|------|------|
-| YOUR_DESIGN_1 | Web App | [Figma](https://YOUR_FIGMA_1) |
-| YOUR_DESIGN_2 | Mobile | [Behance](https://YOUR_BEHANCE_1) |
-| YOUR_DESIGN_3 | Branding | [Dribbble](https://YOUR_DRIBBBLE_1) |
+| YOUR_PROJECT_1 | Web App | [Figma](https://YOUR_PROJECT_1_DEMO) |
+| YOUR_PROJECT_2 | Mobile | [Behance](https://YOUR_BEHANCE_1) |
+| YOUR_PROJECT_3 | Branding | [Dribbble](https://YOUR_DRIBBBLE_1) |
 
 ---
 

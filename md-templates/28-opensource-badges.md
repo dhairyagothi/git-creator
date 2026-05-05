@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,6&height=200&section=header&text=YOUR_NAME&fontSize=50&fontColor=fff&animation=fadeIn&fontAlignY=38" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&pause=1000&color=22C55E&center=true&vCenter=true&width=600&lines=Open+Source+Contributor+%F0%9F%8C%9F;PRs+merged%3A+YOUR_PRS_COUNT+and+counting;YOUR_TAGLINE" alt="Badges Typing"/>
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&pause=1000&color=22C55E&center=true&vCenter=true&width=600&lines=Open+Source+Contributor+%F0%9F%8C%9F;PRs+merged%3A+YOUR_ACHIEVEMENT_1+and+counting;YOUR_TAGLINE" alt="Badges Typing"/>
 
 ---
 
@@ -10,15 +10,15 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Hacktoberfest%202024-Completed-orange?style=for-the-badge&logo=hacktoberfest"/>
-  <img src="https://img.shields.io/badge/PRs%20Merged-YOUR_COUNT-brightgreen?style=for-the-badge&logo=github"/>
-  <img src="https://img.shields.io/badge/Issues%20Resolved-YOUR_COUNT-blue?style=for-the-badge&logo=github"/>
-  <img src="https://img.shields.io/badge/Stars%20Earned-YOUR_COUNT-yellow?style=for-the-badge&logo=github"/>
+  <img src="https://img.shields.io/badge/PRs%20Merged-YOUR_ACHIEVEMENT_1-brightgreen?style=for-the-badge&logo=github"/>
+  <img src="https://img.shields.io/badge/Issues%20Resolved-YOUR_ACHIEVEMENT_1-blue?style=for-the-badge&logo=github"/>
+  <img src="https://img.shields.io/badge/Stars%20Earned-YOUR_ACHIEVEMENT_1-yellow?style=for-the-badge&logo=github"/>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Forks-YOUR_COUNT-9cf?style=flat-square&logo=github"/>
-  <img src="https://img.shields.io/badge/Followers-YOUR_COUNT-success?style=flat-square&logo=github"/>
-  <img src="https://img.shields.io/badge/Repos-YOUR_COUNT-blueviolet?style=flat-square&logo=github"/>
+  <img src="https://img.shields.io/badge/Forks-YOUR_ACHIEVEMENT_1-9cf?style=flat-square&logo=github"/>
+  <img src="https://img.shields.io/badge/Followers-YOUR_ACHIEVEMENT_1-success?style=flat-square&logo=github"/>
+  <img src="https://img.shields.io/badge/Repos-YOUR_ACHIEVEMENT_1-blueviolet?style=flat-square&logo=github"/>
 </p>
 
 ---

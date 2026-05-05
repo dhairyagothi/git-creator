@@ -12,9 +12,9 @@
 
 | Project | Description | Stars | Role |
 |---------|-------------|-------|------|
-| [YOUR_OSS_PROJECT_1](https://github.com/YOUR_USERNAME/YOUR_PROJECT_1) | YOUR_DESC_1 | ⭐ 0 | Maintainer |
-| [YOUR_OSS_PROJECT_2](https://github.com/YOUR_USERNAME/YOUR_PROJECT_2) | YOUR_DESC_2 | ⭐ 0 | Contributor |
-| [YOUR_OSS_PROJECT_3](https://github.com/YOUR_USERNAME/YOUR_PROJECT_3) | YOUR_DESC_3 | ⭐ 0 | Contributor |
+| [YOUR_PROJECT_1](https://github.com/YOUR_USERNAME/YOUR_PROJECT_1) | YOUR_PROJECT_1_DESC | ⭐ 0 | Maintainer |
+| [YOUR_PROJECT_2](https://github.com/YOUR_USERNAME/YOUR_PROJECT_2) | YOUR_PROJECT_2_DESC | ⭐ 0 | Contributor |
+| [YOUR_PROJECT_3](https://github.com/YOUR_USERNAME/YOUR_PROJECT_3) | YOUR_PROJECT_3_DESC | ⭐ 0 | Contributor |
 
 ---
 

@@ -11,7 +11,7 @@
 | | |
 |:--|:--|
 | 🏢 **Current Role** | YOUR_TITLE @ YOUR_COMPANY |
-| 🎓 **Education** | YOUR_DEGREE, YOUR_UNIVERSITY |
+| 🎓 **Education** | YOUR_MAJOR, YOUR_UNIVERSITY |
 | 📍 **Location** | YOUR_LOCATION |
 | 🌐 **LinkedIn** | [YOUR_NAME](https://linkedin.com/in/YOUR_LINKEDIN) |
 | ✍️ **Writing** | [YOUR_BLOG](https://YOUR_BLOG) |

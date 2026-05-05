@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,17,20&height=220&section=header&text=YOUR_NAME&fontSize=55&fontColor=fff&animation=twinkling&fontAlignY=38&desc=Game+Developer+%7C+YOUR_ENGINE+%7C+YOUR_GENRE&descAlignY=60" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,17,20&height=220&section=header&text=YOUR_NAME&fontSize=55&fontColor=fff&animation=twinkling&fontAlignY=38&desc=Game+Developer+%7C+YOUR_TOOLS+%7C+YOUR_FOCUS&descAlignY=60" width="100%"/>
 
 <img src="https://readme-typing-svg.demolab.com?font=Press+Start+2P&size=14&pause=1000&color=F59E0B&center=true&vCenter=true&width=700&lines=PLAYER+ONE+READY...;Loading+YOUR_NAME...;LEVEL+UP+%F0%9F%8E%AE;INSERT+COIN+TO+CONTINUE" alt="Gaming Typing"/>
 
@@ -34,8 +34,8 @@
 
 | Game | Engine | Platform | Players |
 |------|--------|----------|---------|
-| YOUR_GAME_1 | YOUR_ENGINE | YOUR_PLATFORM | YOUR_PLAYERS |
-| YOUR_GAME_2 | YOUR_ENGINE | YOUR_PLATFORM | YOUR_PLAYERS |
+| YOUR_PROJECT_1 | YOUR_TOOLS | YOUR_TOOLS | YOUR_ACHIEVEMENT_1 |
+| YOUR_PROJECT_2 | YOUR_TOOLS | YOUR_TOOLS | YOUR_ACHIEVEMENT_1 |
 
 ---
 

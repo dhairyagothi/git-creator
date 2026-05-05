@@ -1,286 +1,607 @@
-import { useState } from "react";
-import { toast } from "sonner";
-import { Loader2, Search, Plus, Trash2 } from "lucide-react";
+import { useState, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  User, MapPin, Mail, Code2, Briefcase, BookOpen, Link2,
+  Plus, X, ChevronDown, Folder, Quote, Star,
+  Sparkles, GraduationCap, Globe, FileText, Hash, Cpu,
+} from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { getTemplate } from "@/lib/templates";
+import { getTemplate, getTemplatePlaceholders } from "@/lib/templates";
 import { AUTO_PLACEHOLDER_KEYS, getPlaceholderLabel } from "@/lib/templateFields";
-import { Field, Input, Textarea } from "./FormPrimitives";
-import { TagInput } from "./TagInput";
+import type { FormState } from "@/lib/types";
 
-async function fetchGithubUser(username: string) {
-  const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
-  if (!res.ok) throw new Error("Profile not found");
-  return res.json() as Promise<{
-    name?: string;
-    bio?: string;
-    avatar_url?: string;
-    location?: string;
-    blog?: string;
-    twitter_username?: string;
-  }>;
+/* ── helpers ───────────────────────────────────────────────────────────── */
+
+function useFormField<K extends keyof FormState>(key: K) {
+  const value = useAppStore((s) => s.form[key]);
+  const updateForm = useAppStore((s) => s.updateForm);
+  const set = useCallback((v: FormState[K]) => updateForm({ [key]: v } as Partial<FormState>), [key, updateForm]);
+  return [value, set] as const;
 }
 
-export function ProfileForm() {
-  const { form, template, updateForm, updateSocial, updateTemplateField } = useAppStore();
-  const [loading, setLoading] = useState(false);
-  const templateConfig = getTemplate(template);
-  const templatePlaceholders = templateConfig.kind === "markdown" ? templateConfig.placeholders ?? [] : [];
-  const templateFields = templatePlaceholders.filter((key) => !AUTO_PLACEHOLDER_KEYS.has(key));
-  const isLongField = (key: string) => /SUMMARY|DESC|BIO|QUOTE|THREAD|REPORTS|DATA/.test(key);
+/* ── sub-components ─────────────────────────────────────────────────────── */
 
-  const onFetch = async () => {
-    if (!form.username) {
-      toast.error("Enter a GitHub username first");
-      return;
-    }
-    setLoading(true);
-    try {
-      const data = await fetchGithubUser(form.username);
-      updateForm({
-        displayName: data.name || form.displayName,
-        bio: data.bio || form.bio,
-        avatarUrl: data.avatar_url || form.avatarUrl,
-        location: data.location || form.location,
-      });
-      if (data.blog) updateSocial("website", data.blog);
-      if (data.twitter_username) updateSocial("twitter", data.twitter_username);
-      toast.success(`Profile loaded for @${form.username}`);
-    } catch (e) {
-      toast.error("Could not fetch profile. Check the username.");
-    } finally {
-      setLoading(false);
-    }
+function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
+  return (
+    <label className="mb-1.5 block text-xs font-medium text-foreground/80">
+      {children}
+      {required && <span className="ml-1 text-[oklch(0.7_0.24_295)]">*</span>}
+    </label>
+  );
+}
+
+function Input({
+  value, onChange, placeholder, type = "text", className = "",
+}: {
+  value: string; onChange: (v: string) => void; placeholder?: string;
+  type?: string; className?: string;
+}) {
+  return (
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className={`w-full rounded-lg border border-border/60 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-[oklch(0.7_0.24_295)] focus:bg-background/80 ${className}`}
+    />
+  );
+}
+
+function Textarea({
+  value, onChange, placeholder, rows = 3,
+}: {
+  value: string; onChange: (v: string) => void; placeholder?: string; rows?: number;
+}) {
+  return (
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={rows}
+      className="w-full resize-none rounded-lg border border-border/60 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-[oklch(0.7_0.24_295)] focus:bg-background/80"
+    />
+  );
+}
+
+function TagInput({
+  tags, onChange, placeholder,
+}: {
+  tags: string[]; onChange: (tags: string[]) => void; placeholder?: string;
+}) {
+  const [input, setInput] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const add = (raw: string) => {
+    const items = raw.split(",").map((s) => s.trim()).filter(Boolean);
+    const next = [...new Set([...tags, ...items])];
+    onChange(next);
+    setInput("");
   };
 
+  const remove = (i: number) => onChange(tags.filter((_, idx) => idx !== i));
+
   return (
-    <div className="space-y-6">
-      <Section title="GitHub">
-        <Field label="GitHub username" hint="Used for stats & auto-fill">
-          <div className="flex gap-2">
-            <Input
-              value={form.username}
-              onChange={(e) => updateForm({ username: e.target.value.replace(/\s/g, "") })}
-              placeholder="octocat"
-            />
-            <button
-              onClick={onFetch}
-              disabled={loading}
-              className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-gradient-neon px-3 text-xs font-medium text-background shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03] disabled:opacity-60"
-            >
-              {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Search className="h-3.5 w-3.5" />}
-              Fetch
-            </button>
-          </div>
-        </Field>
-      </Section>
-
-      <Section title="Identity">
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Display name">
-            <Input value={form.displayName} onChange={(e) => updateForm({ displayName: e.target.value })} placeholder="Alex Doe" />
-          </Field>
-          <Field label="Tagline">
-            <Input value={form.tagline} onChange={(e) => updateForm({ tagline: e.target.value })} placeholder="Building things on the internet" />
-          </Field>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Role">
-            <Input value={form.role} onChange={(e) => updateForm({ role: e.target.value })} placeholder="Full stack developer" />
-          </Field>
-          <Field label="Focus">
-            <Input value={form.focus} onChange={(e) => updateForm({ focus: e.target.value })} placeholder="Design systems, DX" />
-          </Field>
-        </div>
-        <Field label="Bio / intro">
-          <Textarea rows={3} value={form.bio} onChange={(e) => updateForm({ bio: e.target.value })} placeholder="Short intro about yourself..." />
-        </Field>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Location">
-            <Input value={form.location} onChange={(e) => updateForm({ location: e.target.value })} placeholder="Berlin, Germany" />
-          </Field>
-          <Field label="City">
-            <Input value={form.city} onChange={(e) => updateForm({ city: e.target.value })} placeholder="Berlin" />
-          </Field>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Country">
-            <Input value={form.country} onChange={(e) => updateForm({ country: e.target.value })} placeholder="Germany" />
-          </Field>
-          <Field label="Contact email">
-            <Input type="email" value={form.email} onChange={(e) => updateForm({ email: e.target.value })} placeholder="hi@example.com" />
-          </Field>
-        </div>
-      </Section>
-
-      <Section title="Professional">
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Title">
-            <Input value={form.title} onChange={(e) => updateForm({ title: e.target.value })} placeholder="Senior Software Engineer" />
-          </Field>
-          <Field label="Company">
-            <Input value={form.company} onChange={(e) => updateForm({ company: e.target.value })} placeholder="Acme Corp" />
-          </Field>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Experience (years)">
-            <Input value={form.experienceYears} onChange={(e) => updateForm({ experienceYears: e.target.value })} placeholder="5" />
-          </Field>
-          <Field label="Resume URL">
-            <Input value={form.resumeUrl} onChange={(e) => updateForm({ resumeUrl: e.target.value })} placeholder="https://..." />
-          </Field>
-        </div>
-      </Section>
-
-      <Section title="Education">
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="University">
-            <Input value={form.university} onChange={(e) => updateForm({ university: e.target.value })} placeholder="Stanford University" />
-          </Field>
-          <Field label="Major">
-            <Input value={form.major} onChange={(e) => updateForm({ major: e.target.value })} placeholder="Computer Science" />
-          </Field>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Academic year">
-            <Input value={form.academicYear} onChange={(e) => updateForm({ academicYear: e.target.value })} placeholder="2026" />
-          </Field>
-          <Field label="Scholar ID">
-            <Input value={form.scholarId} onChange={(e) => updateForm({ scholarId: e.target.value })} placeholder="Google Scholar ID" />
-          </Field>
-        </div>
-      </Section>
-
-      <Section title="Currently">
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Working on">
-            <Input value={form.currentlyWorkingOn} onChange={(e) => updateForm({ currentlyWorkingOn: e.target.value })} placeholder="A side project..." />
-          </Field>
-          <Field label="Learning">
-            <Input value={form.currentlyLearning} onChange={(e) => updateForm({ currentlyLearning: e.target.value })} placeholder="Rust, distributed systems" />
-          </Field>
-        </div>
-        <Field label="Contribution goals">
-          <Input value={form.contributionGoals} onChange={(e) => updateForm({ contributionGoals: e.target.value })} placeholder="500 commits this year" />
-        </Field>
-      </Section>
-
-      <Section title="Stack">
-        <Field label="Tech stack" hint="Press Enter to add">
-          <TagInput value={form.techStack} onChange={(v) => updateForm({ techStack: v })} placeholder="React, TypeScript, Node..." />
-        </Field>
-        <Field label="Tools" hint="Editors, infra, design tools">
-          <TagInput value={form.tools} onChange={(v) => updateForm({ tools: v })} placeholder="Docker, Figma, AWS..." />
-        </Field>
-      </Section>
-
-      <Section title="Projects">
-        <div className="space-y-2">
-          {form.projects.map((p, i) => (
-            <div key={i} className="grid gap-2 rounded-lg border border-border/60 bg-background/30 p-3 md:grid-cols-[1fr_2fr_1fr_auto]">
-              <Input
-                value={p.name}
-                onChange={(e) => {
-                  const next = [...form.projects];
-                  next[i] = { ...p, name: e.target.value };
-                  updateForm({ projects: next });
-                }}
-                placeholder="Project name"
-              />
-              <Input
-                value={p.description}
-                onChange={(e) => {
-                  const next = [...form.projects];
-                  next[i] = { ...p, description: e.target.value };
-                  updateForm({ projects: next });
-                }}
-                placeholder="Short description"
-              />
-              <Input
-                value={p.url}
-                onChange={(e) => {
-                  const next = [...form.projects];
-                  next[i] = { ...p, url: e.target.value };
-                  updateForm({ projects: next });
-                }}
-                placeholder="https://..."
-              />
-              <button
-                onClick={() => updateForm({ projects: form.projects.filter((_, idx) => idx !== i) })}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border/60 hover:bg-destructive/20 hover:text-destructive transition-colors"
-                aria-label="Remove project"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
-          <button
-            onClick={() => updateForm({ projects: [...form.projects, { name: "", description: "", url: "" }] })}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-border/60 px-3 py-2 text-xs text-muted-foreground hover:bg-card/40 hover:text-foreground transition-colors"
+    <div
+      className="min-h-[40px] w-full cursor-text rounded-lg border border-border/60 bg-background/50 px-2 py-1.5 transition-colors focus-within:border-[oklch(0.7_0.24_295)] focus-within:bg-background/80"
+      onClick={() => inputRef.current?.focus()}
+    >
+      <div className="flex flex-wrap gap-1.5">
+        {tags.map((t, i) => (
+          <span
+            key={i}
+            className="inline-flex items-center gap-1 rounded-md bg-[oklch(0.7_0.24_295)]/15 px-2 py-0.5 text-xs text-[oklch(0.78_0.18_295)] border border-[oklch(0.7_0.24_295)]/30"
           >
-            <Plus className="h-3.5 w-3.5" /> Add project
-          </button>
-        </div>
-      </Section>
-
-      <Section title="Social links">
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Twitter / X handle"><Input value={form.socials.twitter} onChange={(e) => updateSocial("twitter", e.target.value.replace(/^@/, ""))} placeholder="username" /></Field>
-          <Field label="LinkedIn handle"><Input value={form.socials.linkedin} onChange={(e) => updateSocial("linkedin", e.target.value)} placeholder="username" /></Field>
-          <Field label="Website"><Input value={form.socials.website} onChange={(e) => updateSocial("website", e.target.value)} placeholder="https://..." /></Field>
-          <Field label="YouTube"><Input value={form.socials.youtube} onChange={(e) => updateSocial("youtube", e.target.value)} placeholder="channel" /></Field>
-          <Field label="DEV.to"><Input value={form.socials.devto} onChange={(e) => updateSocial("devto", e.target.value)} placeholder="username" /></Field>
-          <Field label="Instagram"><Input value={form.socials.instagram} onChange={(e) => updateSocial("instagram", e.target.value)} placeholder="username" /></Field>
-        </div>
-      </Section>
-
-      {templateFields.length > 0 && (
-        <Section title="Template fields">
-          <div className="grid gap-4 md:grid-cols-2">
-            {templateFields.map((key) => (
-              <Field key={key} label={getPlaceholderLabel(key)}>
-                {isLongField(key) ? (
-                  <Textarea
-                    rows={3}
-                    value={form.templateFields?.[key] ?? ""}
-                    onChange={(e) => updateTemplateField(key, e.target.value)}
-                    placeholder={key.replace(/_/g, " ")}
-                  />
-                ) : (
-                  <Input
-                    value={form.templateFields?.[key] ?? ""}
-                    onChange={(e) => updateTemplateField(key, e.target.value)}
-                    placeholder={key.replace(/_/g, " ")}
-                  />
-                )}
-              </Field>
-            ))}
-          </div>
-        </Section>
-      )}
-
-      <Section title="Extras">
-        <Field label="Fun facts" hint="Press Enter to add">
-          <TagInput value={form.funFacts} onChange={(v) => updateForm({ funFacts: v })} placeholder="I can solve a Rubik's cube..." />
-        </Field>
-        <Field label="Achievements">
-          <TagInput value={form.achievements} onChange={(v) => updateForm({ achievements: v })} placeholder="Hackathon winner..." />
-        </Field>
-        <Field label="Favorite quote">
-          <Input value={form.quote} onChange={(e) => updateForm({ quote: e.target.value })} placeholder="Stay hungry, stay foolish." />
-        </Field>
-      </Section>
+            {t}
+            <button
+              onClick={(e) => { e.stopPropagation(); remove(i); }}
+              className="opacity-60 hover:opacity-100 transition-opacity"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </span>
+        ))}
+        <input
+          ref={inputRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if ((e.key === "Enter" || e.key === ",") && input.trim()) {
+              e.preventDefault();
+              add(input);
+            } else if (e.key === "Backspace" && !input && tags.length) {
+              remove(tags.length - 1);
+            }
+          }}
+          onBlur={() => { if (input.trim()) add(input); }}
+          placeholder={tags.length ? "" : placeholder}
+          className="min-w-[120px] flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/50 outline-none"
+        />
+      </div>
     </div>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function ProjectsEditor() {
+  const [projects, setProjects] = useFormField("projects");
+
+  const update = (i: number, field: "name" | "description" | "url", val: string) => {
+    const next = [...projects];
+    next[i] = { ...next[i], [field]: val };
+    setProjects(next);
+  };
+
+  const add = () => setProjects([...projects, { name: "", description: "", url: "" }]);
+  const remove = (i: number) => setProjects(projects.filter((_, idx) => idx !== i));
+
   return (
-    <div className="glass rounded-xl p-5">
-      <div className="mb-4 flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-gradient-neon" />
-        <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">{title}</h3>
+    <div className="space-y-3">
+      {projects.map((p, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative rounded-lg border border-border/60 bg-card/30 p-3 space-y-2"
+        >
+          <button
+            onClick={() => remove(i)}
+            className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-card transition-colors"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+          <div className="pr-7">
+            <Label>Project Name</Label>
+            <Input value={p.name} onChange={(v) => update(i, "name", v)} placeholder={`Project ${i + 1}`} />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Input value={p.description} onChange={(v) => update(i, "description", v)} placeholder="Short description..." />
+          </div>
+          <div>
+            <Label>URL / Link</Label>
+            <Input value={p.url} onChange={(v) => update(i, "url", v)} placeholder="https://github.com/..." />
+          </div>
+        </motion.div>
+      ))}
+      {projects.length < 6 && (
+        <button
+          onClick={add}
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border/60 py-2 text-xs text-muted-foreground hover:border-[oklch(0.7_0.24_295)]/50 hover:text-foreground transition-colors"
+        >
+          <Plus className="h-3.5 w-3.5" /> Add Project
+        </button>
+      )}
+    </div>
+  );
+}
+
+function ListEditor({
+  items, onChange, placeholder,
+}: {
+  items: string[]; onChange: (v: string[]) => void; placeholder?: string;
+}) {
+  const [input, setInput] = useState("");
+
+  const add = () => {
+    if (!input.trim()) return;
+    onChange([...items, input.trim()]);
+    setInput("");
+  };
+
+  return (
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <span className="flex-1 rounded-lg border border-border/60 bg-background/50 px-3 py-1.5 text-sm text-foreground">
+            {item}
+          </span>
+          <button
+            onClick={() => onChange(items.filter((_, idx) => idx !== i))}
+            className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-card/60 transition-colors"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ))}
+      <div className="flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(); } }}
+          placeholder={placeholder}
+          className="flex-1 rounded-lg border border-border/60 bg-background/50 px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-[oklch(0.7_0.24_295)]"
+        />
+        <button
+          onClick={add}
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-border/60 bg-card/40 text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
+        >
+          <Plus className="h-3.5 w-3.5" />
+        </button>
       </div>
-      <div className="space-y-4">{children}</div>
+    </div>
+  );
+}
+
+/* ── Section accordion ─────────────────────────────────────────────────── */
+
+function Section({
+  icon: Icon, title, badge, children, defaultOpen = true,
+}: {
+  icon: React.ElementType; title: string; badge?: string;
+  children: React.ReactNode; defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="rounded-xl border border-border/40 bg-card/20 overflow-hidden">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center gap-2.5 px-4 py-3 text-left hover:bg-card/30 transition-colors"
+      >
+        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-[oklch(0.7_0.24_295)]/20 to-[oklch(0.65_0.28_200)]/20">
+          <Icon className="h-3.5 w-3.5 text-[oklch(0.78_0.18_295)]" />
+        </div>
+        <span className="flex-1 text-sm font-semibold">{title}</span>
+        {badge && (
+          <span className="rounded-full bg-[oklch(0.7_0.24_295)]/15 px-2 py-0.5 text-[10px] font-medium text-[oklch(0.78_0.18_295)]">
+            {badge}
+          </span>
+        )}
+        <ChevronDown
+          className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="space-y-4 px-4 pb-4">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ── Field row helper ──────────────────────────────────────────────────── */
+
+function Row({ children, cols = 1 }: { children: React.ReactNode; cols?: 1 | 2 }) {
+  return (
+    <div className={cols === 2 ? "grid grid-cols-2 gap-3" : ""}>
+      {children}
+    </div>
+  );
+}
+
+function Field({ label, children, required }: { label: string; children: React.ReactNode; required?: boolean }) {
+  return (
+    <div>
+      <Label required={required}>{label}</Label>
+      {children}
+    </div>
+  );
+}
+
+/* ── Template-specific fields ──────────────────────────────────────────── */
+
+function TemplateSpecificFields({ placeholders }: { placeholders: string[] }) {
+  const templateFields = useAppStore((s) => s.form.templateFields);
+  const updateTemplateField = useAppStore((s) => s.updateTemplateField);
+
+  const custom = placeholders.filter((p) => !AUTO_PLACEHOLDER_KEYS.has(p));
+  if (!custom.length) return null;
+
+  const groups: Record<string, string[]> = {};
+  custom.forEach((key) => {
+    const base = key.replace(/^YOUR_/, "").replace(/_\d+$/, "");
+    groups[base] = groups[base] ?? [];
+    groups[base].push(key);
+  });
+
+  return (
+    <Section icon={Sparkles} title="Template Fields" badge={`${custom.length} fields`} defaultOpen>
+      <p className="text-xs text-muted-foreground">
+        These fields are specific to your chosen template. Fill them in to customize your profile.
+      </p>
+      {Object.entries(groups).map(([group, keys]) => (
+        <div key={group} className="space-y-2">
+          {keys.length > 1 && (
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+              {group.replace(/_/g, " ")}
+            </p>
+          )}
+          {keys.map((key) => (
+            <div key={key}>
+              <Label>{getPlaceholderLabel(key)}</Label>
+              <Input
+                value={templateFields?.[key] ?? ""}
+                onChange={(v) => updateTemplateField(key, v)}
+                placeholder={`Enter ${getPlaceholderLabel(key).toLowerCase()}...`}
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+    </Section>
+  );
+}
+
+/* ── Main ProfileForm ──────────────────────────────────────────────────── */
+
+export function ProfileForm() {
+  const { template, form, updateForm, updateSocial } = useAppStore();
+  const templateConfig = getTemplate(template);
+  const placeholders = getTemplatePlaceholders(template);
+
+  const needs = (keys: string[]) =>
+    templateConfig.kind === "builder" || keys.some((k) => placeholders.includes(k));
+
+  const upd = (key: keyof FormState) => (val: string) => updateForm({ [key]: val } as Partial<FormState>);
+  const upd2 = (key: keyof FormState) => (val: string[]) => updateForm({ [key]: val } as Partial<FormState>);
+
+  return (
+    <div className="space-y-3">
+      <Section icon={User} title="Identity" defaultOpen>
+        <Field label="GitHub Username" required>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm select-none">@</span>
+            <Input
+              value={form.username}
+              onChange={upd("username")}
+              placeholder="octocat"
+              className="pl-7"
+            />
+          </div>
+        </Field>
+
+        {needs(["YOUR_NAME"]) && (
+          <Field label="Display Name">
+            <Input value={form.displayName} onChange={upd("displayName")} placeholder="John Doe" />
+          </Field>
+        )}
+
+        <Field label="Tagline">
+          <Input value={form.tagline} onChange={upd("tagline")} placeholder="Building things on the internet" />
+        </Field>
+
+        {needs(["YOUR_ROLE", "YOUR_TITLE"]) && (
+          <Row cols={2}>
+            <Field label="Role">
+              <Input value={form.role} onChange={upd("role")} placeholder="Full Stack Developer" />
+            </Field>
+            <Field label="Title">
+              <Input value={form.title} onChange={upd("title")} placeholder="Senior Engineer" />
+            </Field>
+          </Row>
+        )}
+
+        {needs(["YOUR_COMPANY"]) && (
+          <Field label="Company">
+            <div className="relative">
+              <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Input value={form.company} onChange={upd("company")} placeholder="Acme Corp" className="pl-8" />
+            </div>
+          </Field>
+        )}
+
+        {needs(["YOUR_FOCUS", "YOUR_RESEARCH_AREA"]) && (
+          <Field label="Focus / Specialty">
+            <Input value={form.focus} onChange={upd("focus")} placeholder="Web performance, DX, open source..." />
+          </Field>
+        )}
+
+        {needs(["YOUR_BIO"]) && (
+          <Field label="Bio">
+            <Textarea value={form.bio} onChange={upd("bio")} placeholder="A few words about yourself..." />
+          </Field>
+        )}
+
+        {templateConfig.kind === "builder" && (
+          <Field label="Bio">
+            <Textarea value={form.bio} onChange={upd("bio")} placeholder="A few words about yourself..." />
+          </Field>
+        )}
+      </Section>
+
+      {needs(["YOUR_LOCATION", "YOUR_CITY", "YOUR_COUNTRY", "YOUR_EMAIL"]) && (
+        <Section icon={MapPin} title="Location & Contact">
+          {needs(["YOUR_CITY", "YOUR_COUNTRY"]) ? (
+            <Row cols={2}>
+              <Field label="City">
+                <Input value={form.city} onChange={upd("city")} placeholder="San Francisco" />
+              </Field>
+              <Field label="Country">
+                <Input value={form.country} onChange={upd("country")} placeholder="USA" />
+              </Field>
+            </Row>
+          ) : (
+            <Field label="Location">
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input value={form.location} onChange={upd("location")} placeholder="San Francisco, USA" className="pl-8" />
+              </div>
+            </Field>
+          )}
+
+          {needs(["YOUR_EMAIL"]) && (
+            <Field label="Email">
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input type="email" value={form.email} onChange={upd("email")} placeholder="you@example.com" className="pl-8" />
+              </div>
+            </Field>
+          )}
+        </Section>
+      )}
+
+      {needs(["YOUR_PROJECT", "YOUR_LEARNING", "YOUR_CURRENTLY_LEARNING", "YOUR_GOAL"]) && (
+        <Section icon={BookOpen} title="Currently">
+          {needs(["YOUR_PROJECT", "YOUR_CURRENT_FOCUS"]) && (
+            <Field label="Working On">
+              <Input value={form.currentlyWorkingOn} onChange={upd("currentlyWorkingOn")} placeholder="A cool open source project..." />
+            </Field>
+          )}
+          {needs(["YOUR_LEARNING", "YOUR_CURRENTLY_LEARNING"]) && (
+            <Field label="Currently Learning">
+              <Input value={form.currentlyLearning} onChange={upd("currentlyLearning")} placeholder="Rust, WebAssembly, AI..." />
+            </Field>
+          )}
+          {needs(["YOUR_GOAL"]) && (
+            <Field label="Contribution Goals">
+              <Input value={form.contributionGoals} onChange={upd("contributionGoals")} placeholder="Contribute to 10 OSS projects this year" />
+            </Field>
+          )}
+        </Section>
+      )}
+
+      {needs(["YOUR_TOPICS", "YOUR_SKILLS", "YOUR_TECH_1", "YOUR_TECH_2"]) && (
+        <Section icon={Code2} title="Tech Stack">
+          <Field label="Languages & Frameworks">
+            <TagInput
+              tags={form.techStack}
+              onChange={upd2("techStack")}
+              placeholder="React, TypeScript, Python… (comma or Enter)"
+            />
+            <p className="mt-1.5 text-[11px] text-muted-foreground">Comma-separated or press Enter to add each item.</p>
+          </Field>
+          <Field label="Tools & DevOps">
+            <TagInput
+              tags={form.tools}
+              onChange={upd2("tools")}
+              placeholder="Docker, AWS, Git, Figma…"
+            />
+          </Field>
+        </Section>
+      )}
+
+      {needs(["YOUR_PROJECT_1", "YOUR_PROJECT_2", "YOUR_OSS_PROJECT_1", "YOUR_PROJECT_1_DESC", "YOUR_PROJECT_2_DESC", "YOUR_PROJECT_3_DESC", "YOUR_PROJECT_4_DESC"]) && (
+        <Section icon={Folder} title="Projects" defaultOpen={false}>
+          <ProjectsEditor />
+        </Section>
+      )}
+
+      {needs(["YOUR_UNIVERSITY", "YOUR_MAJOR", "YOUR_YEAR"]) && (
+        <Section icon={GraduationCap} title="Education">
+          <Field label="University / School">
+            <Input value={form.university} onChange={upd("university")} placeholder="MIT" />
+          </Field>
+          <Row cols={2}>
+            <Field label="Major / Field">
+              <Input value={form.major} onChange={upd("major")} placeholder="Computer Science" />
+            </Field>
+            <Field label="Year / Level">
+              <Input value={form.academicYear} onChange={upd("academicYear")} placeholder="3rd Year" />
+            </Field>
+          </Row>
+        </Section>
+      )}
+
+      {needs(["YOUR_YEARS", "YOUR_RESUME_URL", "YOUR_SCHOLAR_ID"]) && (
+        <Section icon={Cpu} title="Experience">
+          <Row cols={2}>
+            <Field label="Years of Experience">
+              <Input value={form.experienceYears} onChange={upd("experienceYears")} placeholder="5" />
+            </Field>
+          </Row>
+          {needs(["YOUR_RESUME_URL"]) && (
+            <Field label="Resume URL">
+              <div className="relative">
+                <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input value={form.resumeUrl} onChange={upd("resumeUrl")} placeholder="https://..." className="pl-8" />
+              </div>
+            </Field>
+          )}
+          {needs(["YOUR_SCHOLAR_ID"]) && (
+            <Field label="Google Scholar ID">
+              <Input value={form.scholarId} onChange={upd("scholarId")} placeholder="abc123XYZ" />
+            </Field>
+          )}
+        </Section>
+      )}
+
+      <Section icon={Link2} title="Social Links" defaultOpen={false}>
+        {([
+          { key: "twitter", icon: Hash, label: "Twitter / X", prefix: "@", placeholder: "username" },
+          { key: "linkedin", icon: Link2, label: "LinkedIn", prefix: "in/", placeholder: "username" },
+          { key: "website", icon: Globe, label: "Website / Portfolio", prefix: "", placeholder: "https://yoursite.com" },
+          { key: "youtube", icon: Hash, label: "YouTube", prefix: "@", placeholder: "channel" },
+          { key: "devto", icon: Hash, label: "DEV.to", prefix: "@", placeholder: "username" },
+          { key: "instagram", icon: Hash, label: "Instagram", prefix: "@", placeholder: "username" },
+        ] as const).map(({ key, icon: Icon, label, prefix, placeholder }) => (
+          <div key={key}>
+            <Label>{label}</Label>
+            <div className="relative flex items-center">
+              <Icon className="absolute left-3 h-3.5 w-3.5 text-muted-foreground" />
+              {prefix && (
+                <span className="absolute left-8 text-sm text-muted-foreground select-none">{prefix}</span>
+              )}
+              <input
+                value={form.socials[key]}
+                onChange={(e) => updateSocial(key, e.target.value)}
+                placeholder={placeholder}
+                className={`w-full rounded-lg border border-border/60 bg-background/50 py-2 pr-3 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-[oklch(0.7_0.24_295)] focus:bg-background/80 ${
+                  prefix ? (prefix.length > 2 ? "pl-14" : "pl-9") : "pl-9"
+                }`}
+              />
+            </div>
+          </div>
+        ))}
+      </Section>
+
+      {needs([
+        "YOUR_QUOTE", "YOUR_FUN_FACT", "YOUR_FUN_FACT_1", "YOUR_FUN_FACT_2", "YOUR_FUN_FACT_3", "YOUR_FUN_FACT_4",
+        "YOUR_ACHIEVEMENT_1", "YOUR_ACHIEVEMENT_2", "YOUR_ACHIEVEMENT_3", "YOUR_ACHIEVEMENT_4",
+        "YOUR_GIF_1", "YOUR_GIF_2"
+      ]) && (
+        <Section icon={Star} title="Extras" defaultOpen={false}>
+          {needs(["YOUR_QUOTE"]) && (
+            <Field label="Favorite Quote">
+              <div className="relative">
+                <Quote className="absolute left-3 top-3 h-3.5 w-3.5 text-muted-foreground" />
+                <Textarea
+                  value={form.quote}
+                  onChange={upd("quote")}
+                  placeholder="A quote that inspires you..."
+                />
+              </div>
+            </Field>
+          )}
+          {needs(["YOUR_FUN_FACT", "YOUR_FUN_FACT_1", "YOUR_FUN_FACT_2", "YOUR_FUN_FACT_3", "YOUR_FUN_FACT_4"]) && (
+            <Field label="Fun Facts">
+              <ListEditor
+                items={form.funFacts}
+                onChange={upd2("funFacts")}
+                placeholder="I can solve a Rubik's cube in 30s..."
+              />
+            </Field>
+          )}
+          {needs(["YOUR_ACHIEVEMENT_1", "YOUR_ACHIEVEMENT_2", "YOUR_ACHIEVEMENT_3", "YOUR_ACHIEVEMENT_4"]) && (
+            <Field label="Achievements">
+              <ListEditor
+                items={form.achievements}
+                onChange={upd2("achievements")}
+                placeholder="Speaker at ReactConf 2024..."
+              />
+            </Field>
+          )}
+          {needs(["YOUR_GIF_1", "YOUR_GIF_2"]) && (
+            <Field label="GIF URLs">
+              <ListEditor
+                items={form.gifs}
+                onChange={upd2("gifs")}
+                placeholder="https://media.giphy.com/media/.../giphy.gif"
+              />
+            </Field>
+          )}
+        </Section>
+      )}
+
+      {templateConfig.kind === "markdown" && (
+        <TemplateSpecificFields placeholders={placeholders} />
+      )}
     </div>
   );
 }
