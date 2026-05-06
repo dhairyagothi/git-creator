@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UserDatailsRouteImport } from './routes/user-datails'
 import { Route as TemplatesRouteImport } from './routes/templates'
+import { Route as RepoReadmeRouteImport } from './routes/repo-readme'
 import { Route as GeneratorRouteImport } from './routes/generator'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,6 +23,11 @@ const UserDatailsRoute = UserDatailsRouteImport.update({
 const TemplatesRoute = TemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepoReadmeRoute = RepoReadmeRouteImport.update({
+  id: '/repo-readme',
+  path: '/repo-readme',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GeneratorRoute = GeneratorRouteImport.update({
@@ -38,12 +44,14 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
+  '/repo-readme': typeof RepoReadmeRoute
   '/templates': typeof TemplatesRoute
   '/user-datails': typeof UserDatailsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
+  '/repo-readme': typeof RepoReadmeRoute
   '/templates': typeof TemplatesRoute
   '/user-datails': typeof UserDatailsRoute
 }
@@ -51,20 +59,33 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
+  '/repo-readme': typeof RepoReadmeRoute
   '/templates': typeof TemplatesRoute
   '/user-datails': typeof UserDatailsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/generator' | '/templates' | '/user-datails'
+  fullPaths:
+    | '/'
+    | '/generator'
+    | '/repo-readme'
+    | '/templates'
+    | '/user-datails'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/generator' | '/templates' | '/user-datails'
-  id: '__root__' | '/' | '/generator' | '/templates' | '/user-datails'
+  to: '/' | '/generator' | '/repo-readme' | '/templates' | '/user-datails'
+  id:
+    | '__root__'
+    | '/'
+    | '/generator'
+    | '/repo-readme'
+    | '/templates'
+    | '/user-datails'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GeneratorRoute: typeof GeneratorRoute
+  RepoReadmeRoute: typeof RepoReadmeRoute
   TemplatesRoute: typeof TemplatesRoute
   UserDatailsRoute: typeof UserDatailsRoute
 }
@@ -83,6 +104,13 @@ declare module '@tanstack/react-router' {
       path: '/templates'
       fullPath: '/templates'
       preLoaderRoute: typeof TemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repo-readme': {
+      id: '/repo-readme'
+      path: '/repo-readme'
+      fullPath: '/repo-readme'
+      preLoaderRoute: typeof RepoReadmeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/generator': {
@@ -105,6 +133,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GeneratorRoute: GeneratorRoute,
+  RepoReadmeRoute: RepoReadmeRoute,
   TemplatesRoute: TemplatesRoute,
   UserDatailsRoute: UserDatailsRoute,
 }

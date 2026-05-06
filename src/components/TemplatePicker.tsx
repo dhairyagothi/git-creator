@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { TEMPLATES, type TemplateId } from "@/lib/templates";
+
+const categories = ["all", "minimal", "animated", "fullstack", "student", "opensource", "data-ai", "web3", "professional", "devops", "mobile", "security"];
 
 export function TemplatePicker({
   value,
@@ -11,9 +14,28 @@ export function TemplatePicker({
   onChange: (id: TemplateId) => void;
   compact?: boolean;
 }) {
+  const [cat, setCat] = useState("all");
+  const visible = TEMPLATES.filter(t => cat === "all" || t.tags.includes(cat));
+
   return (
-    <div className={compact ? "space-y-2" : "grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>
-      {TEMPLATES.map((t) => {
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {categories.map((c) => (
+          <button
+            key={c}
+            onClick={() => setCat(c)}
+            className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium capitalize transition-colors border ${
+              cat === c
+                ? "bg-[oklch(0.7_0.24_295)]/20 text-[oklch(0.78_0.18_295)] border-[oklch(0.7_0.24_295)]/30"
+                : "bg-card/40 text-muted-foreground border-border/40 hover:bg-card hover:text-foreground"
+            }`}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+      <div className={compact ? "space-y-2" : "grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>
+        {visible.map((t) => {
         const active = value === t.id;
         return (
           <motion.button
@@ -59,6 +81,7 @@ export function TemplatePicker({
           </motion.button>
         );
       })}
+      </div>
     </div>
   );
 }

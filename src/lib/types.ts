@@ -49,6 +49,8 @@ export interface FormState {
     youtube: string;
     devto: string;
     instagram: string;
+    spotify: string;
+    leetcode: string;
   };
   quote: string;
 }
@@ -103,6 +105,8 @@ export const emptyForm: FormState = {
     youtube: "",
     devto: "",
     instagram: "",
+    spotify: "",
+    leetcode: "",
   },
   quote: "",
 };

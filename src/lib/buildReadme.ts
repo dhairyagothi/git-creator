@@ -2,6 +2,7 @@ import type { FormState } from "./types";
 import type { SectionId, TemplateId } from "./templates";
 import { getTemplate } from "./templates";
 import { replacePlaceholders } from "./templateFields";
+import { getSectionUrl } from "./sectionLinks";
 
 const enc = (s: string) => encodeURIComponent(s.trim());
 
@@ -117,44 +118,78 @@ function techStack(form: FormState): string {
 }
 
 function githubStats(form: FormState): string {
-  const u = form.username || "octocat";
-  const stats = form.githubStats;
-  const badges = [
-    metricBadge("Followers", stats.followers || 0, "0EA5E9"),
-    metricBadge("Public Repos", stats.publicRepos || 0, "10B981"),
-    metricBadge("Stars", stats.totalStars || 0, "F59E0B"),
-  ].join(" ");
-
+  const url = getSectionUrl("githubStats", form);
+  if (!url) return "";
   return [
     "## 📊 GitHub Stats",
     "",
-    `<p align="center">${badges}</p>`,
-    u ? `<p align="center"><a href="https://github.com/${enc(u)}">@${u}</a></p>` : "",
-  ].filter(Boolean).join("\n");
+    `<p align="center">`,
+    `  <img src="${url}" alt="GitHub Stats" />`,
+    `</p>`,
+  ].join("\n");
 }
 
 function streak(form: FormState): string {
-  return "";
+  const url = getSectionUrl("streak", form);
+  if (!url) return "";
+  return [
+    "## 🔥 Streak",
+    "",
+    `<p align="center">`,
+    `  <img src="${url}" alt="Streak Stats" />`,
+    `</p>`,
+  ].join("\n");
 }
 
 function topLangs(form: FormState): string {
-  const langs = form.githubStats.topLanguages.length
-    ? form.githubStats.topLanguages
-    : form.techStack.slice(0, 6);
-  if (!langs.length) return "";
+  const url = getSectionUrl("topLangs", form);
+  if (!url) return "";
   return [
     "## 💡 Top Languages",
     "",
-    `<p align="center">${langs.map(techBadge).join(" ")}</p>`,
+    `<p align="center">`,
+    `  <img src="${url}" alt="Top Languages" />`,
+    `</p>`,
   ].join("\n");
 }
 
 function projects(form: FormState): string {
   if (!form.projects.length) return "";
-  const rows = form.projects
-    .map((p) => `- **[${p.name || "Project"}](${p.url || "#"})** — ${p.description || ""}`)
-    .join("\n");
-  return ["## 🧪 Projects", "", rows].join("\n");
+
+  const getRepoFromUrl = (url: string): string | null => {
+    try {
+      const u = new URL(url);
+      if (u.hostname !== "github.com") return null;
+      const parts = u.pathname.split("/").filter(Boolean);
+      if (parts.length < 2) return null;
+      return parts[1] ?? null;
+    } catch {
+      return null;
+    }
+  };
+
+  const cards = form.projects
+    .map((p) => {
+      const repo = (p.url ? getRepoFromUrl(p.url) : null) ?? (p.name ? p.name.trim() : "");
+      if (!repo) return "";
+      const url = getSectionUrl("projects", form, { repo });
+      if (!url) return "";
+      return `<img src="${url}" alt="${repo}" />`;
+    })
+    .filter(Boolean);
+
+  if (!cards.length) {
+    const rows = form.projects
+      .map((p) => `- **[${p.name || "Project"}](${p.url || "#"})** — ${p.description || ""}`)
+      .join("\n");
+    return ["## 🧪 Projects", "", rows].join("\n");
+  }
+
+  return [
+    "## 🧪 Projects",
+    "",
+    `<p align="center">${cards.join(" ")}</p>`,
+  ].join("\n");
 }
 
 function socials(form: FormState): string {
@@ -185,25 +220,22 @@ function quote(form: FormState): string {
 }
 
 function badges(form: FormState): string {
-  const stats = form.githubStats;
+  const views = getSectionUrl("badges", form);
   return [
     "## 🏅 Badges",
     "",
-    `<p align="center">${[
-      metricBadge("Followers", stats.followers || 0, "0EA5E9"),
-      metricBadge("Public Repos", stats.publicRepos || 0, "10B981"),
-      metricBadge("Stars", stats.totalStars || 0, "F59E0B"),
-    ].join(" ")}</p>`,
+    `<p align="center">${views ? `![Profile views](${views})` : ""}</p>`,
   ].join("\n");
 }
 
 function trophies(form: FormState): string {
-  const u = form.username || "octocat";
+  const url = getSectionUrl("trophies", form);
+  if (!url) return "";
   return [
     "## 🏆 Trophies",
     "",
     `<p align="center">`,
-    `  <img src="https://github-profile-trophy.vercel.app/?username=${enc(u)}&theme=tokyonight&no-frame=true&column=4" alt="Trophies" />`,
+    `  <img src="${url}" alt="Trophies" />`,
     `</p>`,
   ].join("\n");
 }
@@ -226,6 +258,132 @@ function footer(form: FormState): string {
   ].join("\n");
 }
 
+function snake(form: FormState): string {
+  const url = getSectionUrl("snake", form);
+  if (!url) return "";
+  return [
+    "## 🐍 Contribution Snake",
+    "",
+    `<p align="center">`,
+    `  <img src="${url}" alt="github contribution grid snake animation">`,
+    `</p>`,
+  ].join("\n");
+}
+
+function pacman(form: FormState): string {
+  const url = getSectionUrl("pacman", form);
+  if (!url) return "";
+  return [
+    "## 👾 Pac-Man Contribution Graph",
+    "",
+    `<p align="center">`,
+    `  <img src="${url}" alt="pacman contribution graph">`,
+    `</p>`,
+  ].join("\n");
+}
+
+function skyline(form: FormState): string {
+  const u = form.username || "octocat";
+  return [
+    "## 🌆 3D Contribution Skyline",
+    "",
+    `<p align="center">`,
+    `  <img src="https://raw.githubusercontent.com/${enc(u)}/${enc(u)}/main/profile-3d-contrib/profile-night-view.svg" alt="3D Skyline">`,
+    `</p>`,
+  ].join("\n");
+}
+
+function grass(form: FormState): string {
+  const u = form.username || "octocat";
+  return [
+    "## 🌱 Contribution Grass",
+    "",
+    `<p align="center">`,
+    `  <img src="https://raw.githubusercontent.com/${enc(u)}/${enc(u)}/main/assets/fairy-of-grass.svg" alt="Fairy Grass">`,
+    `</p>`,
+  ].join("\n");
+}
+
+function gameOfLife(form: FormState): string {
+  const u = form.username || "octocat";
+  return [
+    "## 🧬 Game of Life",
+    "",
+    `<p align="center">`,
+    `  <img src="https://raw.githubusercontent.com/${enc(u)}/${enc(u)}/main/github4life.svg" alt="Game of Life">`,
+    `</p>`,
+  ].join("\n");
+}
+
+function pixelArt(form: FormState): string {
+  const u = form.username || "octocat";
+  return [
+    "## 🎨 Pixel Art",
+    "",
+    `<p align="center">`,
+    `  <img src="https://raw.githubusercontent.com/${enc(u)}/${enc(u)}/main/assets/gitart.svg" alt="Pixel Art">`,
+    `</p>`,
+  ].join("\n");
+}
+
+function typing(form: FormState): string {
+  const lines = [
+    form.role,
+    form.tagline,
+    form.currentlyWorkingOn ? `Building ${form.currentlyWorkingOn}` : "",
+  ].filter(Boolean).map(enc).join(";");
+  
+  if (!lines) return "";
+  
+  return [
+    "## ⌨️ About Me",
+    "",
+    `<p align="center">`,
+    `  <a href="https://git.io/typing-svg">`,
+    `    <img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=500&size=20&pause=1000&color=0EA5E9&center=true&vCenter=true&width=500&lines=${lines}" alt="Typing SVG" />`,
+    `  </a>`,
+    `</p>`,
+  ].join("\n");
+}
+
+function spotify(form: FormState): string {
+  if (!form.socials.spotify) return "";
+  const url = getSectionUrl("spotify", form);
+  if (!url) return "";
+  return [
+    "## 🎵 Now Playing",
+    "",
+    `<p align="center">`,
+    `  <img src="${url}" alt="Spotify" />`,
+    `</p>`,
+  ].join("\n");
+}
+
+function leetcode(form: FormState): string {
+  if (!form.socials.leetcode) return "";
+  const url = getSectionUrl("leetcode", form);
+  if (!url) return "";
+  return [
+    "## 📈 LeetCode Stats",
+    "",
+    `<p align="center">`,
+    `  <img src="${url}" alt="LeetCode Stats">`,
+    `</p>`,
+  ].join("\n");
+}
+
+function activityGraph(form: FormState): string {
+  const url = getSectionUrl("activityGraph", form, { title: "Activity Graph" });
+  if (!url) return "";
+  return [
+    "## � Activity Graph",
+    "",
+    `<p align="center">`,
+    `  <img src="${url}" alt="Activity Graph">`,
+    `</p>`,
+  ].join("\n");
+}
+
 export function buildReadme(
   form: FormState,
   template: TemplateId,
@@ -233,24 +391,48 @@ export function buildReadme(
 ): string {
   const templateConfig = getTemplate(template);
   if (templateConfig.kind === "markdown" && templateConfig.content) {
-    const replaced = replacePlaceholders(templateConfig.content, form);
-    const cleaned = stripExternalStats(replaced);
-    if (cleaned.didReplace) {
-      const statsBlock = [githubStats(form), topLangs(form)].filter(Boolean).join("\n\n");
-      return [cleaned.content.trim(), statsBlock].filter(Boolean).join("\n\n");
+    const content = templateConfig.content;
+    const sectionContent: Record<string, string> = {};
+    const regex = /<!-- SECTION:([a-zA-Z0-9_-]+) -->([\s\S]*?)<!-- \/SECTION:\1 -->/g;
+    let match;
+    let hasSections = false;
+    
+    while ((match = regex.exec(content)) !== null) {
+      hasSections = true;
+      sectionContent[match[1]] = match[2].trim();
     }
-    return cleaned.content;
+    
+    if (!hasSections) {
+      return replacePlaceholders(content, form);
+    }
+    
+    const result = sections
+      .map(id => sectionContent[id])
+      .filter(Boolean)
+      .join("\n\n");
+      
+    return replacePlaceholders(result, form);
   }
 
   const builders: Record<SectionId, () => string> = {
     header: () => header(form, template),
+    typing: () => typing(form),
     about: () => about(form),
     skills: () => skills(form),
     techStack: () => techStack(form),
     githubStats: () => githubStats(form),
+    leetcode: () => leetcode(form),
+    activityGraph: () => activityGraph(form),
     streak: () => streak(form),
     topLangs: () => topLangs(form),
     projects: () => projects(form),
+    snake: () => snake(form),
+    pacman: () => pacman(form),
+    skyline: () => skyline(form),
+    grass: () => grass(form),
+    gameOfLife: () => gameOfLife(form),
+    pixelArt: () => pixelArt(form),
+    spotify: () => spotify(form),
     socials: () => socials(form),
     quote: () => quote(form),
     badges: () => badges(form),
@@ -263,26 +445,4 @@ export function buildReadme(
     .map((id) => builders[id]?.() ?? "")
     .filter(Boolean)
     .join("\n\n");
-}
-
-function stripExternalStats(content: string): { content: string; didReplace: boolean } {
-  let didReplace = false;
-  const patterns = [
-    /!\[[^\]]*\]\([^)]*github-readme-stats[^)]*\)/gi,
-    /<img[^>]*github-readme-stats[^>]*>/gi,
-    /!\[[^\]]*\]\([^)]*github-readme-streak-stats[^)]*\)/gi,
-    /<img[^>]*github-readme-streak-stats[^>]*>/gi,
-    /!\[[^\]]*\]\([^)]*streak-stats[^)]*\)/gi,
-    /<img[^>]*streak-stats[^>]*>/gi,
-  ];
-
-  let next = content;
-  patterns.forEach((pattern) => {
-    if (pattern.test(next)) {
-      didReplace = true;
-      next = next.replace(pattern, "");
-    }
-  });
-
-  return { content: next, didReplace };
 }

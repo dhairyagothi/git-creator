@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Wand2 } from "lucide-react";
+import { ArrowRight, GitBranch, Sparkles, Wand2 } from "lucide-react";
 import { incrementGenerateCount } from "@/lib/metrics";
 import Aurora from "./Aurora";
 import GradientText from "./GradientText";
@@ -54,20 +54,33 @@ export function Hero() {
               className="group inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-neon px-6 font-medium text-background shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
             >
               <Wand2 className="h-4 w-4" />
-              Start Generating
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              Profile README Generator
+               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              to="/templates"
-              className="inline-flex h-12 items-center gap-2 rounded-xl border border-border/60 bg-card/40 px-6 font-medium text-foreground hover:bg-card/70 transition-colors"
+              to="/repo-readme"
+              className="group inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-neon px-6 font-medium text-background shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
             >
-              View Templates
+              <GitBranch className="h-4 w-4" />
+              Repo README Generator
+               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
+          <div className="mt-4 flex items-center justify-center">
+            <Link
+              to="/templates"
+              className="group inline-flex h-10 items-center gap-2 rounded-full border border-border/60 bg-card/40 px-5 text-sm font-medium text-foreground hover:bg-card/70 transition-colors"
+            >
+              Profile README Templates  
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+
 
         </motion.div>
 
         <FloatingPreview />
+        <RepoAiShowcase />
       </div>
     </section>
   );
@@ -75,7 +88,7 @@ export function Hero() {
 
 function FloatingPreview() {
   return (
-    <div className="relative mx-auto mt-20 max-w-5xl">
+    <div className="relative mx-auto mt-10 max-w-5xl">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -143,6 +156,71 @@ function FloatingPreview() {
       >
         <div className="font-mono text-xs text-muted-foreground">Exported</div>
         <div className="font-mono text-sm">README.md</div>
+      </motion.div>
+    </div>
+  );
+}
+
+function RepoAiShowcase() {
+  return (
+    <div className="relative mx-auto mt-10 max-w-5xl">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.25 }}
+        className="glass relative overflow-hidden rounded-3xl border border-border/60 p-8 shadow-[var(--shadow-elegant)]"
+      >
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute -left-12 -top-12 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(124,255,103,0.35),transparent_70%)] blur-2xl" />
+          <div className="absolute -bottom-16 right-6 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgba(82,39,255,0.35),transparent_70%)] blur-2xl" />
+        </div>
+        <div className="relative grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/50 px-3 py-1 text-xs text-muted-foreground">
+              <Sparkles className="h-3.5 w-3.5" />
+              AI Repo README
+            </div>
+            <h3 className="mt-5 text-3xl font-bold tracking-tight md:text-4xl font-display">
+              AI Repo README in seconds
+            </h3>
+            <p className="mt-3 text-sm text-muted-foreground md:text-base">
+              Analyzing code, dependencies, and docs live.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2 text-xs text-muted-foreground">
+              {["Languages", "Dependencies", "Features", "Install", "Usage", "Contributing"].map((chip) => (
+                <span key={chip} className="rounded-full border border-border/60 bg-card/40 px-3 py-1">
+                  {chip}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="relative">
+            <div className="rounded-2xl border border-border/60 bg-background/50 p-4 font-mono text-xs text-muted-foreground">
+              <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                <span>Analysis stream</span>
+                <span className="rounded-full bg-gradient-neon px-2 py-0.5 text-[9px] font-semibold text-background">
+                  Live
+                </span>
+              </div>
+              <div className="mt-4 space-y-3">
+                {[
+                  "Detected React + Vite project",
+                  "Found 12 dependencies",
+                  "Summarized core features",
+                  "Drafting README outline",
+                ].map((line) => (
+                  <div key={line} className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.78_0.18_200)]" />
+                    <span>{line}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 h-2 overflow-hidden rounded-full bg-border/40">
+                <div className="h-full w-4/5 animate-shimmer bg-gradient-neon" />
+              </div>
+            </div>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

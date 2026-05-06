@@ -2,8 +2,9 @@ import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User, MapPin, Mail, Code2, Briefcase, BookOpen, Link2,
-  Plus, X, ChevronDown, Folder, Quote, Star,
-  Sparkles, GraduationCap, Globe, FileText, Hash, Cpu,
+  Plus, X, ChevronDown, Wrench, Folder, Quote, Star,
+  Sparkles, GraduationCap, Globe, MessageCircle,
+  Video, FileText, Hash, Cpu,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { getTemplate, getTemplatePlaceholders } from "@/lib/templates";
@@ -224,7 +225,7 @@ function ListEditor({
 /* ── Section accordion ─────────────────────────────────────────────────── */
 
 function Section({
-  icon: Icon, title, badge, children, defaultOpen = true,
+  icon: Icon, title, badge, children, defaultOpen = false,
 }: {
   icon: React.ElementType; title: string; badge?: string;
   children: React.ReactNode; defaultOpen?: boolean;
@@ -294,6 +295,7 @@ function TemplateSpecificFields({ placeholders }: { placeholders: string[] }) {
   const custom = placeholders.filter((p) => !AUTO_PLACEHOLDER_KEYS.has(p));
   if (!custom.length) return null;
 
+  // Group them
   const groups: Record<string, string[]> = {};
   custom.forEach((key) => {
     const base = key.replace(/^YOUR_/, "").replace(/_\d+$/, "");
@@ -336,6 +338,7 @@ export function ProfileForm() {
   const templateConfig = getTemplate(template);
   const placeholders = getTemplatePlaceholders(template);
 
+  // check if placeholder is relevant
   const needs = (keys: string[]) =>
     templateConfig.kind === "builder" || keys.some((k) => placeholders.includes(k));
 
@@ -346,14 +349,68 @@ export function ProfileForm() {
     <div className="space-y-3">
       <Section icon={User} title="Identity" defaultOpen>
         <Field label="GitHub Username" required>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm select-none">@</span>
-            <Input
-              value={form.username}
-              onChange={upd("username")}
-              placeholder="octocat"
-              className="pl-7"
-            />
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm select-none">@</span>
+              <Input
+                value={form.username}
+                onChange={upd("username")}
+                placeholder="octocat"
+                className="pl-7"
+              />
+            </div>
+            <button
+              onClick={async () => {
+                const normalizedUsername = form.username.trim().replace(/^@+/, "");
+                if (!normalizedUsername) return;
+                try {
+                  const res = await fetch(`https://api.github.com/users/${encodeURIComponent(normalizedUsername)}`);
+                  if (!res.ok) return;
+                  const data = await res.json() as any;
+                  
+                  const reposRes = await fetch(`https://api.github.com/users/${encodeURIComponent(normalizedUsername)}/repos?per_page=100&sort=updated`);
+                  const repos = reposRes.ok ? await reposRes.json() as any[] : [];
+                  
+                  let totalStars = 0;
+                  const langCounts: Record<string, number> = {};
+                  repos.forEach((repo) => {
+                    totalStars += repo.stargazers_count ?? 0;
+                    if (repo.language) {
+                      langCounts[repo.language] = (langCounts[repo.language] ?? 0) + 1;
+                    }
+                  });
+                  const topLanguages = Object.entries(langCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 6)
+                    .map(([lang]) => lang);
+
+                  updateForm({
+                    username: normalizedUsername,
+                    displayName: data.name || form.displayName,
+                    bio: data.bio || form.bio,
+                    avatarUrl: data.avatar_url || form.avatarUrl,
+                    location: data.location || form.location,
+                    githubStats: {
+                      totalStars,
+                      publicRepos: data.public_repos ?? form.githubStats.publicRepos,
+                      followers: data.followers ?? form.githubStats.followers,
+                      topLanguages,
+                    },
+                    socials: {
+                      ...form.socials,
+                      website: data.blog || form.socials.website,
+                      twitter: data.twitter_username || form.socials.twitter,
+                    }
+                  });
+                } catch (e) {
+                  console.error("Failed to fetch profile", e);
+                }
+              }}
+              className="rounded-lg bg-[oklch(0.7_0.24_295)] px-3 text-sm font-medium text-background hover:opacity-90 disabled:opacity-50"
+              disabled={!form.username.trim()}
+            >
+              Fetch
+            </button>
           </div>
         </Field>
 
@@ -406,8 +463,9 @@ export function ProfileForm() {
         )}
       </Section>
 
+      {/* ── Location & Contact ── */}
       {needs(["YOUR_LOCATION", "YOUR_CITY", "YOUR_COUNTRY", "YOUR_EMAIL"]) && (
-        <Section icon={MapPin} title="Location & Contact">
+        <Section icon={MapPin} title="Location & Contact" defaultOpen>
           {needs(["YOUR_CITY", "YOUR_COUNTRY"]) ? (
             <Row cols={2}>
               <Field label="City">
@@ -437,8 +495,9 @@ export function ProfileForm() {
         </Section>
       )}
 
+      {/* ── Currently ── */}
       {needs(["YOUR_PROJECT", "YOUR_LEARNING", "YOUR_CURRENTLY_LEARNING", "YOUR_GOAL"]) && (
-        <Section icon={BookOpen} title="Currently">
+        <Section icon={BookOpen} title="Currently" defaultOpen>
           {needs(["YOUR_PROJECT", "YOUR_CURRENT_FOCUS"]) && (
             <Field label="Working On">
               <Input value={form.currentlyWorkingOn} onChange={upd("currentlyWorkingOn")} placeholder="A cool open source project..." />
@@ -457,8 +516,9 @@ export function ProfileForm() {
         </Section>
       )}
 
+      {/* ── Tech Stack ── */}
       {needs(["YOUR_TOPICS", "YOUR_SKILLS", "YOUR_TECH_1", "YOUR_TECH_2"]) && (
-        <Section icon={Code2} title="Tech Stack">
+        <Section icon={Code2} title="Tech Stack" defaultOpen>
           <Field label="Languages & Frameworks">
             <TagInput
               tags={form.techStack}
@@ -477,12 +537,14 @@ export function ProfileForm() {
         </Section>
       )}
 
-      {needs(["YOUR_PROJECT_1", "YOUR_PROJECT_2", "YOUR_OSS_PROJECT_1", "YOUR_PROJECT_1_DESC", "YOUR_PROJECT_2_DESC", "YOUR_PROJECT_3_DESC", "YOUR_PROJECT_4_DESC"]) && (
+      {/* ── Projects ── */}
+      {needs(["YOUR_PROJECT_1", "YOUR_PROJECT_2", "YOUR_OSS_PROJECT_1"]) && (
         <Section icon={Folder} title="Projects" defaultOpen={false}>
           <ProjectsEditor />
         </Section>
       )}
 
+      {/* ── Education (student templates) ── */}
       {needs(["YOUR_UNIVERSITY", "YOUR_MAJOR", "YOUR_YEAR"]) && (
         <Section icon={GraduationCap} title="Education">
           <Field label="University / School">
@@ -499,6 +561,7 @@ export function ProfileForm() {
         </Section>
       )}
 
+      {/* ── Experience (professional templates) ── */}
       {needs(["YOUR_YEARS", "YOUR_RESUME_URL", "YOUR_SCHOLAR_ID"]) && (
         <Section icon={Cpu} title="Experience">
           <Row cols={2}>
@@ -522,14 +585,17 @@ export function ProfileForm() {
         </Section>
       )}
 
+      {/* ── Social Links ── */}
       <Section icon={Link2} title="Social Links" defaultOpen={false}>
         {([
-          { key: "twitter", icon: Hash, label: "Twitter / X", prefix: "@", placeholder: "username" },
-          { key: "linkedin", icon: Link2, label: "LinkedIn", prefix: "in/", placeholder: "username" },
+          { key: "twitter", icon: MessageCircle, label: "Twitter / X", prefix: "@", placeholder: "username" },
+          { key: "linkedin", icon: Briefcase, label: "LinkedIn", prefix: "in/", placeholder: "username" },
           { key: "website", icon: Globe, label: "Website / Portfolio", prefix: "", placeholder: "https://yoursite.com" },
-          { key: "youtube", icon: Hash, label: "YouTube", prefix: "@", placeholder: "channel" },
+          { key: "youtube", icon: Video, label: "YouTube", prefix: "@", placeholder: "channel" },
           { key: "devto", icon: Hash, label: "DEV.to", prefix: "@", placeholder: "username" },
           { key: "instagram", icon: Hash, label: "Instagram", prefix: "@", placeholder: "username" },
+          { key: "spotify", icon: Star, label: "Spotify", prefix: "user/", placeholder: "username" },
+          { key: "leetcode", icon: Code2, label: "LeetCode", prefix: "@", placeholder: "username" },
         ] as const).map(({ key, icon: Icon, label, prefix, placeholder }) => (
           <div key={key}>
             <Label>{label}</Label>
@@ -551,11 +617,8 @@ export function ProfileForm() {
         ))}
       </Section>
 
-      {needs([
-        "YOUR_QUOTE", "YOUR_FUN_FACT", "YOUR_FUN_FACT_1", "YOUR_FUN_FACT_2", "YOUR_FUN_FACT_3", "YOUR_FUN_FACT_4",
-        "YOUR_ACHIEVEMENT_1", "YOUR_ACHIEVEMENT_2", "YOUR_ACHIEVEMENT_3", "YOUR_ACHIEVEMENT_4",
-        "YOUR_GIF_1", "YOUR_GIF_2"
-      ]) && (
+      {/* ── Extras ── */}
+      {needs(["YOUR_QUOTE", "YOUR_FUN_FACT"]) && (
         <Section icon={Star} title="Extras" defaultOpen={false}>
           {needs(["YOUR_QUOTE"]) && (
             <Field label="Favorite Quote">
@@ -569,7 +632,7 @@ export function ProfileForm() {
               </div>
             </Field>
           )}
-          {needs(["YOUR_FUN_FACT", "YOUR_FUN_FACT_1", "YOUR_FUN_FACT_2", "YOUR_FUN_FACT_3", "YOUR_FUN_FACT_4"]) && (
+          {needs(["YOUR_FUN_FACT"]) && (
             <Field label="Fun Facts">
               <ListEditor
                 items={form.funFacts}
@@ -578,27 +641,17 @@ export function ProfileForm() {
               />
             </Field>
           )}
-          {needs(["YOUR_ACHIEVEMENT_1", "YOUR_ACHIEVEMENT_2", "YOUR_ACHIEVEMENT_3", "YOUR_ACHIEVEMENT_4"]) && (
-            <Field label="Achievements">
-              <ListEditor
-                items={form.achievements}
-                onChange={upd2("achievements")}
-                placeholder="Speaker at ReactConf 2024..."
-              />
-            </Field>
-          )}
-          {needs(["YOUR_GIF_1", "YOUR_GIF_2"]) && (
-            <Field label="GIF URLs">
-              <ListEditor
-                items={form.gifs}
-                onChange={upd2("gifs")}
-                placeholder="https://media.giphy.com/media/.../giphy.gif"
-              />
-            </Field>
-          )}
+          <Field label="Achievements">
+            <ListEditor
+              items={form.achievements}
+              onChange={upd2("achievements")}
+              placeholder="Speaker at ReactConf 2024..."
+            />
+          </Field>
         </Section>
       )}
 
+      {/* ── Template-specific fields ── */}
       {templateConfig.kind === "markdown" && (
         <TemplateSpecificFields placeholders={placeholders} />
       )}

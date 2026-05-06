@@ -26,12 +26,12 @@ const AUTO_PLACEHOLDERS: Record<string, (form: FormState) => string> = {
   YOUR_PROJECT_2: (form) => form.projects[1]?.name ?? "",
   YOUR_PROJECT_3: (form) => form.projects[2]?.name ?? "",
   YOUR_PROJECT_4: (form) => form.projects[3]?.name ?? "",
-  YOUR_PROJECT_1_DEMO: (form) => form.projects[0]?.url ?? "",
-  YOUR_PROJECT_2_DEMO: (form) => form.projects[1]?.url ?? "",
-  YOUR_TWITTER: (form) => form.socials.twitter,
-  YOUR_LINKEDIN: (form) => form.socials.linkedin,
-  YOUR_WEBSITE: (form) => form.socials.website,
-  YOUR_YOUTUBE: (form) => form.socials.youtube,
+  YOUR_PROJECT_1_DEMO: (form) => encodeURI(form.projects[0]?.url ?? ""),
+  YOUR_PROJECT_2_DEMO: (form) => encodeURI(form.projects[1]?.url ?? ""),
+  YOUR_TWITTER: (form) => encodeURI(form.socials.twitter),
+  YOUR_LINKEDIN: (form) => encodeURI(form.socials.linkedin),
+  YOUR_WEBSITE: (form) => encodeURI(form.socials.website),
+  YOUR_YOUTUBE: (form) => encodeURI(form.socials.youtube),
   YOUR_QUOTE: (form) => form.quote,
   YOUR_FUN_FACT: (form) => form.funFacts[0] ?? "",
   YOUR_GOAL: (form) => form.contributionGoals,
@@ -53,6 +53,29 @@ const AUTO_PLACEHOLDERS: Record<string, (form: FormState) => string> = {
   YOUR_PROJECT_2_DESC: (form) => form.projects[1]?.description ?? "",
   YOUR_PROJECT_3_DESC: (form) => form.projects[2]?.description ?? "",
   YOUR_PROJECT_4_DESC: (form) => form.projects[3]?.description ?? "",
+  YOUR_STARS: (form) => String(form.githubStats.totalStars || 0),
+  YOUR_TOTAL_STARS: (form) => String(form.githubStats.totalStars || 0),
+  YOUR_FOLLOWERS: (form) => String(form.githubStats.followers || 0),
+  YOUR_PUBLIC_REPOS: (form) => String(form.githubStats.publicRepos || 0),
+  YOUR_TOTAL_COMMITS: (form) => String(form.githubStats.totalStars || 0),
+  YOUR_TOP_LANGS: (form) => form.githubStats.topLanguages.join(", "),
+  YOUR_LANGUAGES: (form) => [...form.githubStats.topLanguages, ...form.techStack].slice(0, 5).join(", "),
+  YOUR_FRAMEWORKS: (form) => form.techStack.join(", "),
+  YOUR_DATABASES: (form) => form.tools.join(", "),
+  YOUR_HOBBY_1: (form) => form.funFacts[0] ?? "",
+  YOUR_HOBBY_2: (form) => form.funFacts[1] ?? "",
+  YOUR_OSS_PROJECT_1: (form) => form.projects[0]?.name ?? "",
+  YOUR_OSS_PROJECT_2: (form) => form.projects[1]?.name ?? "",
+  YOUR_OSS_PROJECT_3: (form) => form.projects[2]?.name ?? "",
+  YOUR_DESC_1: (form) => form.projects[0]?.description ?? "",
+  YOUR_DESC_2: (form) => form.projects[1]?.description ?? "",
+  YOUR_DESC_3: (form) => form.projects[2]?.description ?? "",
+  YOUR_PROJECT_1_URL: (form) => form.projects[0]?.url ?? "",
+  YOUR_PROJECT_2_URL: (form) => form.projects[1]?.url ?? "",
+  YOUR_SPECIALTY: (form) => form.focus || form.role,
+  YOUR_COLLAB: (form) => form.currentlyWorkingOn,
+  YOUR_TEAM_SIZE: (_form) => "",
+  YOUR_YEARS_: (form) => form.experienceYears,
   YOUR_GIF_1: (form) => form.gifs?.[0] ?? "https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif",
   YOUR_GIF_2: (form) => form.gifs?.[1] ?? "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif",
 };
@@ -67,7 +90,19 @@ export function resolvePlaceholderValue(form: FormState, key: string): string | 
 }
 
 export function replacePlaceholders(content: string, form: FormState): string {
-  return content.replace(/YOUR_[A-Z0-9_]+/g, (match) => resolvePlaceholderValue(form, match) ?? match);
+  let result = content.replace(/YOUR_[A-Z0-9_]+/g, (match) => resolvePlaceholderValue(form, match) ?? match);
+
+  // Fix skillicons spaces (skillicons API fails with spaces)
+  result = result.replace(/(https:\/\/skillicons\.dev\/icons\?i=)([^&"\s>]+(?: [^&"\s>]+)*)/g, (match, p1, p2) => {
+    return p1 + p2.replace(/\s+/g, '');
+  });
+
+  // Fix github-readmeapp repo names (replace spaces with hyphens for valid repo slugs)
+  result = result.replace(/(&repo=)([^&"\s>]+(?: [^&"\s>]+)*)/g, (match, p1, p2) => {
+    return p1 + encodeURIComponent(p2.replace(/\s+/g, '-'));
+  });
+
+  return result;
 }
 
 export function getPlaceholderLabel(key: string): string {

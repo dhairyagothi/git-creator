@@ -40,7 +40,20 @@ export const useAppStore = create<Store>((set) => ({
         ? state.sections.filter((x) => x !== s)
         : [...state.sections, s],
     })),
-  updateForm: (patch) => set((state) => ({ form: { ...state.form, ...patch } })),
+  updateForm: (patch) =>
+    set((state) => ({
+      form: {
+        ...state.form,
+        ...patch,
+        socials: patch.socials ? { ...state.form.socials, ...patch.socials } : state.form.socials,
+        githubStats: patch.githubStats
+          ? { ...state.form.githubStats, ...patch.githubStats }
+          : state.form.githubStats,
+        templateFields: patch.templateFields
+          ? { ...state.form.templateFields, ...patch.templateFields }
+          : state.form.templateFields,
+      },
+    })),
   updateSocial: (key, value) =>
     set((state) => ({ form: { ...state.form, socials: { ...state.form.socials, [key]: value } } })),
   updateTemplateField: (key, value) =>
@@ -55,7 +68,15 @@ export const useAppStore = create<Store>((set) => ({
   load: (s) =>
     set((state) => {
       const nextTemplate = s.template ? getTemplate(s.template) : getTemplate(state.template);
-      const nextForm = s.form ? { ...emptyForm, ...s.form, templateFields: s.form.templateFields ?? {} } : state.form;
+      const nextForm = s.form
+        ? {
+            ...emptyForm,
+            ...s.form,
+            socials: { ...emptyForm.socials, ...s.form.socials },
+            githubStats: { ...emptyForm.githubStats, ...s.form.githubStats },
+            templateFields: { ...s.form.templateFields },
+          }
+        : state.form;
       return {
         ...state,
         ...s,

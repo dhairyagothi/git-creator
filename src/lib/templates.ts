@@ -15,6 +15,16 @@ export type SectionId =
   | "badges"
   | "trophies"
   | "gifs"
+  | "snake"
+  | "pacman"
+  | "skyline"
+  | "grass"
+  | "gameOfLife"
+  | "pixelArt"
+  | "typing"
+  | "spotify"
+  | "leetcode"
+  | "activityGraph"
   | "footer";
 
 export interface Template {
@@ -31,13 +41,23 @@ export interface Template {
 
 export const ALL_SECTIONS: { id: SectionId; label: string }[] = [
   { id: "header", label: "Header" },
+  { id: "typing", label: "Typing SVG" },
   { id: "about", label: "About Me" },
   { id: "skills", label: "Skills" },
   { id: "techStack", label: "Tech Stack" },
   { id: "githubStats", label: "GitHub Stats" },
+  { id: "leetcode", label: "LeetCode Stats" },
+  { id: "activityGraph", label: "Activity Graph" },
   { id: "streak", label: "Streak Stats" },
   { id: "topLangs", label: "Top Languages" },
   { id: "projects", label: "Projects" },
+  { id: "snake", label: "Snake Animation" },
+  { id: "pacman", label: "Pac-Man Animation" },
+  { id: "skyline", label: "3D Skyline" },
+  { id: "grass", label: "Contribution Grass" },
+  { id: "gameOfLife", label: "Game of Life" },
+  { id: "pixelArt", label: "Pixel Art" },
+  { id: "spotify", label: "Spotify Now Playing" },
   { id: "socials", label: "Social Links" },
   { id: "quote", label: "Quote" },
   { id: "badges", label: "Badges" },

@@ -13,56 +13,71 @@ import {
 import { useAppStore } from "@/lib/store";
 import { buildReadme } from "@/lib/buildReadme";
 import { getTemplate } from "@/lib/templates";
+import { emptyForm } from "@/lib/types";
 import { TemplatePicker } from "./TemplatePicker";
 import { SectionToggles } from "./SectionToggles";
 import { ProfileForm } from "./ProfileForm";
 import { MarkdownPreview } from "./MarkdownPreview";
+import type { TemplateId } from "@/lib/templates";
 
 const DRAFT_KEY = "gra_draft_v1";
 const PREFILL_KEY = "gra_prefill_v1";
 
-export function GeneratorWorkspace() {
+export function GeneratorWorkspace({
+  searchTemplate,
+  searchUsername,
+}: {
+  searchTemplate?: TemplateId;
+  searchUsername?: string;
+}) {
   const store = useAppStore();
-  const { template, sections, form, manualMarkdown, setTemplate, setSections, setManualMarkdown, reset, load } = store;
+  const { template, sections, form, manualMarkdown, setTemplate, setSections, setManualMarkdown, reset, load, updateForm } = store;
   const [tab, setTab] = useState<"preview" | "edit">("preview");
   const templateConfig = getTemplate(template);
 
-  // Load draft on mount
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(DRAFT_KEY);
-      if (raw) {
-        const data = JSON.parse(raw);
-        load(data);
-        toast.success("Draft restored", { duration: 2000 });
-      }
-    } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      // Apply URL-driven state first (direct links/bookmarks)
+      if (searchTemplate) setTemplate(searchTemplate);
+      if (searchUsername) updateForm({ username: searchUsername });
 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(PREFILL_KEY);
-      if (raw) {
-        const data = JSON.parse(raw) as { form?: Partial<typeof form> };
-        if (data?.form) {
+      // Prefill takes priority (coming from user-details page)
+      const prefillRaw = localStorage.getItem(PREFILL_KEY);
+      if (prefillRaw) {
+        const prefillData = JSON.parse(prefillRaw) as {
+          template?: TemplateId;
+          form?: Partial<typeof form>;
+        };
+        localStorage.removeItem(PREFILL_KEY);
+        if (prefillData?.form) {
+          // New prefill should start clean and should not be overridden by an old draft.
+          try {
+            localStorage.removeItem(DRAFT_KEY);
+          } catch {}
+
+          reset();
           load({
-            form: {
-              ...form,
-              ...data.form,
-              templateFields: {
-                ...form.templateFields,
-                ...data.form.templateFields,
-              },
-            },
+            template: prefillData.template ?? searchTemplate,
+            form: { ...emptyForm, ...prefillData.form },
           });
           setManualMarkdown(null);
+          return; // don't also load draft
         }
-        localStorage.removeItem(PREFILL_KEY);
+      }
+
+      // Fall back to draft
+      // Only restore draft when nothing else is driving state.
+      if (!searchTemplate && !searchUsername) {
+        const draftRaw = localStorage.getItem(DRAFT_KEY);
+        if (draftRaw) {
+          const data = JSON.parse(draftRaw);
+          load(data);
+          toast.success("Draft restored", { duration: 2000 });
+        }
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [reset, load, searchTemplate, searchUsername, setManualMarkdown, setTemplate, updateForm]);
 
   // Autosave
   useEffect(() => {

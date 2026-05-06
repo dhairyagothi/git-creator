@@ -28,14 +28,50 @@ function UserDetailsPage() {
   const { template } = Route.useSearch();
   const { form, updateForm } = useAppStore();
   const [username, setUsername] = useState(form.username || "");
+  const [fetched, setFetched] = useState<{
+    name?: string;
+    bio?: string;
+    avatar_url?: string;
+    location?: string;
+    public_repos?: number;
+    followers?: number;
+    totalStars?: number;
+    topLanguages?: string[];
+  } | null>(null);
+  const [fetchedPatch, setFetchedPatch] = useState<Partial<typeof form> | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const canSubmit = useMemo(() => !!username.trim() && !loading, [username, loading]);
 
+  const onContinue = () => {
+    if (!fetchedPatch) return;
+
+    updateForm(fetchedPatch);
+    // New profile prefill should not be overridden by an old autosaved draft
+    try {
+      localStorage.removeItem("gra_draft_v1");
+    } catch {}
+
+    localStorage.setItem(
+      PREFILL_KEY,
+      JSON.stringify({
+        template,
+        form: { ...fetchedPatch, templateFields: form.templateFields },
+      }),
+    );
+
+    // Remove username from search, template is enough
+    navigate({
+      to: "/generator",
+      search: template ? { template } : {},
+    });
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username.trim()) {
+    const normalizedUsername = username.trim().replace(/^@+/, "");
+    if (!normalizedUsername) {
       setError("Please enter your GitHub username.");
       return;
     }
@@ -44,7 +80,7 @@ function UserDetailsPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username.trim())}`);
+      const res = await fetch(`https://api.github.com/users/${encodeURIComponent(normalizedUsername)}`);
       if (!res.ok) {
         if (res.status === 403) {
           throw new Error("GitHub rate limit reached. Try again later.");
@@ -66,7 +102,7 @@ function UserDetailsPage() {
       };
 
       const reposRes = await fetch(
-        `https://api.github.com/users/${encodeURIComponent(username.trim())}/repos?per_page=100&sort=updated`,
+        `https://api.github.com/users/${encodeURIComponent(normalizedUsername)}/repos?per_page=100&sort=updated`,
       );
       const repos = reposRes.ok ? await reposRes.json() as Array<{ stargazers_count?: number; language?: string | null }> : [];
 
@@ -91,7 +127,7 @@ function UserDetailsPage() {
       };
 
       const patch = {
-        username: username.trim(),
+        username: normalizedUsername,
         displayName: data.name || form.displayName,
         bio: data.bio || form.bio,
         avatarUrl: data.avatar_url || form.avatarUrl,
@@ -105,13 +141,17 @@ function UserDetailsPage() {
         socials: nextSocials,
       };
 
-      updateForm(patch);
-      localStorage.setItem(PREFILL_KEY, JSON.stringify({ form: patch }));
-
-      navigate({
-        to: "/generator",
-        search: template ? { template, username: username.trim() } : { username: username.trim() },
+      setFetched({
+        name: data.name,
+        bio: data.bio,
+        avatar_url: data.avatar_url,
+        location: data.location,
+        public_repos: data.public_repos,
+        followers: data.followers,
+        totalStars,
+        topLanguages,
       });
+      setFetchedPatch(patch);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Could not load that profile.";
       setError(message);
@@ -158,7 +198,11 @@ function UserDetailsPage() {
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">@</span>
                 <input
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    if (fetched) setFetched(null);
+                    if (fetchedPatch) setFetchedPatch(null);
+                  }}
                   placeholder="dhairyagothi"
                   className="w-full rounded-xl border border-border/60 bg-background/60 py-3 pl-9 pr-4 text-sm text-foreground outline-none transition-colors focus:border-[oklch(0.7_0.24_295)]"
                 />
@@ -172,8 +216,65 @@ function UserDetailsPage() {
               className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-neon px-4 py-3 text-sm font-medium text-background shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-60"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-              {loading ? "Fetching profile..." : "Continue to Generator"}
+              {loading ? "Fetching profile..." : fetched ? "Fetch again" : "Fetch profile"}
             </button>
+
+            {fetched && (
+              <div className="mt-6 rounded-2xl border border-border/50 bg-card/40 p-4">
+                <div className="flex items-start gap-4">
+                  <div className="h-14 w-14 overflow-hidden rounded-2xl border border-border/60 bg-background/40">
+                    {fetched.avatar_url ? (
+                      <img
+                        src={fetched.avatar_url}
+                        alt={fetched.name ?? username}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full" />
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-sm font-semibold">
+                      {fetched.name ?? username.trim()}
+                    </div>
+                    {fetched.bio && <div className="mt-1 text-xs text-muted-foreground">{fetched.bio}</div>}
+                    {fetched.location && (
+                      <div className="mt-2 text-xs text-muted-foreground">{fetched.location}</div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-3 gap-2">
+                  <div className="rounded-xl border border-border/50 bg-background/30 px-3 py-2">
+                    <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Repos</div>
+                    <div className="mt-1 text-sm font-semibold">{fetched.public_repos ?? 0}</div>
+                  </div>
+                  <div className="rounded-xl border border-border/50 bg-background/30 px-3 py-2">
+                    <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Followers</div>
+                    <div className="mt-1 text-sm font-semibold">{fetched.followers ?? 0}</div>
+                  </div>
+                  <div className="rounded-xl border border-border/50 bg-background/30 px-3 py-2">
+                    <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Stars</div>
+                    <div className="mt-1 text-sm font-semibold">{fetched.totalStars ?? 0}</div>
+                  </div>
+                </div>
+
+                {!!fetched.topLanguages?.length && (
+                  <div className="mt-3 text-xs text-muted-foreground">
+                    Top languages: {fetched.topLanguages.join(", ")}
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={onContinue}
+                  disabled={!fetchedPatch}
+                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border/60 bg-background/60 px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-card disabled:opacity-60"
+                >
+                  Continue <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </form>
         </motion.div>
       </section>
