@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { BackgroundFX } from "@/components/BackgroundFX";
 
 import appCss from "../styles.css?url";
+import favicon from "../../assets/favicon.png?url";
 
 import FuzzyText from "@/components/FuzzyText";
 
@@ -47,12 +48,20 @@ export const Route = createRootRoute({
         name: "description",
         content: "Generate, preview, edit, and export a beautiful GitHub profile README in minutes. Premium templates, GitHub auto-fill, and live markdown preview.",
       },
-      { property: "og:title", content: "github-readme.app — Build a stunning GitHub profile README" },
-      { property: "og:description", content: "Premium templates, GitHub auto-fill, live preview, one-click export." },
+      { property: "og:title", content: "github-readme.app — Best GitHub Profile README Generator" },
+      { property: "og:description", content: "Create a stunning GitHub profile README in seconds for FREE. 100+ premium templates, auto-fill stats, and live editor." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://github-readme.app" },
+      { property: "og:image", content: "https://github-readme.app/og-image.png" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "github-readme.app — Best GitHub Profile README Generator" },
+      { name: "twitter:description", content: "Create a stunning GitHub profile README in seconds for FREE. 100+ premium templates." },
+      { name: "keywords", content: "github readme generator, github profile readme, free readme builder, stunning github profile, best readme templates" },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: favicon },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,

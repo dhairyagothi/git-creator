@@ -64,13 +64,17 @@ function header(form: FormState, template: TemplateId): string {
       `${name} 👋`,
       tagline,
       form.currentlyLearning ? `Currently learning ${form.currentlyLearning}` : "",
-    ].filter(Boolean).map(enc).join(";");
+    ].filter(Boolean).join(";");
+    
+    const url = getSectionUrl("header", form, { lines });
+    const viewsUrl = getSectionUrl("badges", form);
+
     return [
       `<h1 align="center">`,
-      `  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=28&duration=3000&pause=800&color=A78BFA&center=true&vCenter=true&width=600&lines=${lines}" alt="Typing SVG" />`,
+      `  <img src="${url}" alt="Typing SVG" />`,
       `</h1>`,
       ``,
-      `<p align="center"><img src="https://komarev.com/ghpvc/?username=${enc(form.username || "user")}&style=for-the-badge&color=A78BFA" alt="Profile views" /></p>`,
+      viewsUrl ? `<p align="center"><img src="${viewsUrl}" alt="Profile views" /></p>` : "",
     ].join("\n");
   }
 
@@ -283,45 +287,49 @@ function pacman(form: FormState): string {
 }
 
 function skyline(form: FormState): string {
-  const u = form.username || "octocat";
+  const url = getSectionUrl("skyline", form);
+  if (!url) return "";
   return [
     "## 🌆 3D Contribution Skyline",
     "",
     `<p align="center">`,
-    `  <img src="https://raw.githubusercontent.com/${enc(u)}/${enc(u)}/main/profile-3d-contrib/profile-night-view.svg" alt="3D Skyline">`,
+    `  <img src="${url}" alt="3D Skyline">`,
     `</p>`,
   ].join("\n");
 }
 
 function grass(form: FormState): string {
-  const u = form.username || "octocat";
+  const url = getSectionUrl("grass", form);
+  if (!url) return "";
   return [
     "## 🌱 Contribution Grass",
     "",
     `<p align="center">`,
-    `  <img src="https://raw.githubusercontent.com/${enc(u)}/${enc(u)}/main/assets/fairy-of-grass.svg" alt="Fairy Grass">`,
+    `  <img src="${url}" alt="Fairy Grass">`,
     `</p>`,
   ].join("\n");
 }
 
 function gameOfLife(form: FormState): string {
-  const u = form.username || "octocat";
+  const url = getSectionUrl("gameOfLife", form);
+  if (!url) return "";
   return [
     "## 🧬 Game of Life",
     "",
     `<p align="center">`,
-    `  <img src="https://raw.githubusercontent.com/${enc(u)}/${enc(u)}/main/github4life.svg" alt="Game of Life">`,
+    `  <img src="${url}" alt="Game of Life">`,
     `</p>`,
   ].join("\n");
 }
 
 function pixelArt(form: FormState): string {
-  const u = form.username || "octocat";
+  const url = getSectionUrl("pixelArt", form);
+  if (!url) return "";
   return [
     "## 🎨 Pixel Art",
     "",
     `<p align="center">`,
-    `  <img src="https://raw.githubusercontent.com/${enc(u)}/${enc(u)}/main/assets/gitart.svg" alt="Pixel Art">`,
+    `  <img src="${url}" alt="Pixel Art">`,
     `</p>`,
   ].join("\n");
 }
@@ -331,16 +339,17 @@ function typing(form: FormState): string {
     form.role,
     form.tagline,
     form.currentlyWorkingOn ? `Building ${form.currentlyWorkingOn}` : "",
-  ].filter(Boolean).map(enc).join(";");
+  ].filter(Boolean).join(";");
   
-  if (!lines) return "";
+  const url = getSectionUrl("typing", form, { lines });
+  if (!url) return "";
   
   return [
     "## ⌨️ About Me",
     "",
     `<p align="center">`,
     `  <a href="https://git.io/typing-svg">`,
-    `    <img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=500&size=20&pause=1000&color=0EA5E9&center=true&vCenter=true&width=500&lines=${lines}" alt="Typing SVG" />`,
+    `    <img src="${url}" alt="Typing SVG" />`,
     `  </a>`,
     `</p>`,
   ].join("\n");
@@ -427,17 +436,11 @@ export function buildReadme(
     topLangs: () => topLangs(form),
     projects: () => projects(form),
     snake: () => snake(form),
-    pacman: () => pacman(form),
-    skyline: () => skyline(form),
-    grass: () => grass(form),
-    gameOfLife: () => gameOfLife(form),
-    pixelArt: () => pixelArt(form),
     spotify: () => spotify(form),
     socials: () => socials(form),
     quote: () => quote(form),
     badges: () => badges(form),
     trophies: () => trophies(form),
-    gifs: () => gifs(form),
     footer: () => footer(form),
   };
 

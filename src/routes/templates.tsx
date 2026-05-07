@@ -10,8 +10,8 @@ import { incrementGenerateCount } from "@/lib/metrics";
 export const Route = createFileRoute("/templates")({
   head: () => ({
     meta: [
-      { title: "Templates — github-readme.app" },
-      { name: "description", content: "Browse premium GitHub profile README templates: minimal, animated, full stack, AI, web3 and more." },
+      { title: "Premium GitHub README Templates — github-readme.app" },
+      { name: "description", content: "Explore premium GitHub profile README templates for FREE. Minimal, animated, data-driven, and persona-specific designs to make your profile stand out." },
     ],
   }),
   component: TemplatesPage,
@@ -114,7 +114,7 @@ function TemplatesPage() {
                 ))}
               </div>
               <Link
-                to="/user-datails"
+                to="/user-details"
                 search={{ template: t.id }}
                 onClick={() => incrementGenerateCount()}
                 className="mt-5 inline-flex w-full items-center justify-center gap-1 rounded-lg bg-gradient-neon px-3 py-2 text-sm font-medium text-background transition-transform hover:scale-[1.02]"

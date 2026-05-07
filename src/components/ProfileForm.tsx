@@ -22,31 +22,7 @@ function useFormField<K extends keyof FormState>(key: K) {
 
 /* ── sub-components ─────────────────────────────────────────────────────── */
 
-function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
-  return (
-    <label className="mb-1.5 block text-xs font-medium text-foreground/80">
-      {children}
-      {required && <span className="ml-1 text-[oklch(0.7_0.24_295)]">*</span>}
-    </label>
-  );
-}
-
-function Input({
-  value, onChange, placeholder, type = "text", className = "",
-}: {
-  value: string; onChange: (v: string) => void; placeholder?: string;
-  type?: string; className?: string;
-}) {
-  return (
-    <input
-      type={type}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className={`w-full rounded-lg border border-border/60 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-[oklch(0.7_0.24_295)] focus:bg-background/80 ${className}`}
-    />
-  );
-}
+import { Label, Input, TagInput, Section } from "@/components/FormElements";
 
 function Textarea({
   value, onChange, placeholder, rows = 3,
@@ -61,64 +37,6 @@ function Textarea({
       rows={rows}
       className="w-full resize-none rounded-lg border border-border/60 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-[oklch(0.7_0.24_295)] focus:bg-background/80"
     />
-  );
-}
-
-function TagInput({
-  tags, onChange, placeholder,
-}: {
-  tags: string[]; onChange: (tags: string[]) => void; placeholder?: string;
-}) {
-  const [input, setInput] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const add = (raw: string) => {
-    const items = raw.split(",").map((s) => s.trim()).filter(Boolean);
-    const next = [...new Set([...tags, ...items])];
-    onChange(next);
-    setInput("");
-  };
-
-  const remove = (i: number) => onChange(tags.filter((_, idx) => idx !== i));
-
-  return (
-    <div
-      className="min-h-[40px] w-full cursor-text rounded-lg border border-border/60 bg-background/50 px-2 py-1.5 transition-colors focus-within:border-[oklch(0.7_0.24_295)] focus-within:bg-background/80"
-      onClick={() => inputRef.current?.focus()}
-    >
-      <div className="flex flex-wrap gap-1.5">
-        {tags.map((t, i) => (
-          <span
-            key={i}
-            className="inline-flex items-center gap-1 rounded-md bg-[oklch(0.7_0.24_295)]/15 px-2 py-0.5 text-xs text-[oklch(0.78_0.18_295)] border border-[oklch(0.7_0.24_295)]/30"
-          >
-            {t}
-            <button
-              onClick={(e) => { e.stopPropagation(); remove(i); }}
-              className="opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          </span>
-        ))}
-        <input
-          ref={inputRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if ((e.key === "Enter" || e.key === ",") && input.trim()) {
-              e.preventDefault();
-              add(input);
-            } else if (e.key === "Backspace" && !input && tags.length) {
-              remove(tags.length - 1);
-            }
-          }}
-          onBlur={() => { if (input.trim()) add(input); }}
-          placeholder={tags.length ? "" : placeholder}
-          className="min-w-[120px] flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/50 outline-none"
-        />
-      </div>
-    </div>
   );
 }
 
@@ -224,49 +142,6 @@ function ListEditor({
 
 /* ── Section accordion ─────────────────────────────────────────────────── */
 
-function Section({
-  icon: Icon, title, badge, children, defaultOpen = false,
-}: {
-  icon: React.ElementType; title: string; badge?: string;
-  children: React.ReactNode; defaultOpen?: boolean;
-}) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="rounded-xl border border-border/40 bg-card/20 overflow-hidden">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center gap-2.5 px-4 py-3 text-left hover:bg-card/30 transition-colors"
-      >
-        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-[oklch(0.7_0.24_295)]/20 to-[oklch(0.65_0.28_200)]/20">
-          <Icon className="h-3.5 w-3.5 text-[oklch(0.78_0.18_295)]" />
-        </div>
-        <span className="flex-1 text-sm font-semibold">{title}</span>
-        {badge && (
-          <span className="rounded-full bg-[oklch(0.7_0.24_295)]/15 px-2 py-0.5 text-[10px] font-medium text-[oklch(0.78_0.18_295)]">
-            {badge}
-          </span>
-        )}
-        <ChevronDown
-          className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        />
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="space-y-4 px-4 pb-4">{children}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
 /* ── Field row helper ──────────────────────────────────────────────────── */
 
 function Row({ children, cols = 1 }: { children: React.ReactNode; cols?: 1 | 2 }) {
@@ -334,9 +209,12 @@ function TemplateSpecificFields({ placeholders }: { placeholders: string[] }) {
 /* ── Main ProfileForm ──────────────────────────────────────────────────── */
 
 export function ProfileForm() {
-  const { template, form, updateForm, updateSocial } = useAppStore();
+  const { template, sections, form, updateForm, updateSocial } = useAppStore();
   const templateConfig = getTemplate(template);
   const placeholders = getTemplatePlaceholders(template);
+
+  // Helper to check if a section should be shown in editor
+  const isVisible = (id: SectionId) => sections.includes(id);
 
   // check if placeholder is relevant
   const needs = (keys: string[]) =>
@@ -347,311 +225,218 @@ export function ProfileForm() {
 
   return (
     <div className="space-y-3">
-      <Section icon={User} title="Identity" defaultOpen>
-        <Field label="GitHub Username" required>
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm select-none">@</span>
-              <Input
-                value={form.username}
-                onChange={upd("username")}
-                placeholder="octocat"
-                className="pl-7"
-              />
+      {/* ── Identity (Header) ── */}
+      {isVisible("header") && (
+        <Section icon={User} title="Identity" defaultOpen>
+          <Field label="GitHub Username" required>
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm select-none">@</span>
+                <Input
+                  value={form.username}
+                  onChange={upd("username")}
+                  placeholder="octocat"
+                  className="pl-7"
+                />
+              </div>
+              <button
+                onClick={async () => {
+                  const normalizedUsername = form.username.trim().replace(/^@+/, "");
+                  if (!normalizedUsername) return;
+                  try {
+                    const res = await fetch(`https://api.github.com/users/${encodeURIComponent(normalizedUsername)}`);
+                    if (!res.ok) return;
+                    const data = await res.json() as any;
+                    
+                    const reposRes = await fetch(`https://api.github.com/users/${encodeURIComponent(normalizedUsername)}/repos?per_page=100&sort=stars`);
+                    const repos = reposRes.ok ? await reposRes.json() as any[] : [];
+                    
+                    const nonForks = repos.filter(r => !r.fork);
+                    const topProjects = nonForks
+                      .sort((a, b) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0))
+                      .slice(0, 4)
+                      .map(r => ({
+                        name: r.name,
+                        description: r.description || "",
+                        url: r.html_url
+                      }));
+
+                    let totalStars = 0;
+                    const langCounts: Record<string, number> = {};
+                    repos.forEach((repo) => {
+                      totalStars += repo.stargazers_count ?? 0;
+                      if (repo.language) {
+                        langCounts[repo.language] = (langCounts[repo.language] ?? 0) + 1;
+                      }
+                    });
+                    const topLanguages = Object.entries(langCounts)
+                      .sort((a, b) => b[1] - a[1])
+                      .slice(0, 6)
+                      .map(([lang]) => lang);
+
+                    updateForm({
+                      username: normalizedUsername,
+                      displayName: data.name || form.displayName,
+                      bio: data.bio || form.bio,
+                      avatarUrl: data.avatar_url || form.avatarUrl,
+                      location: data.location || form.location,
+                      githubStats: {
+                        totalStars,
+                        publicRepos: data.public_repos ?? form.githubStats.publicRepos,
+                        followers: data.followers ?? form.githubStats.followers,
+                        topLanguages,
+                      },
+                      projects: topProjects.length ? topProjects : form.projects,
+                      socials: {
+                        ...form.socials,
+                        website: data.blog || form.socials.website,
+                        twitter: data.twitter_username || form.socials.twitter,
+                      }
+                    });
+                  } catch (e) {
+                    console.error("Failed to fetch profile", e);
+                  }
+                }}
+                className="rounded-lg bg-[oklch(0.7_0.24_295)] px-3 text-sm font-medium text-background hover:opacity-90 disabled:opacity-50"
+                disabled={!form.username.trim()}
+              >
+                Fetch
+              </button>
             </div>
-            <button
-              onClick={async () => {
-                const normalizedUsername = form.username.trim().replace(/^@+/, "");
-                if (!normalizedUsername) return;
-                try {
-                  const res = await fetch(`https://api.github.com/users/${encodeURIComponent(normalizedUsername)}`);
-                  if (!res.ok) return;
-                  const data = await res.json() as any;
-                  
-                  const reposRes = await fetch(`https://api.github.com/users/${encodeURIComponent(normalizedUsername)}/repos?per_page=100&sort=updated`);
-                  const repos = reposRes.ok ? await reposRes.json() as any[] : [];
-                  
-                  let totalStars = 0;
-                  const langCounts: Record<string, number> = {};
-                  repos.forEach((repo) => {
-                    totalStars += repo.stargazers_count ?? 0;
-                    if (repo.language) {
-                      langCounts[repo.language] = (langCounts[repo.language] ?? 0) + 1;
-                    }
-                  });
-                  const topLanguages = Object.entries(langCounts)
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 6)
-                    .map(([lang]) => lang);
-
-                  updateForm({
-                    username: normalizedUsername,
-                    displayName: data.name || form.displayName,
-                    bio: data.bio || form.bio,
-                    avatarUrl: data.avatar_url || form.avatarUrl,
-                    location: data.location || form.location,
-                    githubStats: {
-                      totalStars,
-                      publicRepos: data.public_repos ?? form.githubStats.publicRepos,
-                      followers: data.followers ?? form.githubStats.followers,
-                      topLanguages,
-                    },
-                    socials: {
-                      ...form.socials,
-                      website: data.blog || form.socials.website,
-                      twitter: data.twitter_username || form.socials.twitter,
-                    }
-                  });
-                } catch (e) {
-                  console.error("Failed to fetch profile", e);
-                }
-              }}
-              className="rounded-lg bg-[oklch(0.7_0.24_295)] px-3 text-sm font-medium text-background hover:opacity-90 disabled:opacity-50"
-              disabled={!form.username.trim()}
-            >
-              Fetch
-            </button>
-          </div>
-        </Field>
-
-        {needs(["YOUR_NAME"]) && (
-          <Field label="Display Name">
-            <Input value={form.displayName} onChange={upd("displayName")} placeholder="John Doe" />
           </Field>
-        )}
 
-        <Field label="Tagline">
-          <Input value={form.tagline} onChange={upd("tagline")} placeholder="Building things on the internet" />
-        </Field>
-
-        {needs(["YOUR_ROLE", "YOUR_TITLE"]) && (
           <Row cols={2}>
-            <Field label="Role">
-              <Input value={form.role} onChange={upd("role")} placeholder="Full Stack Developer" />
+            <Field label="Display Name">
+              <Input value={form.displayName} onChange={upd("displayName")} placeholder="John Doe" />
             </Field>
-            <Field label="Title">
-              <Input value={form.title} onChange={upd("title")} placeholder="Senior Engineer" />
+            <Field label="Tagline">
+              <Input value={form.tagline} onChange={upd("tagline")} placeholder="Building things..." />
             </Field>
           </Row>
-        )}
 
-        {needs(["YOUR_COMPANY"]) && (
-          <Field label="Company">
-            <div className="relative">
-              <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-              <Input value={form.company} onChange={upd("company")} placeholder="Acme Corp" className="pl-8" />
-            </div>
-          </Field>
-        )}
-
-        {needs(["YOUR_FOCUS", "YOUR_RESEARCH_AREA"]) && (
-          <Field label="Focus / Specialty">
-            <Input value={form.focus} onChange={upd("focus")} placeholder="Web performance, DX, open source..." />
-          </Field>
-        )}
-
-        {needs(["YOUR_BIO"]) && (
-          <Field label="Bio">
-            <Textarea value={form.bio} onChange={upd("bio")} placeholder="A few words about yourself..." />
-          </Field>
-        )}
-
-        {templateConfig.kind === "builder" && (
-          <Field label="Bio">
-            <Textarea value={form.bio} onChange={upd("bio")} placeholder="A few words about yourself..." />
-          </Field>
-        )}
-      </Section>
-
-      {/* ── Location & Contact ── */}
-      {needs(["YOUR_LOCATION", "YOUR_CITY", "YOUR_COUNTRY", "YOUR_EMAIL"]) && (
-        <Section icon={MapPin} title="Location & Contact" defaultOpen>
-          {needs(["YOUR_CITY", "YOUR_COUNTRY"]) ? (
-            <Row cols={2}>
-              <Field label="City">
-                <Input value={form.city} onChange={upd("city")} placeholder="San Francisco" />
-              </Field>
-              <Field label="Country">
-                <Input value={form.country} onChange={upd("country")} placeholder="USA" />
-              </Field>
-            </Row>
-          ) : (
+          <Row cols={2}>
+            <Field label="Role">
+              <Input value={form.role} onChange={upd("role")} placeholder="Developer" />
+            </Field>
             <Field label="Location">
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-                <Input value={form.location} onChange={upd("location")} placeholder="San Francisco, USA" className="pl-8" />
-              </div>
+              <Input value={form.location} onChange={upd("location")} placeholder="San Francisco" />
             </Field>
-          )}
+          </Row>
 
-          {needs(["YOUR_EMAIL"]) && (
-            <Field label="Email">
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-                <Input type="email" value={form.email} onChange={upd("email")} placeholder="you@example.com" className="pl-8" />
-              </div>
-            </Field>
-          )}
+          <Field label="Bio">
+            <Textarea value={form.bio} onChange={upd("bio")} placeholder="A few words about yourself..." />
+          </Field>
         </Section>
       )}
 
-      {/* ── Currently ── */}
-      {needs(["YOUR_PROJECT", "YOUR_LEARNING", "YOUR_CURRENTLY_LEARNING", "YOUR_GOAL"]) && (
-        <Section icon={BookOpen} title="Currently" defaultOpen>
-          {needs(["YOUR_PROJECT", "YOUR_CURRENT_FOCUS"]) && (
-            <Field label="Working On">
-              <Input value={form.currentlyWorkingOn} onChange={upd("currentlyWorkingOn")} placeholder="A cool open source project..." />
-            </Field>
-          )}
-          {needs(["YOUR_LEARNING", "YOUR_CURRENTLY_LEARNING"]) && (
-            <Field label="Currently Learning">
-              <Input value={form.currentlyLearning} onChange={upd("currentlyLearning")} placeholder="Rust, WebAssembly, AI..." />
-            </Field>
-          )}
-          {needs(["YOUR_GOAL"]) && (
-            <Field label="Contribution Goals">
-              <Input value={form.contributionGoals} onChange={upd("contributionGoals")} placeholder="Contribute to 10 OSS projects this year" />
-            </Field>
-          )}
+      {/* ── Typing Section Fields ── */}
+      {isVisible("typing") && (
+        <Section icon={Code2} title="Typing Animation">
+          <p className="text-xs text-muted-foreground mb-3">
+            Custom strings for your Typing SVG animation.
+          </p>
+          <Field label="Current Work">
+            <Input value={form.currentlyWorkingOn} onChange={upd("currentlyWorkingOn")} placeholder="Building a SaaS..." />
+          </Field>
+          <Field label="Learning">
+            <Input value={form.currentlyLearning} onChange={upd("currentlyLearning")} placeholder="Rust & AI..." />
+          </Field>
         </Section>
       )}
 
       {/* ── Tech Stack ── */}
-      {needs(["YOUR_TOPICS", "YOUR_SKILLS", "YOUR_TECH_1", "YOUR_TECH_2"]) && (
-        <Section icon={Code2} title="Tech Stack" defaultOpen>
+      {isVisible("techStack") && (
+        <Section icon={Cpu} title="Tech Stack" defaultOpen>
           <Field label="Languages & Frameworks">
             <TagInput
               tags={form.techStack}
               onChange={upd2("techStack")}
-              placeholder="React, TypeScript, Python… (comma or Enter)"
+              placeholder="React, Node, Python..."
             />
-            <p className="mt-1.5 text-[11px] text-muted-foreground">Comma-separated or press Enter to add each item.</p>
           </Field>
-          <Field label="Tools & DevOps">
+          <Field label="Tools & Platforms">
             <TagInput
               tags={form.tools}
               onChange={upd2("tools")}
-              placeholder="Docker, AWS, Git, Figma…"
+              placeholder="Docker, AWS, Git..."
             />
           </Field>
         </Section>
       )}
 
       {/* ── Projects ── */}
-      {needs(["YOUR_PROJECT_1", "YOUR_PROJECT_2", "YOUR_OSS_PROJECT_1"]) && (
-        <Section icon={Folder} title="Projects" defaultOpen={false}>
+      {isVisible("projects") && (
+        <Section icon={Folder} title="Projects" defaultOpen>
           <ProjectsEditor />
         </Section>
       )}
 
-      {/* ── Education (student templates) ── */}
-      {needs(["YOUR_UNIVERSITY", "YOUR_MAJOR", "YOUR_YEAR"]) && (
-        <Section icon={GraduationCap} title="Education">
-          <Field label="University / School">
-            <Input value={form.university} onChange={upd("university")} placeholder="MIT" />
-          </Field>
-          <Row cols={2}>
-            <Field label="Major / Field">
-              <Input value={form.major} onChange={upd("major")} placeholder="Computer Science" />
-            </Field>
-            <Field label="Year / Level">
-              <Input value={form.academicYear} onChange={upd("academicYear")} placeholder="3rd Year" />
-            </Field>
-          </Row>
-        </Section>
-      )}
-
-      {/* ── Experience (professional templates) ── */}
-      {needs(["YOUR_YEARS", "YOUR_RESUME_URL", "YOUR_SCHOLAR_ID"]) && (
-        <Section icon={Cpu} title="Experience">
-          <Row cols={2}>
-            <Field label="Years of Experience">
-              <Input value={form.experienceYears} onChange={upd("experienceYears")} placeholder="5" />
-            </Field>
-          </Row>
-          {needs(["YOUR_RESUME_URL"]) && (
-            <Field label="Resume URL">
-              <div className="relative">
-                <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-                <Input value={form.resumeUrl} onChange={upd("resumeUrl")} placeholder="https://..." className="pl-8" />
-              </div>
-            </Field>
-          )}
-          {needs(["YOUR_SCHOLAR_ID"]) && (
-            <Field label="Google Scholar ID">
-              <Input value={form.scholarId} onChange={upd("scholarId")} placeholder="abc123XYZ" />
-            </Field>
-          )}
-        </Section>
-      )}
-
       {/* ── Social Links ── */}
-      <Section icon={Link2} title="Social Links" defaultOpen={false}>
-        {([
-          { key: "twitter", icon: MessageCircle, label: "Twitter / X", prefix: "@", placeholder: "username" },
-          { key: "linkedin", icon: Briefcase, label: "LinkedIn", prefix: "in/", placeholder: "username" },
-          { key: "website", icon: Globe, label: "Website / Portfolio", prefix: "", placeholder: "https://yoursite.com" },
-          { key: "youtube", icon: Video, label: "YouTube", prefix: "@", placeholder: "channel" },
-          { key: "devto", icon: Hash, label: "DEV.to", prefix: "@", placeholder: "username" },
-          { key: "instagram", icon: Hash, label: "Instagram", prefix: "@", placeholder: "username" },
-          { key: "spotify", icon: Star, label: "Spotify", prefix: "user/", placeholder: "username" },
-          { key: "leetcode", icon: Code2, label: "LeetCode", prefix: "@", placeholder: "username" },
-        ] as const).map(({ key, icon: Icon, label, prefix, placeholder }) => (
-          <div key={key}>
-            <Label>{label}</Label>
-            <div className="relative flex items-center">
-              <Icon className="absolute left-3 h-3.5 w-3.5 text-muted-foreground" />
-              {prefix && (
-                <span className="absolute left-8 text-sm text-muted-foreground select-none">{prefix}</span>
-              )}
-              <input
-                value={form.socials[key]}
-                onChange={(e) => updateSocial(key, e.target.value)}
-                placeholder={placeholder}
-                className={`w-full rounded-lg border border-border/60 bg-background/50 py-2 pr-3 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-[oklch(0.7_0.24_295)] focus:bg-background/80 ${
-                  prefix ? (prefix.length > 2 ? "pl-14" : "pl-9") : "pl-9"
-                }`}
-              />
-            </div>
-          </div>
-        ))}
-      </Section>
-
-      {/* ── Extras ── */}
-      {needs(["YOUR_QUOTE", "YOUR_FUN_FACT"]) && (
-        <Section icon={Star} title="Extras" defaultOpen={false}>
-          {needs(["YOUR_QUOTE"]) && (
-            <Field label="Favorite Quote">
-              <div className="relative">
-                <Quote className="absolute left-3 top-3 h-3.5 w-3.5 text-muted-foreground" />
-                <Textarea
-                  value={form.quote}
-                  onChange={upd("quote")}
-                  placeholder="A quote that inspires you..."
-                />
+      {isVisible("socials") && (
+        <Section icon={Link2} title="Social Links">
+          <div className="grid gap-3 sm:grid-cols-2">
+            {([
+              { key: "twitter", icon: MessageCircle, label: "Twitter / X" },
+              { key: "linkedin", icon: Briefcase, label: "LinkedIn" },
+              { key: "website", icon: Globe, label: "Portfolio" },
+              { key: "leetcode", icon: Code2, label: "LeetCode" },
+              { key: "youtube", icon: Video, label: "YouTube" },
+              { key: "github", icon: User, label: "GitHub" },
+            ] as const).map(({ key, icon: Icon, label }) => (
+              <div key={key}>
+                <Label>{label}</Label>
+                <div className="relative">
+                  <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                  <input
+                    value={key === "github" ? form.username : form.socials[key as keyof typeof form.socials] || ""}
+                    onChange={(e) => key !== "github" && updateSocial(key as keyof typeof form.socials, e.target.value)}
+                    readOnly={key === "github"}
+                    placeholder="username"
+                    className="w-full rounded-lg border border-border/60 bg-background/50 py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-[oklch(0.7_0.24_295)]"
+                  />
+                </div>
               </div>
-            </Field>
-          )}
-          {needs(["YOUR_FUN_FACT"]) && (
-            <Field label="Fun Facts">
-              <ListEditor
-                items={form.funFacts}
-                onChange={upd2("funFacts")}
-                placeholder="I can solve a Rubik's cube in 30s..."
-              />
-            </Field>
-          )}
-          <Field label="Achievements">
-            <ListEditor
-              items={form.achievements}
-              onChange={upd2("achievements")}
-              placeholder="Speaker at ReactConf 2024..."
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {/* ── Quote ── */}
+      {isVisible("quote") && (
+        <Section icon={Quote} title="Quote">
+          <Field label="Favorite Quote">
+            <Textarea value={form.quote} onChange={upd("quote")} placeholder="Your inspiration..." />
+          </Field>
+        </Section>
+      )}
+
+      {/* ── LeetCode (Optional) ── */}
+      {isVisible("leetcode") && (
+        <Section icon={Code2} title="LeetCode">
+          <Field label="LeetCode Username">
+            <Input 
+              value={form.socials.leetcode} 
+              onChange={(v) => updateSocial("leetcode", v)} 
+              placeholder="Username" 
             />
           </Field>
         </Section>
       )}
 
-      {/* ── Template-specific fields ── */}
+      {/* ── Spotify (Optional) ── */}
+      {isVisible("spotify") && (
+        <Section icon={Star} title="Spotify">
+          <Field label="Spotify User ID">
+            <Input 
+              value={form.socials.spotify} 
+              onChange={(v) => updateSocial("spotify", v)} 
+              placeholder="Your ID..." 
+            />
+          </Field>
+        </Section>
+      )}
+
+      {/* ── Extra Fields for Templates ── */}
       {templateConfig.kind === "markdown" && (
         <TemplateSpecificFields placeholders={placeholders} />
       )}

@@ -12,7 +12,7 @@ const searchSchema = z.object({
   template: z.string().optional(),
 });
 
-export const Route = createFileRoute("/user-datails")({
+export const Route = createFileRoute("/user-details")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
@@ -102,9 +102,26 @@ function UserDetailsPage() {
       };
 
       const reposRes = await fetch(
-        `https://api.github.com/users/${encodeURIComponent(normalizedUsername)}/repos?per_page=100&sort=updated`,
+        `https://api.github.com/users/${encodeURIComponent(normalizedUsername)}/repos?per_page=100&sort=stars`,
       );
-      const repos = reposRes.ok ? await reposRes.json() as Array<{ stargazers_count?: number; language?: string | null }> : [];
+      const repos = reposRes.ok ? await reposRes.json() as Array<{ 
+        name: string;
+        description: string | null;
+        html_url: string;
+        stargazers_count?: number; 
+        language?: string | null;
+        fork: boolean;
+      }> : [];
+
+      const nonForks = repos.filter(r => !r.fork);
+      const topProjects = nonForks
+        .sort((a, b) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0))
+        .slice(0, 4)
+        .map(r => ({
+          name: r.name,
+          description: r.description || "",
+          url: r.html_url
+        }));
 
       let totalStars = 0;
       const langCounts: Record<string, number> = {};
@@ -138,6 +155,7 @@ function UserDetailsPage() {
           followers: data.followers ?? form.githubStats.followers,
           topLanguages,
         },
+        projects: topProjects.length ? topProjects : form.projects,
         socials: nextSocials,
       };
 

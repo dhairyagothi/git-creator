@@ -24,7 +24,9 @@ export function Navbar() {
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-neon shadow-[var(--shadow-glow)]">
             <Sparkles className="h-4 w-4 text-background" />
           </span>
-          <span className="font-bold tracking-tight">github-readme<span className="text-gradient">.app</span></span>
+          <span className="font-bold tracking-tight">
+            github-readme<span className="text-gradient">.app</span>
+          </span>
         </Link>
         <nav className="hidden items-center gap-7 md:flex">
           {link("/", "Home")}

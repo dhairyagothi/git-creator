@@ -57,7 +57,7 @@ export function TemplateShowcase() {
               </div>
               <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{t.description}</p>
               <Link
-                to="/user-datails"
+                to="/user-details"
                 search={{ template: t.id } as never}
                 onClick={() => incrementGenerateCount()}
                 className="mt-4 inline-flex items-center gap-1 text-sm text-foreground hover:text-[oklch(0.82_0.16_200)] transition-colors"

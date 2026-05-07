@@ -17,7 +17,10 @@ export const SECTION_LINKS: Record<SectionId, { type: LinkType; url: string | nu
     url: "https://readme-typing-svg.demolab.com/?font=JetBrains+Mono&weight=600&size=24&duration=2500&pause=1000&color=58A6FF&center=true&vCenter=true&width=850&lines=Building+beautiful+and+performant+web+experiences;Exploring+AI+%2B+Web+integration;Open+to+collaboration+on+impactful+projects",
   },
 
-  about: { type: "markdown", url: null },
+  about: {
+    type: "markdown",
+    url: null,
+  },
 
   skills: {
     type: "icons",
@@ -49,7 +52,10 @@ export const SECTION_LINKS: Record<SectionId, { type: LinkType; url: string | nu
     url: "https://github-readmeapp.vercel.app/api/pin/?username={username}&repo={repo}&theme=tokyonight&hide_border=true",
   },
 
-  socials: { type: "markdown", url: null },
+  socials: {
+    type: "markdown",
+    url: null,
+  },
 
   quote: {
     type: "external",
@@ -66,7 +72,10 @@ export const SECTION_LINKS: Record<SectionId, { type: LinkType; url: string | nu
     url: "https://github-profile-trophy.vercel.app/?username={username}&theme=tokyonight&no-frame=true&no-bg=true&margin-w=10&row=1",
   },
 
-  gifs: { type: "asset", url: null },
+  gifs: {
+    type: "asset",
+    url: null,
+  },
 
   snake: {
     type: "generatedAsset",
@@ -118,7 +127,10 @@ export const SECTION_LINKS: Record<SectionId, { type: LinkType; url: string | nu
     url: "https://github-readme-activity-graph.vercel.app/graph?username={username}&custom_title={title}&bg_color=0d1117&color=58A6FF&line=7C3AED&point=FFFFFF&area=true&hide_border=true",
   },
 
-  footer: { type: "markdown", url: null },
+  footer: {
+    type: "markdown",
+    url: null,
+  },
 };
 
 function normalizeUsername(raw: string): string {
@@ -132,17 +144,29 @@ function enc(s: string): string {
 export function fillSectionUrl(
   templateUrl: string,
   form: FormState,
-  extras?: { repo?: string; title?: string },
+  extras?: { repo?: string; title?: string; lines?: string },
 ): string {
   const username = normalizeUsername(form.username || "octocat");
 
-  return templateUrl
+  let url = templateUrl
     .replaceAll("{username}", enc(username))
     .replaceAll("{repo}", enc(extras?.repo ?? ""))
     .replaceAll("{spotifyUserId}", enc(form.socials.spotify || ""))
     .replaceAll("{leetcodeUsername}", enc(form.socials.leetcode || ""))
     .replaceAll("{title}", enc(extras?.title ?? ""));
+
+  if (extras?.lines) {
+    // If we have custom lines, replace the lines param in the URL if it exists
+    if (url.includes("lines=")) {
+      url = url.replace(/lines=[^&]*/, `lines=${enc(extras.lines)}`);
+    } else {
+      url += (url.includes("?") ? "&" : "?") + `lines=${enc(extras.lines)}`;
+    }
+  }
+
+  return url;
 }
+
 
 export function getSectionUrl(
   id: SectionId,

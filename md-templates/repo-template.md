@@ -328,7 +328,7 @@ git push origin feature-name
 
 <div align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=USERNAME&show_icons=true&theme=tokyonight&hide_border=true" />
+<img src="https://github-readmeapp.vercel.app/api?username=USERNAME&show_icons=true&theme=tokyonight&hide_border=true" />
 
 <img src="https://github-readme-streak-stats.herokuapp.com/?user=USERNAME&theme=tokyonight&hide_border=true" />
 

@@ -25,7 +25,7 @@ export function Hero() {
         >
           <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-3 py-1 text-xs text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full bg-gradient-neon" />
-            Generate Animated README.md
+            100% Free README Generator
           </div>
           <h1 className="mt-6 text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl font-display flex flex-col items-center">
             <span>
@@ -42,14 +42,14 @@ export function Hero() {
               </GradientText>
             </div>
           </h1>
-          <p className="mt-6 text-lg text-muted-foreground md:text-lg">
-            Pick a template, fill in a few fields, and export a polished{" "}
-            <span className="font-mono text-foreground">README.md</span> in under 60 seconds.
+          <p className="mt-6 text-lg text-muted-foreground md:text-lg max-w-2xl mx-auto">
+            Build a professional profile in under 60 seconds for <b>FREE</b>. 
+            Pick a premium template, auto-fill your stats, and export instantly.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
-              to="/user-datails"
+              to="/user-details"
               onClick={() => incrementGenerateCount()}
               className="group inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-neon px-6 font-medium text-background shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
             >

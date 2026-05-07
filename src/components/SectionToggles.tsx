@@ -5,24 +5,27 @@ import { useState } from "react";
 export function SectionToggles({
   sections,
   onChange,
+  availableSections,
 }: {
-  sections: SectionId[];
-  onChange: (s: SectionId[]) => void;
+  sections: string[];
+  onChange: (s: string[]) => void;
+  availableSections?: { id: string; label: string }[];
 }) {
-  const [draggedId, setDraggedId] = useState<SectionId | null>(null);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
 
+  const source = availableSections ?? ALL_SECTIONS;
   const enabled = new Set(sections);
-  const ordered: SectionId[] = [
+  const ordered: string[] = [
     ...sections,
-    ...ALL_SECTIONS.filter((a) => !enabled.has(a.id)).map((a) => a.id),
+    ...source.filter((a) => !enabled.has(a.id)).map((a) => a.id),
   ];
 
-  const toggle = (id: SectionId) => {
+  const toggle = (id: string) => {
     if (enabled.has(id)) onChange(sections.filter((s) => s !== id));
     else onChange([...sections, id]);
   };
 
-  const onDrop = (target: SectionId) => {
+  const onDrop = (target: string) => {
     if (!draggedId || draggedId === target || !enabled.has(draggedId) || !enabled.has(target)) {
       setDraggedId(null);
       return;
@@ -39,7 +42,8 @@ export function SectionToggles({
   return (
     <ul className="space-y-1">
       {ordered.map((id) => {
-        const section = ALL_SECTIONS.find((s) => s.id === id)!;
+        const section = source.find((s) => s.id === id);
+        if (!section) return null;
         const on = enabled.has(id);
         return (
           <li

@@ -3,29 +3,23 @@ export type TemplateKind = "builder" | "markdown";
 
 export type SectionId =
   | "header"
-  | "about"
-  | "skills"
+  | "typing"
+  | "socials"
   | "techStack"
   | "githubStats"
-  | "streak"
   | "topLangs"
-  | "projects"
-  | "socials"
-  | "quote"
-  | "badges"
+  | "streak"
   | "trophies"
-  | "gifs"
-  | "snake"
-  | "pacman"
-  | "skyline"
-  | "grass"
-  | "gameOfLife"
-  | "pixelArt"
-  | "typing"
-  | "spotify"
-  | "leetcode"
   | "activityGraph"
-  | "footer";
+  | "projects"
+  | "footer"
+  | "about"
+  | "skills"
+  | "leetcode"
+  | "spotify"
+  | "snake"
+  | "quote"
+  | "badges";
 
 export interface Template {
   id: TemplateId;
@@ -42,28 +36,37 @@ export interface Template {
 export const ALL_SECTIONS: { id: SectionId; label: string }[] = [
   { id: "header", label: "Header" },
   { id: "typing", label: "Typing SVG" },
-  { id: "about", label: "About Me" },
-  { id: "skills", label: "Skills" },
+  { id: "socials", label: "Social Links" },
   { id: "techStack", label: "Tech Stack" },
   { id: "githubStats", label: "GitHub Stats" },
-  { id: "leetcode", label: "LeetCode Stats" },
-  { id: "activityGraph", label: "Activity Graph" },
-  { id: "streak", label: "Streak Stats" },
   { id: "topLangs", label: "Top Languages" },
+  { id: "streak", label: "Streak Stats" },
+  { id: "trophies", label: "Trophies" },
+  { id: "activityGraph", label: "Activity Graph" },
   { id: "projects", label: "Projects" },
-  { id: "snake", label: "Snake Animation" },
-  { id: "pacman", label: "Pac-Man Animation" },
-  { id: "skyline", label: "3D Skyline" },
-  { id: "grass", label: "Contribution Grass" },
-  { id: "gameOfLife", label: "Game of Life" },
-  { id: "pixelArt", label: "Pixel Art" },
+  { id: "footer", label: "Footer" },
+  // Optional / Working but not default
+  { id: "about", label: "About Me" },
+  { id: "skills", label: "Skills" },
+  { id: "leetcode", label: "LeetCode Stats" },
   { id: "spotify", label: "Spotify Now Playing" },
-  { id: "socials", label: "Social Links" },
+  { id: "snake", label: "Snake Animation" },
   { id: "quote", label: "Quote" },
   { id: "badges", label: "Badges" },
-  { id: "trophies", label: "Trophies" },
-  { id: "gifs", label: "GIFs" },
-  { id: "footer", label: "Footer" },
+];
+
+export const DEFAULT_PROFILE_SECTIONS: SectionId[] = [
+  "header",
+  "typing",
+  "socials",
+  "techStack",
+  "githubStats",
+  "topLangs",
+  "streak",
+  "trophies",
+  "activityGraph",
+  "projects",
+  "footer",
 ];
 
 const SECTION_IDS = ALL_SECTIONS.map((s) => s.id);
@@ -111,7 +114,7 @@ const markdownTemplatesWithOrder = Object.entries(markdownFiles)
       description: descriptionFromSlug(slug, category),
       tags,
       accent: CATEGORY_ACCENTS[category] ?? "from-slate-400 to-slate-600",
-      defaultSections: SECTION_IDS,
+      defaultSections: DEFAULT_PROFILE_SECTIONS,
       kind: "markdown",
       content,
       placeholders,
@@ -128,7 +131,7 @@ const builderTemplates: Template[] = [
     description: "Clean, focused, no fluff. Just the essentials with elegant typography.",
     tags: ["minimal", "popular", "builder"],
     accent: "from-slate-400 to-slate-600",
-    defaultSections: ["header", "about", "techStack", "socials", "footer"],
+    defaultSections: DEFAULT_PROFILE_SECTIONS,
     kind: "builder",
   },
   {
@@ -137,16 +140,7 @@ const builderTemplates: Template[] = [
     description: "Typing SVG headers, animated stats and a dynamic vibe.",
     tags: ["popular", "advanced", "builder"],
     accent: "from-fuchsia-500 to-violet-500",
-    defaultSections: [
-      "header",
-      "about",
-      "techStack",
-      "githubStats",
-      "streak",
-      "topLangs",
-      "socials",
-      "footer",
-    ],
+    defaultSections: DEFAULT_PROFILE_SECTIONS,
     kind: "builder",
   },
   {
@@ -155,16 +149,7 @@ const builderTemplates: Template[] = [
     description: "Front-end, back-end, infra. Show off your complete toolkit.",
     tags: ["popular", "builder"],
     accent: "from-cyan-400 to-blue-500",
-    defaultSections: [
-      "header",
-      "about",
-      "techStack",
-      "projects",
-      "githubStats",
-      "topLangs",
-      "socials",
-      "footer",
-    ],
+    defaultSections: DEFAULT_PROFILE_SECTIONS,
     kind: "builder",
   },
   {
@@ -173,7 +158,7 @@ const builderTemplates: Template[] = [
     description: "Friendly intro for learners with goals and currently learning.",
     tags: ["minimal", "builder"],
     accent: "from-emerald-400 to-teal-500",
-    defaultSections: ["header", "about", "skills", "githubStats", "socials", "footer"],
+    defaultSections: DEFAULT_PROFILE_SECTIONS,
     kind: "builder",
   },
   {
@@ -182,17 +167,7 @@ const builderTemplates: Template[] = [
     description: "Highlight contributions, badges, and OSS projects.",
     tags: ["advanced", "builder"],
     accent: "from-orange-400 to-rose-500",
-    defaultSections: [
-      "header",
-      "about",
-      "badges",
-      "trophies",
-      "projects",
-      "githubStats",
-      "streak",
-      "socials",
-      "footer",
-    ],
+    defaultSections: DEFAULT_PROFILE_SECTIONS,
     kind: "builder",
   },
   {
@@ -201,16 +176,7 @@ const builderTemplates: Template[] = [
     description: "Notebooks, models, and a data-driven aesthetic.",
     tags: ["advanced", "builder"],
     accent: "from-indigo-400 to-purple-500",
-    defaultSections: [
-      "header",
-      "about",
-      "techStack",
-      "projects",
-      "topLangs",
-      "quote",
-      "socials",
-      "footer",
-    ],
+    defaultSections: DEFAULT_PROFILE_SECTIONS,
     kind: "builder",
   },
   {
@@ -219,15 +185,7 @@ const builderTemplates: Template[] = [
     description: "Smart contracts, dApps, and on-chain achievements.",
     tags: ["advanced", "builder"],
     accent: "from-yellow-400 to-pink-500",
-    defaultSections: [
-      "header",
-      "about",
-      "techStack",
-      "projects",
-      "badges",
-      "socials",
-      "footer",
-    ],
+    defaultSections: DEFAULT_PROFILE_SECTIONS,
     kind: "builder",
   },
   {
@@ -236,15 +194,7 @@ const builderTemplates: Template[] = [
     description: "Recruiter-ready, polished and structured for impact.",
     tags: ["popular", "builder"],
     accent: "from-blue-400 to-violet-500",
-    defaultSections: [
-      "header",
-      "about",
-      "techStack",
-      "projects",
-      "githubStats",
-      "socials",
-      "footer",
-    ],
+    defaultSections: DEFAULT_PROFILE_SECTIONS,
     kind: "builder",
   },
 ];

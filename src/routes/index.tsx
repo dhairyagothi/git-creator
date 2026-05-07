@@ -9,13 +9,14 @@ import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { getGenerateCount } from "@/lib/metrics";
 
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "github-readme.app — Build a stunning GitHub profile README" },
+      { title: "Best GitHub Profile README Generator — github-readme.app" },
       {
         name: "description",
-        content: "Generate, preview, edit, and export a beautiful GitHub profile README in minutes.",
+        content: "Build a stunning GitHub profile README in seconds for FREE. Pick from 100+ premium templates, auto-fill your stats, and stand out from the crowd.",
       },
     ],
   }),
