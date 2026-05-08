@@ -40,3 +40,4 @@ bunfig.toml
 *.njsproj
 *.sln
 *.sw?
+package-lock.json
