@@ -19,6 +19,7 @@ import { Navbar } from "@/components/Navbar";
 import { RepoForm } from "@/components/RepoForm";
 import { SectionToggles } from "@/components/SectionToggles";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
+import { InfoButton } from "@/components/InfoButton";
 import { TagInput } from "@/components/FormElements";
 import { RepoFormState, emptyRepoForm } from "@/lib/repoTypes";
 import { buildRepoReadme } from "@/lib/buildRepoReadme";
@@ -27,7 +28,7 @@ import { detectRepoType, getSectionsForType, REPO_SECTIONS } from "@/lib/repoTem
 export const Route = createFileRoute("/repo-readme")({
   head: () => ({
     meta: [
-      { title: "Best Repository README Generator — github-readme.app" },
+      { title: "Best Repository README Generator — github-readme.tech" },
       { name: "description", content: "Create professional repository READMEs for FREE. Automated tech stack detection, file structure visualization, and one-click export." },
     ],
   }),

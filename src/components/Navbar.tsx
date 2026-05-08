@@ -1,8 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { GitBranch, Sparkles, Star } from "lucide-react";
+import { Sparkles, Star } from "lucide-react";
+import { InfoButton } from "./InfoButton";
 
 export function Navbar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const isGenerator = path === "/profile-readme" || path === "/repo-readme" || path ==="/generator";
+
   const link = (to: string, label: string) => (
     <Link
       to={to}
@@ -25,7 +28,7 @@ export function Navbar() {
             <Sparkles className="h-4 w-4 text-background" />
           </span>
           <span className="font-bold tracking-tight">
-            github-readme<span className="text-gradient">.app</span>
+            github-readme<span className="text-gradient">.tech</span>
           </span>
         </Link>
         <nav className="hidden items-center gap-7 md:flex">
@@ -37,6 +40,7 @@ export function Navbar() {
           </a>
         </nav>
         <div className="flex items-center gap-3">
+          {isGenerator && <InfoButton />}
           <a
             href="https://github.com/dhairyagothi/git-creator"
             target="_blank"

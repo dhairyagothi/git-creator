@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { getTemplate, getTemplatePlaceholders } from "@/lib/templates";
-import { AUTO_PLACEHOLDER_KEYS, getPlaceholderLabel } from "@/lib/templateFields";
+import { AUTO_PLACEHOLDER_KEYS, getPlaceholderLabel, SOCIAL_OPTIONS, type SocialOption } from "@/lib/templateFields";
 import type { FormState } from "@/lib/types";
 
 /* ── helpers ───────────────────────────────────────────────────────────── */
@@ -344,9 +344,9 @@ export function ProfileForm() {
         </Section>
       )}
 
-      {/* ── Tech Stack ── */}
-      {isVisible("techStack") && (
-        <Section icon={Cpu} title="Tech Stack" defaultOpen>
+      {/* ── Tech Stack / Skills ── */}
+      {(isVisible("techStack") || isVisible("skills")) && (
+        <Section icon={Cpu} title={isVisible("skills") ? "Skills" : "Tech Stack"} defaultOpen>
           <Field label="Languages & Frameworks">
             <TagInput
               tags={form.techStack}
@@ -375,28 +375,62 @@ export function ProfileForm() {
       {isVisible("socials") && (
         <Section icon={Link2} title="Social Links">
           <div className="grid gap-3 sm:grid-cols-2">
-            {([
-              { key: "twitter", icon: MessageCircle, label: "Twitter / X" },
-              { key: "linkedin", icon: Briefcase, label: "LinkedIn" },
-              { key: "website", icon: Globe, label: "Portfolio" },
-              { key: "leetcode", icon: Code2, label: "LeetCode" },
-              { key: "youtube", icon: Video, label: "YouTube" },
-              { key: "github", icon: User, label: "GitHub" },
-            ] as const).map(({ key, icon: Icon, label }) => (
-              <div key={key}>
-                <Label>{label}</Label>
-                <div className="relative">
-                  <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-                  <input
-                    value={key === "github" ? form.username : form.socials[key as keyof typeof form.socials] || ""}
-                    onChange={(e) => key !== "github" && updateSocial(key as keyof typeof form.socials, e.target.value)}
-                    readOnly={key === "github"}
-                    placeholder="username"
-                    className="w-full rounded-lg border border-border/60 bg-background/50 py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-[oklch(0.7_0.24_295)]"
-                  />
+            {SOCIAL_OPTIONS.map((opt) => {
+              const val = opt.key === "github" ? form.username : form.socials[opt.key] || "";
+              // For GitHub, we always show it. For others, only if they have a value.
+              // We'll manage "adding" via a separate UI below.
+              if (opt.key !== "github" && !val) return null;
+
+              return (
+                <div key={opt.key} className="group relative">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <Label>{opt.label}</Label>
+                    {opt.key !== "github" && (
+                      <button 
+                        onClick={() => updateSocial(opt.key, "")}
+                        className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                        title="Remove"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <div 
+                      className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 flex items-center justify-center opacity-70"
+                      style={{ color: `#${opt.color}` }}
+                    >
+                      <Globe className="h-3.5 w-3.5" />
+                    </div>
+                    <input
+                      value={val}
+                      onChange={(e) => {
+                        if (opt.key === "github") updateForm({ username: e.target.value });
+                        else updateSocial(opt.key, e.target.value);
+                      }}
+                      placeholder={opt.prefix ? "username / email" : "profile link or username"}
+                      className="w-full rounded-lg border border-border/60 bg-background/50 py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-[oklch(0.7_0.24_295)]"
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
+          </div>
+
+          <div className="mt-4 border-t border-border/40 pt-4">
+            <label className="mb-2 block text-xs font-medium text-muted-foreground uppercase tracking-wider">Add Social Platform</label>
+            <div className="flex flex-wrap gap-2">
+              {SOCIAL_OPTIONS.filter(opt => opt.key !== "github" && !form.socials[opt.key]).map(opt => (
+                <button
+                  key={opt.key}
+                  onClick={() => updateSocial(opt.key, " ")} // set to a space to "activate" it
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/40 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:border-border/80 hover:text-foreground transition-all"
+                >
+                  <Plus className="h-3 w-3" />
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
         </Section>
       )}

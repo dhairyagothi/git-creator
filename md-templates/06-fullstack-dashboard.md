@@ -66,13 +66,6 @@
 <!-- /SECTION:projects -->
 
 <!-- SECTION:socials -->
-## 🔗 Links
-
-<div align="center">
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-38BDF8?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
-  <a href="https://twitter.com/YOUR_TWITTER"><img src="https://img.shields.io/badge/Twitter-0EA5E9?style=for-the-badge&logo=twitter&logoColor=white"/></a>
-  <a href="YOUR_WEBSITE"><img src="https://img.shields.io/badge/Portfolio-7C3AED?style=for-the-badge&logo=vercel&logoColor=white"/></a>
-</div>
 <!-- /SECTION:socials -->
 
 <!-- SECTION:quote -->
@@ -102,3 +95,6 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=24,20,14,5&height=100&section=footer" width="100%"/>
 </div>
 <!-- /SECTION:footer -->
+
+
+

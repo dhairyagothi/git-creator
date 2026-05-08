@@ -66,12 +66,6 @@ contract Developer {
 <!-- /SECTION:projects -->
 
 <!-- SECTION:socials -->
-## 📡 Connect
-
-<p align="center">
-  <a href="https://twitter.com/YOUR_TWITTER"><img src="https://img.shields.io/badge/Twitter-627EEA?style=for-the-badge&logo=twitter&logoColor=white"/></a>
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-627EEA?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
-</p>
 <!-- /SECTION:socials -->
 
 <!-- SECTION:quote -->
@@ -99,3 +93,6 @@ contract Developer {
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=9,14,20&height=100&section=footer" width="100%"/>
 </div>
 <!-- /SECTION:footer -->
+
+
+

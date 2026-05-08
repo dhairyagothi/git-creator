@@ -35,11 +35,19 @@ export const useAppStore = create<Store>((set) => ({
     }),
   setSections: (sections) => set({ sections }),
   toggleSection: (s) =>
-    set((state) => ({
-      sections: state.sections.includes(s)
-        ? state.sections.filter((x) => x !== s)
-        : [...state.sections, s],
-    })),
+    set((state) => {
+      const isEnabling = !state.sections.includes(s);
+      let nextSections = isEnabling
+        ? [...state.sections, s]
+        : state.sections.filter((x) => x !== s);
+      
+      if (isEnabling && s === "about") {
+        nextSections = nextSections.filter(x => x !== "about");
+        nextSections.splice(Math.min(3, nextSections.length), 0, "about");
+      }
+      
+      return { sections: nextSections };
+    }),
   updateForm: (patch) =>
     set((state) => ({
       form: {

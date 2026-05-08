@@ -66,12 +66,6 @@
 <!-- /SECTION:projects -->
 
 <!-- SECTION:socials -->
-## 🌐 Connect
-
-<p align="center">
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-10B981?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
-  <a href="mailto:YOUR_EMAIL"><img src="https://img.shields.io/badge/Email-10B981?style=for-the-badge&logo=gmail&logoColor=white"/></a>
-</p>
 <!-- /SECTION:socials -->
 
 <!-- SECTION:quote -->
@@ -99,3 +93,6 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=7,14,20&height=100&section=footer" width="100%"/>
 </div>
 <!-- /SECTION:footer -->
+
+
+

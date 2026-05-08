@@ -18,7 +18,8 @@ import { TemplatePicker } from "./TemplatePicker";
 import { SectionToggles } from "./SectionToggles";
 import { ProfileForm } from "./ProfileForm";
 import { MarkdownPreview } from "./MarkdownPreview";
-import type { TemplateId } from "@/lib/templates";
+import { InfoButton } from "./InfoButton";
+import type { TemplateId, SectionId } from "@/lib/templates";
 
 const DRAFT_KEY = "gra_draft_v1";
 const PREFILL_KEY = "gra_prefill_v1";
@@ -47,6 +48,7 @@ export function GeneratorWorkspace({
         const prefillData = JSON.parse(prefillRaw) as {
           template?: TemplateId;
           form?: Partial<typeof form>;
+          sections?: SectionId[];
         };
         localStorage.removeItem(PREFILL_KEY);
         if (prefillData?.form) {
@@ -59,6 +61,7 @@ export function GeneratorWorkspace({
           load({
             template: prefillData.template ?? searchTemplate,
             form: { ...emptyForm, ...prefillData.form },
+            sections: prefillData.sections,
           });
           setManualMarkdown(null);
           return; // don't also load draft

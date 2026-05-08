@@ -72,13 +72,6 @@ const dev = {
 <!-- /SECTION:projects -->
 
 <!-- SECTION:socials -->
-## 📡 Connect
-
-<p align="center">
-  <a href="https://twitter.com/YOUR_TWITTER"><img src="https://img.shields.io/badge/Twitter-000000?style=for-the-badge&logo=twitter&logoColor=white"/></a>
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-000000?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
-  <a href="mailto:YOUR_EMAIL"><img src="https://img.shields.io/badge/Email-000000?style=for-the-badge&logo=gmail&logoColor=white"/></a>
-</p>
 <!-- /SECTION:socials -->
 
 <!-- SECTION:quote -->
@@ -110,3 +103,6 @@ const dev = {
   <sub>Made with ❤️ by YOUR_NAME</sub>
 </div>
 <!-- /SECTION:footer -->
+
+
+

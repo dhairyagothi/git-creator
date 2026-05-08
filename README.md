@@ -1,95 +1,107 @@
-# git-creator
+# git-creator 🚀
 
-A fast, dark-themed web app for generating beautiful GitHub profile READMEs — with live preview, 8 templates, GitHub auto-fill, and one-click export.
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=220&section=header&text=git-creator&fontSize=65&fontColor=fff&animation=twinkling&fontAlignY=38&desc=Modern%20GitHub%20Profile%20README%20Generator&descAlignY=60" width="100%"/>
 
-![TanStack Start](https://img.shields.io/badge/TanStack_Start-v1-f97316?style=flat-square)
-![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?style=flat-square&logo=tailwindcss)
-![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+  <p align="center">
+    <strong>Build a stunning GitHub profile in minutes.</strong>
+    <br />
+    30+ Premium Templates • Live Preview • GitHub Auto-Fill • One-Click Export
+  </p>
 
-## Features
+  <p align="center">
+    <a href="https://github-readme.tech"><strong>Explore the App »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/dhairyagothi/git-creator/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/dhairyagothi/git-creator/issues">Request Feature</a>
+  </p>
+</div>
 
-- **8 Templates** — Minimal, Animated, Full-Stack, Student, Open Source, Data/AI, Web3, Portfolio
-- **GitHub Auto-Fill** — Fetch your name, bio, location, and avatar directly from the GitHub API
-- **Live Markdown Preview** — See your README rendered in real time as you type
-- **Editable Markdown** — Switch to raw mode to tweak anything by hand
-- **One-Click Export** — Download `README.md` instantly
-- **Autosave** — Draft saved to `localStorage` so you never lose your work
-- **Section Toggles** — Show or hide individual README sections with a click
+---
 
-## Tech Stack
+## 🌟 Features
 
-| Layer | Library |
-|---|---|
-| Framework | [TanStack Start](https://tanstack.com/start) |
-| UI | [shadcn/ui](https://ui.shadcn.com) + [Radix UI](https://www.radix-ui.com) |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com) |
-| Animation | [Framer Motion](https://www.framer.com/motion) |
-| Forms | [React Hook Form](https://react-hook-form.com) + [Zod](https://zod.dev) |
-| State | [Zustand](https://zustand.docs.pmnd.rs) |
-| Markdown | [react-markdown](https://github.com/remarkjs/react-markdown) + [remark-gfm](https://github.com/remarkjs/remark-gfm) |
-| Icons | [Lucide](https://lucide.dev) |
-| Toasts | [Sonner](https://sonner.emilkowal.ski) |
+- **30+ Premium Templates** — Modern, Animated, Minimal, Student, Open Source, and more.
+- **GitHub Data Integration** — Instantly fetch your profile stats, bio, and top languages.
+- **Dynamic Social Badges** — Standardized Shields.io badges for LinkedIn, Instagram, X, etc.
+- **Live Markdown Editor** — Real-time preview with support for manual markdown tweaks.
+- **Modular Sections** — Toggle sections like Streak Stats, Trophies, Activity Graph, and Spotify.
+- **One-Click Export** — Download your `README.md` or copy to clipboard instantly.
+- **Rich Tech Stack Icons** — Integrated with SkillIcons for beautiful tool displays.
 
-## Getting Started
+## 🛠 Tech Stack
 
-### Prerequisites
+| Layer | Technology |
+| :--- | :--- |
+| **Framework** | [TanStack Start](https://tanstack.com/start) + React 19 |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com) + Vanilla CSS |
+| **Animation** | [Framer Motion](https://www.framer.com/motion) |
+| **Icons** | [Lucide](https://lucide.dev) + [React Icons](https://react-icons.github.io/react-icons/) |
+| **State** | [Zustand](https://zustand.docs.pmnd.rs) |
+| **Markdown** | [Shields.io](https://shields.io) + [GitHub Readme Stats](https://github.com/anuraghazra/github-readme-stats) |
 
-- Node.js 20+
-- npm or bun
+## 📂 Template Library
+
+Our library features **30+ premium templates** categorized for every type of developer. You can find all the raw markdown files in the [`md-templates/`](./md-templates) directory.
+
+### Categories Available:
+- **🎨 Minimal & Elegant**: Clean designs for a professional look.
+- **✨ Animated & Dynamic**: Using SVG animations and interactive elements.
+- **🚀 Full-Stack & Engineering**: Comprehensive layouts with tech stacks and project grids.
+- **🎓 Student & Learner**: Track your journey, learning progress, and goals.
+- **🌐 Open Source & Community**: Showcase your contributions, stats, and maintainer status.
+- **🧬 Specialized**: AI/Data Science, Web3/Crypto, and Portfolio-first designs.
+
+> [!TIP]
+> Each template is built to be **highly modular**. Our engine automatically detects the `<!-- SECTION:xx -->` tags in these files to inject your dynamic GitHub data!
+
+## 📁 Project Structure
+
+```text
+git-creator/
+├── md-templates/      # 📂 ALL Markdown templates are stored here (.md)
+├── src/
+│   ├── components/    # Reusable UI components
+│   ├── lib/           # Core builder logic & utilities
+│   └── routes/        # TanStack Router file-based pages
+├── public/            # Static assets
+└── package.json       # Dependencies & scripts
+```
+
+## 🚀 Getting Started
 
 ### Installation
 
-```bash
-git clone https://github.com/dhairyagothi/git-creator.git
-cd git-creator
-npm install
-```
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/dhairyagothi/git-creator.git
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run development server:
+   ```bash
+   npm run dev
+   ```
 
-### Development
+## 🤝 Contributing
 
-```bash
-npm run dev
-```
+We love contributions! If you want to add a new template, simply:
+1. Create a new `.md` file in the [`md-templates/`](./md-templates) directory.
+2. Follow the standard section formatting.
+3. Open a Pull Request!
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Check out [CONTRIBUTING.md](./CONTRIBUTING.md) for more details.
 
-### Build
+## 📄 License
 
-```bash
-npm run build
-```
+Distributed under the MIT License. See `LICENSE` for more information.
 
-### Preview production build
+---
 
-```bash
-npm run preview
-```
-
-## Project Structure
-
-```
-src/
-├── components/        # UI components (Navbar, Hero, GeneratorWorkspace, …)
-│   └── ui/            # shadcn/ui primitives
-├── hooks/             # Custom React hooks
-├── lib/
-│   ├── buildReadme.ts # Core markdown generation logic
-│   ├── templates.ts   # Template definitions
-│   ├── store.ts       # Zustand store
-│   └── types.ts       # Shared TypeScript types
-└── routes/            # TanStack Start file-based routes
-    ├── __root.tsx
-    ├── index.tsx      # Landing page
-    ├── generator.tsx  # README builder workspace
-    └── templates.tsx  # Template gallery
-```
-
-## Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR.
-
-## License
-
-[MIT](LICENSE) © 2024 Dhairya Gothi
+<div align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/dhairyagothi">Dhairya Gothi</a></sub>
+</div>

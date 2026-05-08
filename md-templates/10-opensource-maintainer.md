@@ -66,12 +66,6 @@ email:    YOUR_EMAIL
 <!-- /SECTION:projects -->
 
 <!-- SECTION:socials -->
-## 📬 Connect
-
-<p align="center">
-  <a href="https://twitter.com/YOUR_TWITTER"><img src="https://img.shields.io/badge/Twitter-E96C4C?style=for-the-badge&logo=twitter&logoColor=white"/></a>
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-E96C4C?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
-</p>
 <!-- /SECTION:socials -->
 
 <!-- SECTION:quote -->
@@ -99,3 +93,6 @@ email:    YOUR_EMAIL
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:e96c4c,100:e96c4c&height=100&section=footer" width="100%"/>
 </div>
 <!-- /SECTION:footer -->
+
+
+

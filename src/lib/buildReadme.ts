@@ -1,7 +1,7 @@
 import type { FormState } from "./types";
 import type { SectionId, TemplateId } from "./templates";
 import { getTemplate } from "./templates";
-import { replacePlaceholders } from "./templateFields";
+import { replacePlaceholders, SOCIAL_OPTIONS, getSocialBadgeMd } from "./templateFields";
 import { getSectionUrl } from "./sectionLinks";
 
 const enc = (s: string) => encodeURIComponent(s.trim());
@@ -197,21 +197,21 @@ function projects(form: FormState): string {
 }
 
 function socials(form: FormState): string {
-  const s = form.socials;
-  const items: { name: string; url: string; color: string; logo: string }[] = [];
-  if (s.twitter) items.push({ name: "Twitter", url: `https://twitter.com/${s.twitter}`, color: "1DA1F2", logo: "twitter" });
-  if (s.linkedin) items.push({ name: "LinkedIn", url: `https://linkedin.com/in/${s.linkedin}`, color: "0A66C2", logo: "linkedin" });
-  if (s.website) items.push({ name: "Website", url: s.website, color: "0EA5E9", logo: "googlechrome" });
-  if (s.youtube) items.push({ name: "YouTube", url: `https://youtube.com/@${s.youtube}`, color: "FF0000", logo: "youtube" });
-  if (s.devto) items.push({ name: "DEV.to", url: `https://dev.to/${s.devto}`, color: "0A0A0A", logo: "devdotto" });
-  if (s.instagram) items.push({ name: "Instagram", url: `https://instagram.com/${s.instagram}`, color: "E4405F", logo: "instagram" });
-  if (form.email) items.push({ name: "Email", url: `mailto:${form.email}`, color: "EA4335", logo: "gmail" });
+  const items: string[] = [];
+  
+  SOCIAL_OPTIONS.forEach(opt => {
+    let val = form.socials[opt.key];
+    if (opt.key === "github" && !val) val = form.username;
+    
+    if (val && val.trim()) {
+      items.push(getSocialBadgeMd(opt, val.trim()));
+    }
+  });
+
   if (!items.length) return "";
 
-  const links = items
-    .map((i) => `[![${i.name}](https://img.shields.io/badge/-${enc(i.name)}-${i.color}?style=for-the-badge&logo=${i.logo}&logoColor=white)](${i.url})`)
-    .join(" ");
-  return ["## 🌐 Connect with me", "", `<p align="center">${links}</p>`].join("\n");
+  return ["## 🤝 Connect with me", "", `<p align="center">
+    `, ...items, `</p>`].join("\n");
 }
 
 function quote(form: FormState): string {
@@ -384,11 +384,14 @@ function leetcode(form: FormState): string {
 function activityGraph(form: FormState): string {
   const url = getSectionUrl("activityGraph", form, { title: "Activity Graph" });
   if (!url) return "";
+  const username = form.username || "octocat";
   return [
-    "## � Activity Graph",
+    "## 📈 Activity Graph",
     "",
     `<p align="center">`,
-    `  <img src="${url}" alt="Activity Graph">`,
+    `  <a href="https://github.com/${username}">`,
+    `    <img src="${url}" alt="Activity Graph">`,
+    `  </a>`,
     `</p>`,
   ].join("\n");
 }
@@ -398,32 +401,7 @@ export function buildReadme(
   template: TemplateId,
   sections: SectionId[],
 ): string {
-  const templateConfig = getTemplate(template);
-  if (templateConfig.kind === "markdown" && templateConfig.content) {
-    const content = templateConfig.content;
-    const sectionContent: Record<string, string> = {};
-    const regex = /<!-- SECTION:([a-zA-Z0-9_-]+) -->([\s\S]*?)<!-- \/SECTION:\1 -->/g;
-    let match;
-    let hasSections = false;
-    
-    while ((match = regex.exec(content)) !== null) {
-      hasSections = true;
-      sectionContent[match[1]] = match[2].trim();
-    }
-    
-    if (!hasSections) {
-      return replacePlaceholders(content, form);
-    }
-    
-    const result = sections
-      .map(id => sectionContent[id])
-      .filter(Boolean)
-      .join("\n\n");
-      
-    return replacePlaceholders(result, form);
-  }
-
-  const builders: Record<SectionId, () => string> = {
+  const builders: Record<string, () => string> = {
     header: () => header(form, template),
     typing: () => typing(form),
     about: () => about(form),
@@ -442,10 +420,65 @@ export function buildReadme(
     badges: () => badges(form),
     trophies: () => trophies(form),
     footer: () => footer(form),
+    pacman: () => pacman(form),
+    skyline: () => skyline(form),
+    grass: () => grass(form),
+    gameOfLife: () => gameOfLife(form),
+    pixelArt: () => pixelArt(form),
+    gifs: () => gifs(form),
+    profileViews: () => profileViews(form),
+    followers: () => followers(form),
   };
+
+  const templateConfig = getTemplate(template);
+  if (templateConfig.kind === "markdown" && templateConfig.content) {
+    const content = templateConfig.content;
+    const sectionContent: Record<string, string> = {};
+    const regex = /<!-- SECTION:([a-zA-Z0-9_-]+) -->([\s\S]*?)<!-- \/SECTION:\1 -->/g;
+    let match;
+    let hasSections = false;
+    
+    while ((match = regex.exec(content)) !== null) {
+      hasSections = true;
+      sectionContent[match[1]] = match[2].trim();
+    }
+    
+    if (!hasSections) {
+      return replacePlaceholders(content, form);
+    }
+    
+    const result = sections
+      .map(id => sectionContent[id] || builders[id]?.())
+      .filter(Boolean)
+      .join("\n\n");
+      
+    return replacePlaceholders(result, form);
+  }
 
   return sections
     .map((id) => builders[id]?.() ?? "")
     .filter(Boolean)
     .join("\n\n");
+}
+
+function profileViews(form: FormState): string {
+  const username = form.username || "octocat";
+  return [
+    "## 👁️ Profile Views",
+    "",
+    `<p align="center">`,
+    `  <img src="https://komarev.com/ghpvc/?username=${username}&style=flat-square&color=00FF41" alt="Profile views"/>`,
+    `</p>`,
+  ].join("\n");
+}
+
+function followers(form: FormState): string {
+  const username = form.username || "octocat";
+  return [
+    "## 👥 Followers",
+    "",
+    `<p align="center">`,
+    `  <img src="https://img.shields.io/github/followers/${username}?style=for-the-badge&color=00FF41&labelColor=000000" alt="Followers"/>`,
+    `</p>`,
+  ].join("\n");
 }

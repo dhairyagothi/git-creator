@@ -69,13 +69,6 @@
 <!-- /SECTION:projects -->
 
 <!-- SECTION:socials -->
-## 📡 Signal
-
-<p align="center">
-  <a href="https://twitter.com/YOUR_TWITTER"><img src="https://img.shields.io/badge/Twitter-00FFFF?style=for-the-badge&logo=twitter&logoColor=black"/></a>
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-FF00FF?style=for-the-badge&logo=linkedin&logoColor=black"/></a>
-  <a href="mailto:YOUR_EMAIL"><img src="https://img.shields.io/badge/Email-00FFFF?style=for-the-badge&logo=gmail&logoColor=black"/></a>
-</p>
 <!-- /SECTION:socials -->
 
 <!-- SECTION:quote -->
@@ -111,3 +104,6 @@
 <img src="https://capsule-render.vercel.app/api?type=venom&color=gradient&customColorList=9,17,24&height=150&section=footer" width="100%"/>
 </div>
 <!-- /SECTION:footer -->
+
+
+

@@ -3,6 +3,7 @@ import type { FormState } from "./types";
 const AUTO_PLACEHOLDERS: Record<string, (form: FormState) => string> = {
   YOUR_NAME: (form) => form.displayName || form.username,
   YOUR_USERNAME: (form) => form.username,
+  YOUR_GITHUB: (form) => form.username,
   YOUR_TAGLINE: (form) => form.tagline,
   YOUR_ROLE: (form) => form.role,
   YOUR_TITLE: (form) => form.title,
@@ -132,4 +133,41 @@ function formatWord(word: string): string {
   };
   if (overrides[lower]) return overrides[lower];
   return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
+export interface SocialOption {
+  key: keyof FormState["socials"];
+  label: string;
+  color: string;
+  logo: string;
+  urlPattern: string; // use {} as placeholder for username
+}
+
+export const SOCIAL_OPTIONS: SocialOption[] = [
+  { key: "github", label: "GitHub", color: "181717", logo: "github", urlPattern: "https://github.com/{}" },
+  { key: "linkedin", label: "LinkedIn", color: "0A66C2", logo: "linkedin", urlPattern: "https://linkedin.com/in/{}" },
+  { key: "instagram", label: "Instagram", color: "E4405F", logo: "instagram", urlPattern: "https://instagram.com/{}" },
+  { key: "twitter", label: "Twitter", color: "000000", logo: "x", urlPattern: "https://x.com/{}" },
+  { key: "gmail", label: "Gmail", color: "EA4335", logo: "gmail", urlPattern: "mailto:{}" },
+  { key: "youtube", label: "YouTube", color: "FF0000", logo: "youtube", urlPattern: "https://youtube.com/@{}" },
+  { key: "discord", label: "Discord", color: "5865F2", logo: "discord", urlPattern: "https://discord.gg/{}" },
+  { key: "telegram", label: "Telegram", color: "26A5E4", logo: "telegram", urlPattern: "https://t.me/{}" },
+  { key: "website", label: "Portfolio", color: "7C3AED", logo: "googlechrome", urlPattern: "{}" },
+  { key: "devto", label: "Dev.to", color: "0A0A0A", logo: "devdotto", urlPattern: "https://dev.to/{}" },
+  { key: "medium", label: "Medium", color: "12100E", logo: "medium", urlPattern: "https://medium.com/@{}" },
+  { key: "hashnode", label: "Hashnode", color: "2962FF", logo: "hashnode", urlPattern: "https://hashnode.com/@{}" },
+  { key: "leetcode", label: "LeetCode", color: "FFA116", logo: "leetcode", urlPattern: "https://leetcode.com/u/{}" },
+  { key: "hackerrank", label: "HackerRank", color: "00EA64", logo: "hackerrank", urlPattern: "https://hackerrank.com/{}" },
+  { key: "codeforces", label: "Codeforces", color: "1F8ACB", logo: "codeforces", urlPattern: "https://codeforces.com/profile/{}" },
+  { key: "geeksforgeeks", label: "GeeksforGeeks", color: "2F8D46", logo: "geeksforgeeks", urlPattern: "https://auth.geeksforgeeks.org/user/{}" },
+  { key: "reddit", label: "Reddit", color: "FF4500", logo: "reddit", urlPattern: "https://reddit.com/u/{}" },
+  { key: "spotify", label: "Spotify", color: "1DB954", logo: "spotify", urlPattern: "https://open.spotify.com/user/{}" },
+  { key: "twitch", label: "Twitch", color: "9146FF", logo: "twitch", urlPattern: "https://twitch.tv/{}" },
+  { key: "stackoverflow", label: "StackOverflow", color: "F58025", logo: "stackoverflow", urlPattern: "https://stackoverflow.com/users/{}" },
+  { key: "facebook", label: "Facebook", color: "1877F2", logo: "facebook", urlPattern: "https://facebook.com/{}" },
+];
+
+export function getSocialBadgeMd(option: SocialOption, username: string): string {
+  const url = username.startsWith("http") ? username : option.urlPattern.replace("{}", username);
+  return `[![${option.label}](https://img.shields.io/badge/${option.label.replace(/\s+/g, "_")}-${option.color}?style=for-the-badge&logo=${option.logo}&logoColor=white)](${url})`;
 }

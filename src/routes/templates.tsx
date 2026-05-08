@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Star, X } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { TEMPLATES } from "@/lib/templates";
@@ -10,7 +10,7 @@ import { incrementGenerateCount } from "@/lib/metrics";
 export const Route = createFileRoute("/templates")({
   head: () => ({
     meta: [
-      { title: "Premium GitHub README Templates — github-readme.app" },
+      { title: "Premium GitHub README Templates — github-readme.tech" },
       { name: "description", content: "Explore premium GitHub profile README templates for FREE. Minimal, animated, data-driven, and persona-specific designs to make your profile stand out." },
     ],
   }),
@@ -28,6 +28,16 @@ const tags = [
   "data-ai",
   "web3",
   "professional",
+  "space",
+  "cyberpunk",
+  "pastel",
+  "ocean",
+  "sunset",
+  "forest",
+  "fire",
+  "retro",
+  "aurora",
+  "matrix",
 ];
 
 function TemplatesPage() {
@@ -57,76 +67,127 @@ function TemplatesPage() {
           </p>
         </motion.div>
 
-        <div className="mt-10 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="relative max-w-sm flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search templates..."
-              className="w-full rounded-lg border border-border/60 bg-background/40 px-3 py-2.5 pl-9 text-sm outline-none focus:border-[oklch(0.7_0.24_295)]"
-            />
+        <div className="mt-12 space-y-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="relative max-w-md flex-1">
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Search by name, role or tech..."
+                className="w-full rounded-2xl border border-border/40 bg-card/30 backdrop-blur-sm px-4 py-3 pl-11 text-sm outline-none transition-all focus:border-[oklch(0.7_0.24_295)] focus:ring-4 focus:ring-[oklch(0.7_0.24_295)]/10"
+              />
+            </div>
+            
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">{filtered.length}</span>
+              <span>matching templates</span>
+            </div>
           </div>
-          <div className="flex gap-1.5">
-            {tags.map((t) => (
-              <button
-                key={t}
-                onClick={() => setTag(t)}
-                className={`rounded-full border px-3 py-1.5 text-xs capitalize transition-colors ${
-                  tag === t
-                    ? "border-transparent bg-gradient-neon text-background"
-                    : "border-border/60 text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {t}
-              </button>
-            ))}
+
+          <div className="flex flex-wrap gap-2 pt-2">
+            {tags.map((t) => {
+              const count = t === "all" 
+                ? TEMPLATES.length 
+                : TEMPLATES.filter(temp => temp.tags.includes(t)).length;
+              
+              if (count === 0 && t !== "all") return null;
+
+              return (
+                <button
+                  key={t}
+                  onClick={() => setTag(t)}
+                  className={`group relative flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-medium transition-all ${
+                    tag === t
+                      ? "border-[oklch(0.7_0.24_295)] bg-[oklch(0.7_0.24_295)]/10 text-[oklch(0.78_0.18_295)] shadow-[0_0_20px_-5px_oklch(0.7_0.24_295)]"
+                      : "border-border/40 bg-card/20 text-muted-foreground hover:border-border/80 hover:text-foreground"
+                  }`}
+                >
+                  <span className="capitalize">{t.replace("-", " ")}</span>
+                  <span className={`flex h-4 min-w-[1rem] items-center justify-center rounded-full px-1 text-[9px] font-bold ${
+                    tag === t ? "bg-[oklch(0.7_0.24_295)] text-background" : "bg-muted text-muted-foreground group-hover:bg-border"
+                  }`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((t, i) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.04 }}
-              whileHover={{ y: -6 }}
-              className="glass group relative overflow-hidden rounded-2xl p-5"
-            >
-              <div className={`h-32 rounded-xl bg-gradient-to-br ${t.accent} relative overflow-hidden`}>
-                <div className="absolute inset-0 grid-bg opacity-30" />
-              </div>
-              <div className="mt-4 flex items-center gap-2">
-                <h3 className="font-semibold">{t.name}</h3>
-                {t.tags.includes("popular") && (
-                  <span className="rounded-full bg-gradient-neon px-2 py-0.5 text-[10px] font-medium text-background">
-                    popular
-                  </span>
-                )}
-              </div>
-              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{t.description}</p>
-              <div className="mt-3 flex flex-wrap gap-1">
-                {t.tags.map((tg) => (
-                  <span key={tg} className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] text-muted-foreground">
-                    {tg}
-                  </span>
-                ))}
-              </div>
-              <Link
-                to="/user-details"
-                search={{ template: t.id }}
-                onClick={() => incrementGenerateCount()}
-                className="mt-5 inline-flex w-full items-center justify-center gap-1 rounded-lg bg-gradient-neon px-3 py-2 text-sm font-medium text-background transition-transform hover:scale-[1.02]"
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((t, i) => (
+              <motion.div
+                key={t.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.2, delay: i * 0.02 }}
+                className="group relative"
               >
-                Use template
-              </Link>
-            </motion.div>
-          ))}
+                <div className="glass relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card/20 p-5 transition-all hover:border-[oklch(0.7_0.24_295)]/50 hover:bg-card/40 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
+                  {/* Preview Area */}
+                  <div className={`relative h-40 overflow-hidden rounded-2xl bg-gradient-to-br ${t.accent}`}>
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20" />
+                    {t.tags.includes("popular") && (
+                      <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-background/80 px-2.5 py-1 text-[10px] font-bold text-foreground backdrop-blur-md">
+                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                        Popular
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Info Area */}
+                  <div className="mt-5">
+                    <div className="flex items-start justify-between">
+                      <h3 className="font-bold text-lg tracking-tight">{t.name}</h3>
+                    </div>
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                      {t.description}
+                    </p>
+                    
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {t.tags.filter(tag => tag !== "popular").map((tg) => (
+                        <span key={tg} className="rounded-lg border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground capitalize">
+                          {tg.replace("-", " ")}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Link
+                    to="/profile-readme"
+                    search={{ template: t.id }}
+                    onClick={() => incrementGenerateCount()}
+                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-foreground px-4 py-3 text-sm font-bold text-background transition-all hover:bg-foreground/90 active:scale-95"
+                  >
+                    Use this template
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
           {!filtered.length && (
-            <div className="col-span-full py-20 text-center text-muted-foreground">
-              No templates match your search.
-            </div>
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }}
+              className="col-span-full py-24 text-center"
+            >
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-border/50 bg-card/20">
+                <Search className="h-8 w-8 text-muted-foreground/40" />
+              </div>
+              <h3 className="mt-4 text-xl font-semibold">No templates found</h3>
+              <p className="mt-2 text-muted-foreground">Try adjusting your search or filters to find what you're looking for.</p>
+              <button 
+                onClick={() => { setQ(""); setTag("all"); }}
+                className="mt-6 text-sm font-bold text-[oklch(0.7_0.24_295)] hover:underline"
+              >
+                Clear all filters
+              </button>
+            </motion.div>
           )}
         </div>
       </section>

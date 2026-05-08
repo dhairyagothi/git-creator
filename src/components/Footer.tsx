@@ -10,7 +10,7 @@ export function Footer() {
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-neon shadow-[var(--shadow-glow)]">
               <Sparkles className="h-4 w-4 text-background" />
             </span>
-            <span className="font-bold tracking-tight">github-readme<span className="text-gradient">.app</span></span>
+            <span className="font-bold tracking-tight">github-readme<span className="text-gradient">.tech</span></span>
           </Link>
           <p className="mt-3 text-sm text-muted-foreground max-w-xs">
             The fastest way to ship a beautiful GitHub profile README.
@@ -31,7 +31,7 @@ export function Footer() {
       </div>
       <div className="border-t border-border/40">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 text-xs text-muted-foreground">
-          <div>© {new Date().getFullYear()} github-readme.app</div>
+          <div>© {new Date().getFullYear()} github-readme.tech</div>
           <div>Made by Dhairya with ❤️ Made in Bharat </div>
         </div>
       </div>

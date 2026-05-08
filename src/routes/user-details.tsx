@@ -16,7 +16,7 @@ export const Route = createFileRoute("/user-details")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "GitHub Profile — github-readme.app" },
+      { title: "GitHub Profile — github-readme.tech" },
       { name: "description", content: "Fetch your GitHub profile details to pre-fill your README." },
     ],
   }),

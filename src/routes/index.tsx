@@ -13,7 +13,7 @@ import { getGenerateCount } from "@/lib/metrics";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Best GitHub Profile README Generator — github-readme.app" },
+      { title: "GitHub README.tech - Best GitHub Profile README Generator" },
       {
         name: "description",
         content: "Build a stunning GitHub profile README in seconds for FREE. Pick from 100+ premium templates, auto-fill your stats, and stand out from the crowd.",

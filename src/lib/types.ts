@@ -43,6 +43,7 @@ export interface FormState {
     topLanguages: string[];
   };
   socials: {
+    github: string;
     twitter: string;
     linkedin: string;
     website: string;
@@ -51,6 +52,18 @@ export interface FormState {
     instagram: string;
     spotify: string;
     leetcode: string;
+    facebook: string;
+    medium: string;
+    discord: string;
+    gmail: string;
+    telegram: string;
+    hashnode: string;
+    hackerrank: string;
+    codeforces: string;
+    geeksforgeeks: string;
+    reddit: string;
+    twitch: string;
+    stackoverflow: string;
   };
   quote: string;
 }
@@ -99,6 +112,7 @@ export const emptyForm: FormState = {
     topLanguages: [],
   },
   socials: {
+    github: "",
     twitter: "",
     linkedin: "",
     website: "",
@@ -107,6 +121,18 @@ export const emptyForm: FormState = {
     instagram: "",
     spotify: "",
     leetcode: "",
+    facebook: "",
+    medium: "",
+    discord: "",
+    gmail: "",
+    telegram: "",
+    hashnode: "",
+    hackerrank: "",
+    codeforces: "",
+    geeksforgeeks: "",
+    reddit: "",
+    twitch: "",
+    stackoverflow: "",
   },
   quote: "",
 };

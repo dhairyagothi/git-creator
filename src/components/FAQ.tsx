@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 
 const faqs = [
   {
-    q: "Is github-readme.app free?",
+    q: "Is github-readme.tech free?",
     a: "Yes. Building, previewing, and exporting your README is completely free. No account needed.",
   },
   {

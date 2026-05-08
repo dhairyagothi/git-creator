@@ -26,6 +26,21 @@ export function MarkdownPreview({ source }: { source: string }) {
             }
             return <th {...nextProps} />;
           },
+          img: ({ node, ...props }) => {
+            return (
+              <span className="relative inline-block overflow-hidden rounded-md bg-muted/20 align-middle">
+                <img 
+                  {...props} 
+                  loading="lazy"
+                  onLoad={(e) => {
+                    (e.currentTarget.parentElement as HTMLElement).classList.remove("animate-pulse", "bg-muted/20");
+                  }}
+                  className="relative z-10 block max-w-full"
+                />
+                <span className="absolute inset-0 -z-0 animate-shimmer bg-gradient-to-r from-transparent via-white/5 to-transparent bg-[length:200%_100%]" />
+              </span>
+            );
+          },
           ...["div", "p", "h1", "h2", "h3"].reduce((acc, tag) => {
             acc[tag as keyof JSX.IntrinsicElements] = ({ node, ...props }: any) => {
               const nextProps: Record<string, any> = { ...props };

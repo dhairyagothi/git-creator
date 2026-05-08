@@ -3,7 +3,10 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { TEMPLATES, type TemplateId } from "@/lib/templates";
 
-const categories = ["all", "minimal", "animated", "fullstack", "student", "opensource", "data-ai", "web3", "professional", "devops", "mobile", "security"];
+const categories = [
+  "all", "minimal", "animated", "fullstack", "student", "opensource", "data-ai", "web3", "professional", 
+  "space", "cyberpunk", "pastel", "ocean", "sunset", "forest", "fire", "retro", "aurora", "matrix"
+];
 
 export function TemplatePicker({
   value,

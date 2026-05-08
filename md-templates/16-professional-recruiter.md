@@ -66,13 +66,6 @@ YOUR_BIO
 <!-- /SECTION:projects -->
 
 <!-- SECTION:socials -->
-## 📬 Contact
-
-<p align="center">
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
-  <a href="mailto:YOUR_EMAIL"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white"/></a>
-  <a href="YOUR_WEBSITE"><img src="https://img.shields.io/badge/Portfolio-3B82F6?style=for-the-badge&logo=google-chrome&logoColor=white"/></a>
-</p>
 <!-- /SECTION:socials -->
 
 <!-- SECTION:quote -->
@@ -102,3 +95,6 @@ YOUR_BIO
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,6,14&height=100&section=footer" width="100%"/>
 </div>
 <!-- /SECTION:footer -->
+
+
+

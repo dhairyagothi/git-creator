@@ -19,7 +19,9 @@ export type SectionId =
   | "spotify"
   | "snake"
   | "quote"
-  | "badges";
+  | "badges"
+  | "profileViews"
+  | "followers";
 
 export interface Template {
   id: TemplateId;
@@ -45,6 +47,8 @@ export const ALL_SECTIONS: { id: SectionId; label: string }[] = [
   { id: "activityGraph", label: "Activity Graph" },
   { id: "projects", label: "Projects" },
   { id: "footer", label: "Footer" },
+  { id: "profileViews", label: "Profile Views" },
+  { id: "followers", label: "Followers Badge" },
   // Optional / Working but not default
   { id: "about", label: "About Me" },
   { id: "skills", label: "Skills" },
@@ -89,6 +93,20 @@ const CATEGORY_ACCENTS: Record<string, string> = {
   indie: "from-teal-400 to-emerald-500",
   content: "from-purple-400 to-rose-500",
   hackathon: "from-violet-400 to-indigo-500",
+  space: "from-indigo-900 via-purple-900 to-black",
+  cyberpunk: "from-fuchsia-600 via-pink-600 to-blue-600",
+  pastel: "from-pink-200 via-purple-200 to-blue-200",
+  ocean: "from-blue-600 via-cyan-500 to-teal-400",
+  sunset: "from-orange-500 via-rose-500 to-purple-600",
+  forest: "from-emerald-600 via-green-500 to-teal-600",
+  fire: "from-red-600 via-orange-500 to-yellow-500",
+  retro: "from-yellow-600 via-orange-600 to-red-600",
+  aurora: "from-green-400 via-teal-400 to-blue-500",
+  matrix: "from-black via-green-900 to-black",
+  gradient: "from-fuchsia-500 via-purple-500 to-blue-500",
+  mono: "from-slate-700 via-slate-800 to-slate-900",
+  purple: "from-purple-600 via-violet-600 to-indigo-600",
+  teal: "from-teal-500 via-cyan-500 to-emerald-500",
 };
 
 const CATEGORY_ORDER = Object.keys(CATEGORY_ACCENTS);

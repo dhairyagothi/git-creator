@@ -13,7 +13,7 @@ export const Route = createFileRoute("/generator")({
   validateSearch: search,
   head: () => ({
     meta: [
-      { title: "Generator — github-readme.app" },
+      { title: "Generator — github-readme.tech" },
       { name: "description", content: "Build your GitHub profile README with live preview and one-click export." },
     ],
   }),

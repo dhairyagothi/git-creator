@@ -1,67 +1,58 @@
-# Contributing to git-creator
+# Contributing to git-creator 🤝
 
-Thanks for taking the time to contribute! Here are a few guidelines to help things run smoothly.
+Thanks for taking the time to contribute! This project thrives on community templates and features.
 
-## Getting Started
+## 🎨 Adding New Templates
+
+The easiest way to contribute is by adding a new README template. All templates are stored in the [`md-templates/`](./md-templates) directory.
+
+### Template Guidelines
+1. **File Naming**: Use the format `XX-template-name.md` (e.g., `32-modern-minimal.md`).
+2. **Sectioning**: Use HTML comments to wrap dynamic sections. This allows our builder to inject user data:
+   ```markdown
+   <!-- SECTION:header -->
+   Your header markdown here
+   <!-- /SECTION:header -->
+
+   <!-- SECTION:about -->
+   Your about me markdown here
+   <!-- /SECTION:about -->
+   ```
+3. **Available Sections**:
+   - `header`, `typing`, `about`, `socials`, `techStack`, `githubStats`, `topLangs`, `streak`, `trophies`, `activityGraph`, `projects`, `footer`, `quote`, `badges`.
+4. **Placeholders**: Use standard placeholders like `YOUR_NAME`, `YOUR_USERNAME`, `YOUR_TAGLINE` which will be automatically replaced by the generator.
+
+## 🛠️ Development Setup
 
 1. Fork the repository and clone your fork:
-
    ```bash
    git clone https://github.com/<your-username>/git-creator.git
    cd git-creator
    npm install
    npm run dev
    ```
-
-2. Create a branch for your change:
-
+2. Create a feature branch:
    ```bash
    git checkout -b feat/your-feature-name
    ```
 
-## Development Workflow
+## 📜 Commit Style
+We use [Conventional Commits](https://www.conventionalcommits.org/):
+- `feat:` for new features
+- `fix:` for bug fixes
+- `docs:` for documentation changes
+- `refactor:` for code restructuring
 
-- `npm run dev` — start the development server
-- `npm run lint` — run ESLint
-- `npm run format` — run Prettier
-- `npm run build` — production build (use this to check for TypeScript errors before opening a PR)
+## 🚀 Submitting Changes
+1. Run `npm run build` to ensure there are no TypeScript or build errors.
+2. Open a Pull Request with a clear description of your changes.
+3. If you added a template, include a screenshot of the preview if possible.
 
-## Commit Style
+## 💻 Code Style
+- **TypeScript**: Use strict types; avoid `any`.
+- **Styling**: We use Tailwind CSS v4. Stick to our established design tokens (gradients, glassmorphism).
+- **Separation of Concerns**: Keep business logic in `src/lib/` and UI in `src/components/`.
 
-Use [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-feat: add dark/light mode toggle
-fix: handle GitHub API rate-limit error gracefully
-docs: update README setup instructions
-refactor: extract section-order logic into hook
-```
-
-## Submitting a Pull Request
-
-1. Make sure `npm run build` passes with no errors.
-2. Keep PRs focused — one feature or fix per PR.
-3. Fill in the PR template when you open a pull request.
-4. Reference any related issues with `Closes #<issue-number>`.
-
-## Reporting Bugs
-
-Open a [bug report](https://github.com/dhairyagothi/git-creator/issues/new?template=bug_report.md) with:
-- Steps to reproduce
-- Expected vs actual behaviour
-- Browser/OS version
-
-## Suggesting Features
-
-Open a [feature request](https://github.com/dhairyagothi/git-creator/issues/new?template=feature_request.md) with a clear description of the problem it solves.
-
-## Code Style
-
-- TypeScript strict mode — no `any` unless absolutely necessary
-- Components go in `src/components/`, primitives under `src/components/ui/`
-- Business logic belongs in `src/lib/`, not components
-- Keep components small and focused; extract hooks when state logic grows
-
-## License
+---
 
 By contributing, you agree that your changes will be licensed under the [MIT License](LICENSE).

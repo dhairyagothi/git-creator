@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UserDetailsRouteImport } from './routes/user-details'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as RepoReadmeRouteImport } from './routes/repo-readme'
+import { Route as ProfileReadmeRouteImport } from './routes/profile-readme'
 import { Route as GeneratorRouteImport } from './routes/generator'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -30,6 +31,11 @@ const RepoReadmeRoute = RepoReadmeRouteImport.update({
   path: '/repo-readme',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileReadmeRoute = ProfileReadmeRouteImport.update({
+  id: '/profile-readme',
+  path: '/profile-readme',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GeneratorRoute = GeneratorRouteImport.update({
   id: '/generator',
   path: '/generator',
@@ -44,6 +50,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
+  '/profile-readme': typeof ProfileReadmeRoute
   '/repo-readme': typeof RepoReadmeRoute
   '/templates': typeof TemplatesRoute
   '/user-details': typeof UserDetailsRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
+  '/profile-readme': typeof ProfileReadmeRoute
   '/repo-readme': typeof RepoReadmeRoute
   '/templates': typeof TemplatesRoute
   '/user-details': typeof UserDetailsRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/generator': typeof GeneratorRoute
+  '/profile-readme': typeof ProfileReadmeRoute
   '/repo-readme': typeof RepoReadmeRoute
   '/templates': typeof TemplatesRoute
   '/user-details': typeof UserDetailsRoute
@@ -68,15 +77,23 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/generator'
+    | '/profile-readme'
     | '/repo-readme'
     | '/templates'
     | '/user-details'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/generator' | '/repo-readme' | '/templates' | '/user-details'
+  to:
+    | '/'
+    | '/generator'
+    | '/profile-readme'
+    | '/repo-readme'
+    | '/templates'
+    | '/user-details'
   id:
     | '__root__'
     | '/'
     | '/generator'
+    | '/profile-readme'
     | '/repo-readme'
     | '/templates'
     | '/user-details'
@@ -85,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GeneratorRoute: typeof GeneratorRoute
+  ProfileReadmeRoute: typeof ProfileReadmeRoute
   RepoReadmeRoute: typeof RepoReadmeRoute
   TemplatesRoute: typeof TemplatesRoute
   UserDetailsRoute: typeof UserDetailsRoute
@@ -113,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RepoReadmeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile-readme': {
+      id: '/profile-readme'
+      path: '/profile-readme'
+      fullPath: '/profile-readme'
+      preLoaderRoute: typeof ProfileReadmeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/generator': {
       id: '/generator'
       path: '/generator'
@@ -133,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GeneratorRoute: GeneratorRoute,
+  ProfileReadmeRoute: ProfileReadmeRoute,
   RepoReadmeRoute: RepoReadmeRoute,
   TemplatesRoute: TemplatesRoute,
   UserDetailsRoute: UserDetailsRoute,
