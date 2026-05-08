@@ -2,7 +2,9 @@
   "framework": null,
   "buildCommand": "npm run build",
   "functions": {
-    "api/index.js": {}
+    "api/index.js": {
+      "maxDuration": 10
+    }
   },
   "rewrites": [
     {
