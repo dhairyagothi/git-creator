@@ -28,6 +28,7 @@ import {
 } from "react-icons/si";
 import { Navbar } from "@/components/Navbar";
 import { useAppStore } from "@/lib/store";
+import { trackGeneration } from "@/lib/supabase";
 import { ALL_SECTIONS, DEFAULT_PROFILE_SECTIONS, type SectionId } from "@/lib/templates";
 import { emptyForm } from "@/lib/types";
 import { Loader2 } from "lucide-react";
@@ -149,6 +150,7 @@ function ProfileOnboardingPage() {
       setForm(nextForm);
       setStep("sections");
       toast.success("Profile data fetched!");
+      trackGeneration({ username: normalizedUsername, type: 'profile', action: 'preview' });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

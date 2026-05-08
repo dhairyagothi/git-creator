@@ -8,6 +8,8 @@ import { TemplateShowcase } from "@/components/TemplateShowcase";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { getGenerateCount } from "@/lib/metrics";
+import { supabase } from "@/lib/supabase";
+import { FiUsers, FiTrendingUp, FiActivity } from "react-icons/fi";
 
 
 export const Route = createFileRoute("/")({
@@ -100,52 +102,148 @@ function SocialProof() {
 }
 
 function ConnectWithMe() {
-  const [count, setCount] = useState(0);
+  const [stats, setStats] = useState({ profileCount: 0, repoCount: 0, recent: [] as any[] });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setCount(getGenerateCount());
+    async function fetchStats() {
+      try {
+        // Fetch Profile count
+        const { count: profileCount, error: pError } = await supabase
+          .from('generations')
+          .select('*', { count: 'exact', head: true })
+          .eq('type', 'profile');
+
+        // Fetch Repo count
+        const { count: repoCount, error: rError } = await supabase
+          .from('generations')
+          .select('*', { count: 'exact', head: true })
+          .eq('type', 'repo');
+
+        // Fetch recent 3 generations
+        const { data: recent, error: recentError } = await supabase
+          .from('generations')
+          .select('username, type, created_at')
+          .order('created_at', { ascending: false })
+          .limit(3);
+
+        if (!pError && !rError && !recentError) {
+          setStats({ 
+            profileCount: profileCount || 0,
+            repoCount: repoCount || 0,
+            recent: recent || [] 
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch stats:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStats();
   }, []);
 
   return (
-    <section className="py-5">
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(124,255,103,0.05),transparent_70%)] blur-3xl" />
+      </div>
+
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           
-          <div className="glass flex-1 rounded-3xl p-8">
-            <div className="flex h-full flex-col justify-between gap-6">
+          {/* Stats Card */}
+          <div className="glass group rounded-3xl p-8 border border-border/40 hover:border-[oklch(0.78_0.18_200)]/40 transition-colors">
+            <div className="flex h-full flex-col justify-between">
               <div>
-                <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">No of READMEs Generated</div>
-                <div className="mt-2 text-4xl font-bold text-gradient">
-                  {count.toLocaleString()}
+                <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                  <FiTrendingUp className="text-[oklch(0.78_0.18_200)]" /> Usage Analytics
                 </div>
-                <p className="mt-2 text-xs text-muted-foreground">if you loved it, leave a review! 💖</p>
-              </div>
-              <div className="space-y-2">
-                <a
-                  href="https://github.com/dhairyagothi/git-creator/issues/1"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-xl bg-gradient-neon px-4 py-2 text-sm font-medium text-background shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
-                >
-                  Give Review
-                </a>
+                
+                <div className="mt-8 space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                        👤
+                      </div>
+                      <div className="text-sm font-semibold">Profiles</div>
+                    </div>
+                    <div className="text-2xl font-bold font-display">
+                      {loading ? "..." : stats.profileCount.toLocaleString()}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
+                        📦
+                      </div>
+                      <div className="text-sm font-semibold">Repositories</div>
+                    </div>
+                    <div className="text-2xl font-bold font-display">
+                      {loading ? "..." : stats.repoCount.toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-border/40">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground uppercase tracking-widest font-semibold">
+                    <span>Total Generated</span>
+                    <span className="text-foreground">{loading ? "..." : (stats.profileCount + stats.repoCount).toLocaleString()}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className="glass flex-1 rounded-3xl p-8">
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Connect with me</div>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl font-display">
-              Let’s build together
-            </h2>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Found this helpful? Follow the journey, share feedback, and help make it better.
+
+          {/* Recent Activity Card */}
+          <div className="glass rounded-3xl p-8 border border-border/40">
+            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
+              <FiActivity className="text-blue-400" /> Live Activity
+            </div>
+            <div className="mt-6 space-y-4">
+              {loading ? (
+                [1,2,3].map(i => <div key={i} className="h-12 w-full animate-pulse rounded-xl bg-card/40" />)
+              ) : stats.recent.length > 0 ? (
+                stats.recent.map((gen, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-card/30 border border-white/5">
+                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center text-lg">
+                      {gen.type === 'profile' ? '👤' : '📦'}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-semibold text-foreground truncate">
+                        {gen.username}
+                      </div>
+                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                        {gen.type === 'profile' ? 'Profile README' : 'Repo README'}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-xs text-muted-foreground italic text-center py-8">No recent activity yet. Be the first!</p>
+              )}
+            </div>
+            <p className="mt-6 text-[10px] text-center text-muted-foreground uppercase tracking-widest opacity-60">
+              Real-time updates via Supabase
             </p>
-            <div className="mt-5 flex flex-wrap gap-3">
+          </div>
+
+          {/* Social Connect Card */}
+          <div className="glass rounded-3xl p-8 border border-border/40 md:col-span-2 lg:col-span-1">
+            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Creator</div>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight font-display">
+              Let’s build <span className="text-[oklch(0.78_0.18_200)]">together</span>
+            </h2>
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+              Found this helpful? Follow the journey on social media or reach out for collaborations.
+            </p>
+            <div className="mt-8 grid grid-cols-2 gap-3">
               <a
                 href="https://github.com/dhairyagothi"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-lg border border-border/60 bg-card/40 px-4 py-2 text-sm font-medium hover:bg-card/70 transition-colors"
+                className="flex items-center justify-center gap-2 rounded-xl border border-border/60 bg-card/40 py-3 text-xs font-bold hover:bg-card/70 transition-all"
               >
                 GitHub
               </a>
@@ -153,7 +251,7 @@ function ConnectWithMe() {
                 href="https://www.linkedin.com/in/dhairya-gothi/"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-lg border border-border/60 bg-card/40 px-4 py-2 text-sm font-medium hover:bg-card/70 transition-colors"
+                className="flex items-center justify-center gap-2 rounded-xl border border-border/60 bg-card/40 py-3 text-xs font-bold hover:bg-card/70 transition-all"
               >
                 LinkedIn
               </a>
@@ -161,12 +259,13 @@ function ConnectWithMe() {
                 href="https://www.dhairyagothiportfolio.live/"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-lg border border-border/60 bg-card/40 px-4 py-2 text-sm font-medium hover:bg-card/70 transition-colors"
+                className="col-span-2 flex items-center justify-center gap-2 rounded-xl border border-border/60 bg-card/40 py-3 text-xs font-bold hover:bg-card/70 transition-all"
               >
-                Portfolio
+                View Portfolio
               </a>
             </div>
           </div>
+
         </div>
       </div>
     </section>

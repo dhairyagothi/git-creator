@@ -16,6 +16,7 @@ import {
   Package,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
+import { trackGeneration } from "@/lib/supabase";
 import { RepoForm } from "@/components/RepoForm";
 import { SectionToggles } from "@/components/SectionToggles";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
@@ -125,6 +126,7 @@ function RepoReadmePage() {
       setForm(res);
       setStep("details");
       toast.success("Repository analyzed!");
+      trackGeneration({ username: `${res.repoOwner}/${res.repoName}`, type: 'repo', action: 'preview' });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -254,8 +256,8 @@ function RepoReadmePage() {
                       key={type.id}
                       onClick={() => setForm(f => ({ ...f, repoType: type.id as any }))}
                       className={`flex flex-col items-center justify-center rounded-2xl border p-4 text-xs font-semibold transition-all ${form.repoType === type.id
-                          ? "border-[oklch(0.7_0.24_295)] bg-[oklch(0.7_0.24_295)]/10 text-foreground ring-1 ring-[oklch(0.7_0.24_295)]/30"
-                          : "border-border/60 bg-background/40 text-muted-foreground hover:border-border/80 hover:text-foreground"
+                        ? "border-[oklch(0.7_0.24_295)] bg-[oklch(0.7_0.24_295)]/10 text-foreground ring-1 ring-[oklch(0.7_0.24_295)]/30"
+                        : "border-border/60 bg-background/40 text-muted-foreground hover:border-border/80 hover:text-foreground"
                         }`}
                     >
                       <div className="text-2xl mb-2">{type.icon}</div>
@@ -282,8 +284,8 @@ function RepoReadmePage() {
                       key={pm}
                       onClick={() => setForm(f => ({ ...f, packageManager: pm as any }))}
                       className={`rounded-xl border px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider transition-all ${form.packageManager === pm
-                          ? "border-[oklch(0.7_0.24_295)] bg-[oklch(0.7_0.24_295)]/10 text-[oklch(0.78_0.18_295)]"
-                          : "border-border/60 bg-background/40 text-muted-foreground hover:border-border"
+                        ? "border-[oklch(0.7_0.24_295)] bg-[oklch(0.7_0.24_295)]/10 text-[oklch(0.78_0.18_295)]"
+                        : "border-border/60 bg-background/40 text-muted-foreground hover:border-border"
                         }`}
                     >
                       {pm}

@@ -143,7 +143,7 @@ function FloatingPreview() {
           <div className="h-10 w-10 rounded-full bg-gradient-neon" />
           <div>
             <div className="text-xs text-muted-foreground">Auto-fetched</div>
-            <div className="text-sm font-medium">@octocat</div>
+            <div className="text-sm font-medium">@dhairyagothi</div>
           </div>
         </div>
       </motion.div>

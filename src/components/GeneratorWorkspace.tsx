@@ -10,6 +10,7 @@ import {
   Code2,
   Sparkles,
 } from "lucide-react";
+import { trackGeneration } from "@/lib/supabase";
 import { useAppStore } from "@/lib/store";
 import { buildReadme } from "@/lib/buildReadme";
 import { getTemplate } from "@/lib/templates";
