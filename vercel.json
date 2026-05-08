@@ -1,5 +1,15 @@
 {
+  "framework": null,
+  "buildCommand": "npm run build",
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs22.x"
+    }
+  },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/(.*)",
+      "destination": "/api"
+    }
   ]
 }
