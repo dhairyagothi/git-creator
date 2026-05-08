@@ -21,6 +21,14 @@ dist-ssr
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
+wrangler.jsonc
+
+# Bun
+bun.lockb
+bunfig.toml
+
+# Scripts
+*.py
 
 # Editor directories and files
 .vscode/*
