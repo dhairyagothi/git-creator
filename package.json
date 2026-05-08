@@ -2,9 +2,6 @@
   "name": "git-creator",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "20.x"
-  },
   "sideEffects": false,
   "type": "module",
   "scripts": {
