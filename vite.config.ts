@@ -7,9 +7,14 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 export default defineConfig({
   base: '/',
   plugins: [
-    tanstackStart(),
+    tanstackStart({
+      // Force Node.js preset, not Cloudflare
+      server: {
+        preset: 'node',
+      },
+    }),
     react(),
-    tailwindcss(),
+      tailwindcss(),
     tsConfigPaths(),
   ],
 });
