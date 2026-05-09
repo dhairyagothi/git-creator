@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { BackgroundFX } from "@/components/BackgroundFX";
+import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
 import favicon from "../../assets/favicon.png?url";
@@ -56,6 +57,7 @@ export const Route = createRootRoute({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "github-readme.tech — Best GitHub Profile README Generator" },
       { name: "twitter:description", content: "Create a stunning GitHub profile README in seconds for FREE. 100+ premium templates." },
+      { name: "twitter:image", content: "https://github-readme.tech/og-image.png" },
       { name: "keywords", content: "github readme generator, github profile readme, free readme builder, stunning github profile, best readme templates" },
     ],
     links: [
@@ -88,6 +90,7 @@ function RootComponent() {
       <BackgroundFX />
       <Outlet />
       <Toaster theme="dark" position="bottom-right" />
+      <Analytics />
     </>
   );
 }

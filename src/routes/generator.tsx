@@ -14,7 +14,9 @@ export const Route = createFileRoute("/generator")({
   head: () => ({
     meta: [
       { title: "Generator — github-readme.tech" },
-      { name: "description", content: "Build your GitHub profile README with live preview and one-click export." },
+      { name: "description", content: "Build your GitHub profile README with live preview, 100+ templates, and one-click export." },
+      { property: "og:title", content: "GitHub README Generator — github-readme.tech" },
+      { property: "og:url", content: "https://github-readme.tech/generator" },
     ],
   }),
   component: Generator,

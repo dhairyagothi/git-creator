@@ -15,11 +15,15 @@ import { FiUsers, FiTrendingUp, FiActivity } from "react-icons/fi";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "GitHub README.tech - Best GitHub Profile README Generator" },
+      { title: "github-readme.tech — Best GitHub Profile README Generator" },
       {
         name: "description",
-        content: "Build a stunning GitHub profile README in seconds for FREE. Pick from 100+ premium templates, auto-fill your stats, and stand out from the crowd.",
+        content: "Create a stunning GitHub profile README in seconds for FREE. 100+ premium templates, auto-fill stats, and live editor. The ultimate builder for developers.",
       },
+      { property: "og:title", content: "github-readme.tech — Best GitHub Profile README Generator" },
+      { property: "og:description", content: "Create a stunning GitHub profile README in seconds for FREE. 100+ premium templates, auto-fill stats, and live editor." },
+      { property: "og:url", content: "https://github-readme.tech" },
+      { property: "og:image", content: "https://github-readme.tech/og-image.png" },
     ],
   }),
   component: Index,

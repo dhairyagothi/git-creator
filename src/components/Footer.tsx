@@ -23,6 +23,7 @@ export function Footer() {
         <FooterCol title="Resources" links={[
           { to: "/#features", label: "Features" },
           { to: "/#faq", label: "FAQ" },
+          { to: "/sitemap.xml", label: "Sitemap" },
         ]} />
         <FooterCol title="Legal" links={[
           { to: "/", label: "Privacy" },

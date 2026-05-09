@@ -31,6 +31,8 @@ export const Route = createFileRoute("/repo-readme")({
     meta: [
       { title: "Best Repository README Generator — github-readme.tech" },
       { name: "description", content: "Create professional repository READMEs for FREE. Automated tech stack detection, file structure visualization, and one-click export." },
+      { property: "og:title", content: "Repository README Generator — github-readme.tech" },
+      { property: "og:url", content: "https://github-readme.tech/repo-readme" },
     ],
   }),
   component: RepoReadmePage,
