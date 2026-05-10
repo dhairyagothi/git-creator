@@ -9,7 +9,7 @@ import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { getGenerateCount } from "@/lib/metrics";
 import { supabase } from "@/lib/supabase";
-import { FiUsers, FiTrendingUp, FiActivity } from "react-icons/fi";
+import { FiUsers, FiTrendingUp, FiActivity, FiStar } from "react-icons/fi";
 
 
 export const Route = createFileRoute("/")({
@@ -39,6 +39,7 @@ function Index() {
       <SocialProof />
       <FAQ />
       <ConnectWithMe />
+      <ReviewCallout />
       <Footer />
     </main>
   );
@@ -275,3 +276,38 @@ function ConnectWithMe() {
     </section>
   );
 }
+
+function ReviewCallout() {
+  return (
+    <section className="pb-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="glass rounded-3xl p-8 border border-border/40 relative overflow-hidden group hover:border-[oklch(0.78_0.18_200)]/40 transition-colors">
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(124,255,103,0.05),transparent_40%)]" />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center gap-6 text-center md:text-left">
+              <div className="h-16 w-16 rounded-2xl bg-[oklch(0.78_0.18_200)]/10 flex items-center justify-center text-3xl shadow-inner border border-[oklch(0.78_0.18_200)]/20">
+                <FiStar className="text-[oklch(0.78_0.18_200)] animate-pulse" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-2xl font-bold font-display tracking-tight">If you love it, leave a review!</h3>
+                <p className="text-muted-foreground text-sm max-w-md">
+                  Your feedback fuels our open-source journey. Share your experience and help us make README generation even better.
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://github.com/dhairyagothi/git-creator/issues/1"
+              target="_blank"
+              rel="noreferrer"
+              className="group relative inline-flex items-center justify-center gap-2 rounded-2xl bg-[oklch(0.78_0.18_200)] px-8 py-4 text-sm font-bold text-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(124,255,103,0.2)] hover:shadow-[0_0_40px_rgba(124,255,103,0.4)]"
+            >
+              Write a Review
+              <span className="text-lg">✨</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
