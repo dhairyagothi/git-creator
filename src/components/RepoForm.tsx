@@ -1,11 +1,12 @@
 import { Info, ExternalLink, Image as ImageIcon, Star, Key, Server, FolderTree, Folder, FileText, Users, Heart, Cpu } from "lucide-react";
 import type { RepoFormState } from "@/lib/repoTypes";
 import { Label, Input, TagInput, Section, ListEditor, ApiEndpointsEditor } from "@/components/FormElements";
+import { useState } from "react"; // ← ADDED
 
 interface RepoFormProps {
   form: RepoFormState;
   onChange: (patch: Partial<RepoFormState>) => void;
-  activeSections: string[]; 
+  activeSections: string[];
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -21,16 +22,63 @@ export function RepoForm({ form, onChange, activeSections }: RepoFormProps) {
   const has = (id: string) => activeSections.includes(id);
   const upd = (patch: Partial<RepoFormState>) => onChange(patch);
 
+  // ---- AI AUTO-GENERATION STATE & HANDLER ----
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  const handleAutoGenerate = async () => {
+    if (!form.repoOwner || !form.repoName) {
+      alert("Please enter the Repo Owner and Repo Name first.");
+      return;
+    }
+    const repoUrl = `https://github.com/${form.repoOwner}/${form.repoName}`;
+    setIsAnalyzing(true);
+    try {
+      const res = await fetch("/api/analyze-repo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ repoUrl }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      // Populate form fields with AI response (only if not empty)
+      upd({
+        tagline: data.tagline || form.tagline,
+        description: data.description || form.description,
+        features: data.features?.length ? data.features : form.features,
+        techStack: data.techStack?.length ? data.techStack : form.techStack,
+      });
+    } catch (err) {
+      alert("Auto-generation failed: " + (err as Error).message);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+  // --------------------------------------------
+
   return (
     <div className="space-y-3 pb-20">
-      {/* Essentials / Header — always shown or gated by 'header'? User says always or gated by has("header")? 
-          User snippet says "Header fields — always shown" but also uses has("demo") for demo.
-          I'll keep Basic Info always shown as per their snippet. */}
       <Section icon={Info} title="Basic Info" defaultOpen>
         <Field label="Project Tagline">
           <Input value={form.tagline} onChange={v => upd({ tagline: v })}
             placeholder="One-line catchy description"/>
         </Field>
+
+        {/* ---- AI AUTO-GENERATE BUTTON ---- */}
+        <div className="mt-1 mb-3">
+          <button
+            type="button"
+            onClick={handleAutoGenerate}
+            disabled={isAnalyzing}
+            className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 disabled:opacity-50 transition-colors"
+          >
+            {isAnalyzing ? "⏳ Analyzing repo..." : "✨ Auto‑generate from Repo"}
+          </button>
+          <p className="text-[10px] text-muted-foreground mt-0.5">
+            Reads your GitHub repo and fills in the description, features, and tech stack using AI.
+          </p>
+        </div>
+        {/* --------------------------------- */}
+
         <Field label="Primary Language">
           <Input value={form.language} onChange={v => upd({ language: v })}/>
         </Field>
@@ -125,6 +173,7 @@ export function RepoForm({ form, onChange, activeSections }: RepoFormProps) {
           </div>
         </Section>
       )}
+
       {/* Contributors */}
       {has("contributors") && (
         <Section icon={Users} title="Contributors" defaultOpen={false}>
